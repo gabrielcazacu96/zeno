@@ -1,6 +1,7 @@
 {
-    "recommendations": [
-        "dbaeumer.vscode-eslint",
-        "YoavBls.pretty-ts-errors"
-    ]
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "YoavBls.pretty-ts-errors"
+  ]
 }
