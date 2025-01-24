@@ -1,23 +1,23 @@
-import { Button } from "@zeno/ui/button";
-import Image, { type ImageProps } from "next/image";
+import { Button } from "@zeno/ui/button"
+import Image, { type ImageProps } from "next/image"
 
-import styles from "./page.module.css";
+import styles from "./page.module.css"
 
 type Props = Omit<ImageProps, "src"> & {
-  srcDark: string;
-  srcLight: string;
-};
+  srcDark: string
+  srcLight: string
+}
 
 const ThemeImage = (props: Props) => {
-  const { srcDark, srcLight, ...rest } = props;
+  const { srcDark, srcLight, ...rest } = props
 
   return (
     <>
       <Image {...rest} className="imgLight" src={srcLight} />
       <Image {...rest} className="imgDark" src={srcDark} />
     </>
-  );
-};
+  )
+}
 
 export default function Home() {
   return (
@@ -34,7 +34,9 @@ export default function Home() {
         />
         <ol>
           <li>
-            Get started by editing <code>apps/web/app/page.tsx</code>
+            Get started by editing
+            {" "}
+            <code>apps/web/app/page.tsx</code>
           </li>
           <li>Save and see your changes instantly.</li>
         </ol>
@@ -99,5 +101,5 @@ export default function Home() {
         </a>
       </footer>
     </div>
-  );
+  )
 }

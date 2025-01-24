@@ -1,4 +1,4 @@
-import { type JSX } from "react";
+import { type JSX } from "react"
 
 export function Card({
   children,
@@ -6,10 +6,10 @@ export function Card({
   href,
   title,
 }: {
-  children: React.ReactNode;
-  className?: string;
-  href: string;
-  title: string;
+  children: React.ReactNode
+  className?: string
+  href: string
+  title: string
 }): JSX.Element {
   return (
     <a
@@ -19,9 +19,12 @@ export function Card({
       target="_blank"
     >
       <h2>
-        {title} <span>-&gt;</span>
+        {title}
+        {" "}
+        <span>-&gt;</span>
+        <span>-&gt;</span>
       </h2>
       <p>{children}</p>
     </a>
-  );
+  )
 }

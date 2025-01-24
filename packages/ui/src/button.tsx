@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { ReactNode } from "react";
+import { ReactNode } from "react"
 
 interface ButtonProps {
-  appName: string;
-  children: ReactNode;
-  className?: string;
+  appName: string
+  children: ReactNode
+  className?: string
 }
 
 export const Button = ({ appName, children, className }: ButtonProps) => {
@@ -16,5 +16,5 @@ export const Button = ({ appName, children, className }: ButtonProps) => {
     >
       {children}
     </button>
-  );
-};
+  )
+}
