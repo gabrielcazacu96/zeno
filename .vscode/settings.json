@@ -1,26 +1,36 @@
 {
+  // Auto fix on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+
+    // Imports are managed through EsLint
+    "source.organizeImports": "never"
+  },
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnSave": false,
+  "eslint.format.enable": true,
+
+  // Stylistic rules as info, but still auto fix them
+  "eslint.rules.customizations": [
+    {
+      "rule": "@stylistic/*",
+      "fixable": true,
+      "severity": "info"
+    },
+    {
+      "rule": "perfectionist/*",
+      "fixable": true,
+      "severity": "info"
+    }
+  ],
+
   "eslint.workingDirectories": [
     {
       "mode": "auto"
     }
   ],
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "always"
-  },
-  "editor.formatOnSave": true,
-  "eslint.format.enable": true,
+
+  // Formatting is managed by Eslint
+  "prettier.enable": false,
   "typescript.tsdk": "./node_modules/typescript/lib",
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[typescript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  }
 }

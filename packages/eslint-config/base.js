@@ -1,10 +1,9 @@
-import js from "@eslint/js";
-import eslintConfigPrettier from "eslint-config-prettier";
+import jseslint from "@eslint/js";
 import turbo from "eslint-plugin-turbo";
 import tseslint from "typescript-eslint";
 import onlyWarn from "eslint-plugin-only-warn";
 import perfectionist from "eslint-plugin-perfectionist"
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import stylistic from '@stylistic/eslint-plugin'
 
 /** 
  * A shared ESLint configuration for the repository.
@@ -12,8 +11,12 @@ import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
  * @type {import("eslint").Linter.Config}
  * */
 export const config = [
-  js.configs.recommended,
-  eslintConfigPrettier,
+  perfectionist.configs["recommended-natural"],
+  stylistic.configs.customize({
+    flat: true,
+    quotes: 'double',
+  }),
+  jseslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
     plugins: { turbo },
@@ -21,8 +24,6 @@ export const config = [
       "turbo/no-undeclared-env-vars": "warn",
     },
   },
-  perfectionist.configs["recommended-natural"],
-  eslintPluginPrettierRecommended,
   {
     plugins: { onlyWarn },
   },
