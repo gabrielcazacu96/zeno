@@ -19,7 +19,21 @@ export const config = [
   }),
   jseslint.configs.recommended,
   ...tseslint.configs.recommended,
-  unicorn.configs["flat/recommended"],
+  {
+    ...unicorn.configs["flat/recommended"],
+    rules: {
+      ...unicorn.configs["flat/recommended"].rules,
+      "unicorn/prevent-abbreviations": [
+        "error",
+        {
+          replacements: {
+            prop: false,
+            props: false,
+          },
+        },
+      ],
+    },
+  },
   {
     plugins: { turbo },
     rules: {
