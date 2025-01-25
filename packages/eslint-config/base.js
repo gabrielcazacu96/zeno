@@ -1,9 +1,10 @@
-import jseslint from "@eslint/js";
-import turbo from "eslint-plugin-turbo";
-import tseslint from "typescript-eslint";
-import onlyWarn from "eslint-plugin-only-warn";
+import jseslint from "@eslint/js"
+import turbo from "eslint-plugin-turbo"
+import tseslint from "typescript-eslint"
+import onlyWarn from "eslint-plugin-only-warn"
 import perfectionist from "eslint-plugin-perfectionist"
-import stylistic from '@stylistic/eslint-plugin'
+import stylistic from "@stylistic/eslint-plugin"
+import unicorn from "eslint-plugin-unicorn"
 
 /** 
  * A shared ESLint configuration for the repository.
@@ -18,6 +19,7 @@ export const config = [
   }),
   jseslint.configs.recommended,
   ...tseslint.configs.recommended,
+  unicorn.configs["flat/recommended"],
   {
     plugins: { turbo },
     rules: {
@@ -30,4 +32,4 @@ export const config = [
   {
     ignores: ["dist/**"],
   },
-]; 
+] 
