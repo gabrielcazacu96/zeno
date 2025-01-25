@@ -1,4 +1,3 @@
-import { config } from "@zeno/eslint-config/react-internal"
-
 /** @type {import("eslint").Linter.Config} */
-export default config
+
+export { config as default } from "@zeno/eslint-config/react-internal"

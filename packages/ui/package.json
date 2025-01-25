@@ -16,9 +16,9 @@
   "devDependencies": {
     "@zeno/eslint-config": "workspace:*",
     "@zeno/typescript-config": "workspace:*",
-    "@turbo/gen": "1.12.4",
-    "@types/node": "22.10.7",
-    "@types/react": "19.0.7",
+    "@turbo/gen": "2.3.4",
+    "@types/node": "22.10.10",
+    "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
     "typescript": "5.7.3"
   },
