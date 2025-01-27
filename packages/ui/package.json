@@ -5,7 +5,8 @@
   "exports": {
     "./button": "./src/button.tsx",
     "./card": "./src/card.tsx",
-    "./code": "./src/code.tsx"
+    "./code": "./src/code.tsx",
+    "./styles/globals.css": "./src/styles/globals.css"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -14,12 +15,13 @@
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@zeno/eslint-config": "workspace:*",
-    "@zeno/typescript-config": "workspace:*",
     "@turbo/gen": "2.3.4",
     "@types/node": "22.10.10",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
+    "@zeno/eslint-config": "workspace:*",
+    "@zeno/tailwind-config": "workspace:*",
+    "@zeno/typescript-config": "workspace:*",
     "typescript": "5.7.3"
   },
   "dependencies": {
