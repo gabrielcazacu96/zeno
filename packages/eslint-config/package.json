@@ -11,7 +11,7 @@
   "devDependencies": {
     "@eslint/js": "9.19.0",
     "@next/eslint-plugin-next": "15.1.6",
-    "@stylistic/eslint-plugin": "2.13.0",
+    "@stylistic/eslint-plugin": "3.0.0",
     "eslint": "9.19.0",
     "eslint-plugin-only-warn": "1.1.0",
     "eslint-plugin-perfectionist": "4.7.0",
@@ -21,6 +21,6 @@
     "eslint-plugin-unicorn":"56.0.1",
     "globals": "15.14.0",
     "typescript": "5.7.3",
-    "typescript-eslint": "8.21.0"
+    "typescript-eslint": "8.22.0"
   }
 }
