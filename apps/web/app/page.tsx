@@ -1,4 +1,4 @@
-import { Button } from "@zeno/ui/button"
+import { Button } from "@zeno/ui/components/button"
 import Image, { type ImageProps } from "next/image"
 
 import styles from "./page.module.css"
@@ -66,7 +66,7 @@ export default function Home() {
             Read our docs
           </a>
         </div>
-        <Button appName="web" className={styles.secondary}>
+        <Button variant="destructive">
           Open alert
         </Button>
       </main>
