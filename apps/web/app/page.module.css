@@ -38,7 +38,6 @@
   font-family: var(--font-geist-mono);
   padding-left: 0;
   margin: 0;
-  font-size: 14px;
   line-height: 24px;
   letter-spacing: -0.01em;
   list-style-position: inside;
@@ -74,7 +73,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
   line-height: 20px;
   font-weight: 500;
 }
@@ -103,7 +101,6 @@ button.secondary {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
   line-height: 20px;
   font-weight: 500;
   background: transparent;
@@ -165,7 +162,6 @@ button.secondary {
   }
 
   .ctas a {
-    font-size: 14px;
     height: 40px;
     padding: 0 16px;
   }
