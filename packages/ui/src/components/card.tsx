@@ -1,4 +1,4 @@
-import { cn } from "@zeno/ui/utils/cn"
+import { cn } from "@/utils/cn"
 import * as React from "react"
 
 const Card = React.forwardRef<
