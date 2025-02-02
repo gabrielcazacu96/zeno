@@ -11,10 +11,10 @@
   },
   "iconLibrary": "lucide",
   "aliases": {
-    "components": "@zeno/ui/components",
-    "ui": "@zeno/ui/components",
-    "utils": "@zeno/ui/utils/cn",
-    "lib": "@zeno/ui/utils",
-    "hooks": "@zeno/ui/hooks"
+    "components": "@/temp",
+    "ui": "@/components",
+    "utils": "@/utils/cn",
+    "lib": "@/utils",
+    "hooks": "@/hooks"
   }
 }
