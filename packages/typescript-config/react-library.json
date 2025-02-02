@@ -1,7 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "./base.json",
+  "extends": "./strictest.json",
   "compilerOptions": {
-    "jsx": "react-jsx"
+    // Allow JSX files (or files that are internally considered JSX, like Astro files) to be imported inside `.js` and `.ts` files.
+    "jsx": "preserve"
   }
 }
