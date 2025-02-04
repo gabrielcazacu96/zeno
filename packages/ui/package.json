@@ -9,12 +9,11 @@
       "./src/hooks/*.tsx"
     ],
     "./styles/*.css": "./src/styles/*.css",
-    "./utils/*": "./src/utils/*.ts"
+    "./lib/*": "./src/utils/*.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
-    "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {

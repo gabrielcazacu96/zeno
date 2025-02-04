@@ -1,12 +1,12 @@
 "use client"
 
+// Inspired by react-hot-toast library
+import * as React from "react"
+
 import type {
   ToastActionElement,
   ToastProps,
-} from "@/components/toast"
-
-// Inspired by react-hot-toast library
-import * as React from "react"
+} from "../components/toast"
 
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1_000_000
@@ -33,9 +33,9 @@ type Action =
     type: ActionType["UPDATE_TOAST"]
   }
   | {
-      toast: ToasterToast
-      type: ActionType["ADD_TOAST"]
-    }
+    toast: ToasterToast
+    type: ActionType["ADD_TOAST"]
+  }
   | {
     toastId?: ToasterToast["id"]
     type: ActionType["DISMISS_TOAST"]
