@@ -20,6 +20,16 @@ export const config = [
   jseslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    rules: {
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        {
+          "prefer": "type-imports"
+        }
+      ]
+    }
+  },
+  {
     ...unicorn.configs["flat/recommended"],
     rules: {
       ...unicorn.configs["flat/recommended"].rules,
