@@ -92,7 +92,7 @@ ContextMenuItem.displayName = ContextMenuPrimitive.Item.displayName
 const ContextMenuCheckboxItem = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.CheckboxItem>
->(({ checked, children, className, ...props }, reference) => (
+>(({ checked = false, children, className, ...props }, reference) => (
   <ContextMenuPrimitive.CheckboxItem
     checked={checked}
     className={cn(

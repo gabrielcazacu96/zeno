@@ -18,34 +18,25 @@ type ToasterToast = ToastProps & {
   title?: React.ReactNode
 }
 
-const actionTypes = {
-  ADD_TOAST: "ADD_TOAST",
-  DISMISS_TOAST: "DISMISS_TOAST",
-  REMOVE_TOAST: "REMOVE_TOAST",
-  UPDATE_TOAST: "UPDATE_TOAST",
-} as const
-
 let count = 0
 
 type Action =
   | {
     toast: Partial<ToasterToast>
-    type: ActionType["UPDATE_TOAST"]
+    type: "UPDATE_TOAST"
   }
   | {
     toast: ToasterToast
-    type: ActionType["ADD_TOAST"]
+    type: "ADD_TOAST"
   }
   | {
     toastId?: ToasterToast["id"]
-    type: ActionType["DISMISS_TOAST"]
+    type: "DISMISS_TOAST"
   }
   | {
     toastId?: ToasterToast["id"]
-    type: ActionType["REMOVE_TOAST"]
+    type: "REMOVE_TOAST"
   }
-
-type ActionType = typeof actionTypes
 
 interface State {
   toasts: ToasterToast[]
@@ -190,7 +181,7 @@ function useToast() {
 
   return {
     ...state,
-    dismiss: (toastId?: string) => dispatch({ toastId, type: "DISMISS_TOAST" }),
+    dismiss: (toastId: string) => dispatch({ toastId, type: "DISMISS_TOAST" }),
     toast,
   }
 }

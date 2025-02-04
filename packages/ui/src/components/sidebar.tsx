@@ -1,9 +1,9 @@
-import { useIsMobile } from "@/hooks/use-mobile"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import { PanelLeft } from "lucide-react"
 import * as React from "react"
 
+import { useIsMobile } from "../hooks/use-mobile"
 import { cn } from "../lib/utils"
 import { Button } from "./button"
 import { Input } from "./input"
@@ -34,7 +34,7 @@ type SidebarContext = {
   toggleSidebar: () => void
 }
 
-const SidebarContext = React.createContext<null | SidebarContext>(null)
+const SidebarContext = React.createContext<SidebarContext | undefined>(undefined)
 
 function useSidebar() {
   const context = React.useContext(SidebarContext)
@@ -73,7 +73,7 @@ const SidebarProvider = React.forwardRef<
         const [_open, _setOpen] = React.useState(defaultOpen)
         const open = openProp ?? _open
         const setOpen = React.useCallback(
-          (value: ((value: boolean) => boolean) | boolean) => {
+          async (value: ((value: boolean) => boolean) | boolean) => {
             const openState = typeof value === "function" ? value(open) : value
             if (setOpenProp) {
               setOpenProp(openState)
@@ -83,6 +83,7 @@ const SidebarProvider = React.forwardRef<
             }
 
             // This sets the cookie to keep the sidebar state.
+            // eslint-disable-next-line unicorn/no-document-cookie
             document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
           },
           [setOpenProp, open],

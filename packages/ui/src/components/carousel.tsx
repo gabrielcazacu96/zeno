@@ -30,7 +30,7 @@ type CarouselProps = {
 
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
 
-const CarouselContext = React.createContext<CarouselContextProps | null>(null)
+const CarouselContext = React.createContext<CarouselContextProps | undefined>(undefined)
 
 function useCarousel() {
   const context = React.useContext(CarouselContext)
