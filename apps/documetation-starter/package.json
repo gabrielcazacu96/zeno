@@ -1,5 +1,5 @@
 {
-  "name": "@zeno/next-starter",
+  "name": "@zeno/documentation-starter",
   "version": "0.0.0",
   "type": "module",
   "private": true,
@@ -14,6 +14,8 @@
   "dependencies": {
     "@zeno/ui": "workspace:*",
     "next": "15.1.6",
+    "nextra": "4.2.4",
+    "nextra-theme-docs": "4.2.4",
     "react": "19.0.0",
     "react-dom": "19.0.0"
   },
