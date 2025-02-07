@@ -26,7 +26,7 @@
     // Skip typechecking libraries and .d.ts files
     "skipLibCheck": true,
     // Allow JavaScript files to be imported
-    "allowJs": true,
+    "allowJs": true
   },
   "exclude": ["${configDir}/dist", "${configDir}/node_modules"],
   "include": ["${configDir}/src/**/*"]
