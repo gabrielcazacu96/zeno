@@ -23,9 +23,7 @@ export const config = [
     rules: {
       "@typescript-eslint/consistent-type-imports": [
         "error",
-        {
-          "prefer": "type-imports"
-        }
+        { "prefer": "type-imports" }
       ]
     }
   },
@@ -39,21 +37,17 @@ export const config = [
           replacements: {
             prop: false,
             props: false,
-          },
-        },
-      ],
-    },
+          }
+        }
+      ]
+    }
   },
   {
     plugins: { turbo },
     rules: {
       "turbo/no-undeclared-env-vars": "warn",
-    },
+    }
   },
-  {
-    plugins: { onlyWarn },
-  },
-  {
-    ignores: ["dist/**"],
-  },
+  { plugins: { onlyWarn } },
+  { ignores: ["dist/**"] }
 ] 

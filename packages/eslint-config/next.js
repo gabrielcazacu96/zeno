@@ -16,28 +16,31 @@ export const nextJsConfig = [
     languageOptions: {
       ...react.configs.flat.recommended.languageOptions,
       globals: {
-        ...globals.serviceworker,
-      },
-    },
+        ...globals.serviceworker
+      }
+    }
   },
   {
-    plugins: {
-      "@next/next": next,
-    },
+    plugins: { "@next/next": next },
     rules: {
       ...next.configs.recommended.rules,
       ...next.configs["core-web-vitals"].rules,
     },
   },
   {
-    plugins: {
-      "react-hooks": reactHooks,
-    },
+    plugins: { "react-hooks": reactHooks },
     settings: { react: { version: "detect" } },
     rules: {
       ...reactHooks.configs.recommended.rules,
       // React scope no longer necessary with new JSX transform.
       "react/react-in-jsx-scope": "off",
-    },
+    }
   },
+  {
+    // Nextra meta files define order using object keys.
+    files: ["**/_meta.js", "**/_meta.ts"],
+    rules: {
+      "perfectionist/sort-objects": "off",
+    }
+  }
 ]
