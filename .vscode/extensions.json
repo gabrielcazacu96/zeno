@@ -2,6 +2,7 @@
   "recommendations": [
     "dbaeumer.vscode-eslint",
     "stivo.tailwind-fold",
+    "unifiedjs.vscode-mdx",
     "YoavBls.pretty-ts-errors"
   ]
 }
