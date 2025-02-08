@@ -1,0 +1,33 @@
+{
+  "name": "@zeno/documentation",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack -p 5001",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint --max-warnings 0",
+    "lint:fix": "next lint --fix",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@zeno/ui": "workspace:*",
+    "next": "15.1.6",
+    "nextra": "4.2.4",
+    "nextra-theme-docs": "4.2.4",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.0.3",
+    "@types/node": "22.13.0",
+    "@types/react": "19.0.8",
+    "@types/react-dom": "19.0.3",
+    "@zeno/eslint-config": "workspace:*",
+    "@zeno/typescript-config": "workspace:*",
+    "postcss": "8.5.1",
+    "tailwindcss": "4.0.3",
+    "typescript": "5.7.3"
+  }
+}
