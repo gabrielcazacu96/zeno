@@ -1,9 +1,10 @@
-import { Footer, Layout, Navbar } from "nextra-theme-docs"
+import { Footer, Layout, Navbar } from "@zeno/documentation-theme"
 import { Head } from "nextra/components"
 import { getPageMap } from "nextra/page-map"
-import "nextra-theme-docs/style.css"
+import "@zeno/documentation-theme/style.css"
 
 import "./globals.css"
+import React from "react"
 
 export const metadata = {
   // https://nextjs.org/docs/app/building-your-application/optimizing/metadata

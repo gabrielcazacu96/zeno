@@ -17,6 +17,9 @@ importers:
 
   apps/documentation:
     dependencies:
+      '@zeno/documentation-theme':
+        specifier: workspace:*
+        version: link:../../packages/documentation-theme
       '@zeno/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -26,9 +29,6 @@ importers:
       nextra:
         specifier: 4.2.4
         version: 4.2.4(acorn@8.14.0)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)
-      nextra-theme-docs:
-        specifier: 4.2.4
-        version: 4.2.4(@types/react@19.0.8)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(nextra@4.2.4(acorn@8.14.0)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(use-sync-external-store@1.4.0(react@19.0.0))
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -66,6 +66,9 @@ importers:
 
   apps/documentation-starter:
     dependencies:
+      '@zeno/documentation-theme':
+        specifier: workspace:*
+        version: link:../../packages/documentation-theme
       '@zeno/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -75,9 +78,6 @@ importers:
       nextra:
         specifier: 4.2.4
         version: 4.2.4(acorn@8.14.0)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)
-      nextra-theme-docs:
-        specifier: 4.2.4
-        version: 4.2.4(@types/react@19.0.8)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(nextra@4.2.4(acorn@8.14.0)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(use-sync-external-store@1.4.0(react@19.0.0))
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -155,6 +155,55 @@ importers:
       typescript:
         specifier: 5.7.3
         version: 5.7.3
+
+  packages/documentation-theme:
+    dependencies:
+      '@headlessui/react':
+        specifier: ^2.1.2
+        version: 2.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@zeno/ui':
+        specifier: workspace:*
+        version: link:../ui
+      next:
+        specifier: '>=14'
+        version: 15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      next-themes:
+        specifier: ^0.4.0
+        version: 0.4.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      nextra:
+        specifier: '>=4'
+        version: 4.2.4(acorn@8.14.0)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)
+      react-dom:
+        specifier: '>=18'
+        version: 19.0.0(react@19.0.0)
+      scroll-into-view-if-needed:
+        specifier: ^3.1.0
+        version: 3.1.0
+      zod:
+        specifier: ^3.22.3
+        version: 3.24.1
+      zod-validation-error:
+        specifier: ^3.0.0
+        version: 3.4.0(zod@3.24.1)
+      zustand:
+        specifier: ^5.0.1
+        version: 5.0.3(@types/react@19.0.8)(react@19.0.0)(use-sync-external-store@1.4.0(react@19.0.0))
+    devDependencies:
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.0.8
+      '@zeno/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@zeno/tailwind-config':
+        specifier: workspace:*
+        version: link:../tailwind-config
+      '@zeno/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      react:
+        specifier: 19.0.0
+        version: 19.0.0
 
   packages/eslint-config:
     devDependencies:
@@ -3428,14 +3477,6 @@ packages:
         optional: true
       sass:
         optional: true
-
-  nextra-theme-docs@4.2.4:
-    resolution: {integrity: sha512-8xXn88EkIg9CLP/O+xcrze1fZFg3kzT2DW6auZYGbR+fruMbGAXcsqntJ+vOdbBPx/z4KjWMt6mWPiI5Whtrvw==}
-    peerDependencies:
-      next: '>=14'
-      nextra: 4.2.4
-      react: '>=18'
-      react-dom: '>=18'
 
   nextra@4.2.4:
     resolution: {integrity: sha512-pB91o5jrgcIkkot79GbTtfg9qZtLtzzMJRzbeqeL+HSVGLFhj2urEAOPzpc47emvdmEjjNLyB7LQ8BcBZvrlxg==}
@@ -8243,25 +8284,6 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
-
-  nextra-theme-docs@4.2.4(@types/react@19.0.8)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(nextra@4.2.4(acorn@8.14.0)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(use-sync-external-store@1.4.0(react@19.0.0)):
-    dependencies:
-      '@headlessui/react': 2.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      clsx: 2.1.1
-      next: 15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      next-themes: 0.4.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      nextra: 4.2.4(acorn@8.14.0)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)
-      react: 19.0.0
-      react-compiler-runtime: 0.0.0-experimental-22c6e49-20241219(react@19.0.0)
-      react-dom: 19.0.0(react@19.0.0)
-      scroll-into-view-if-needed: 3.1.0
-      zod: 3.24.1
-      zod-validation-error: 3.4.0(zod@3.24.1)
-      zustand: 5.0.3(@types/react@19.0.8)(react@19.0.0)(use-sync-external-store@1.4.0(react@19.0.0))
-    transitivePeerDependencies:
-      - '@types/react'
-      - immer
-      - use-sync-external-store
 
   nextra@4.2.4(acorn@8.14.0)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3):
     dependencies:
