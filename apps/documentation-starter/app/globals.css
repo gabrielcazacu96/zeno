@@ -1,5 +1,5 @@
 @import "@zeno/ui/styles/globals.css";
+@import "@zeno/documentation-theme/style.css";
 
-@source "../../../packages/ui/src/**/*.{ts,tsx}";
 @source "./app/**/*.{md,mdx}"
 @source "./content/**/*.{md,mdx}"

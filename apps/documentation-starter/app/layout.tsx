@@ -1,7 +1,6 @@
 import { Footer, Layout, Navbar } from "@zeno/documentation-theme"
 import { Head } from "nextra/components"
 import { getPageMap } from "nextra/page-map"
-import "@zeno/documentation-theme/style.css"
 
 import "./globals.css"
 import React from "react"
