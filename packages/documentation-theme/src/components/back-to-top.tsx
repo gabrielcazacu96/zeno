@@ -1,6 +1,6 @@
 import type { ComponentProps, FC, ReactNode } from "react"
 
-import { ArrowRightIcon } from "@zeno/ui/icons"
+import { ChevronRightIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { Button } from "nextra/components"
 
@@ -38,7 +38,7 @@ export const BackToTop: FC<{
       onClick={scrollToTop}
     >
       {children}
-      <ArrowRightIcon
+      <ChevronRightIcon
         className="-rotate-90 border rounded-full border-current"
         height="1.1em"
       />

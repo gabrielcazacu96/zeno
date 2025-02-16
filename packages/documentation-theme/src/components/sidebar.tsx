@@ -4,7 +4,7 @@ import type { Heading } from "nextra"
 import type { Item, MenuItem, PageItem } from "nextra/normalize-pages"
 import type { FC, FocusEventHandler, MouseEventHandler } from "react"
 
-import { ArrowRightIcon, ExpandIcon } from "@zeno/ui/icons"
+import { ChevronRightIcon, ExpandIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { usePathname } from "next/navigation"
 import { Anchor, Button, Collapse } from "nextra/components"
@@ -152,7 +152,7 @@ const Folder: FC<FolderProps> = ({ anchors, item: _item, level, onFocus }) => {
         onFocus={onFocus}
       >
         {item.title}
-        <ArrowRightIcon
+        <ChevronRightIcon
           className={cn(
             "shrink-0",
             "rounded-sm p-0.5 hover:bg-gray-800/5 dark:hover:bg-gray-100/5",

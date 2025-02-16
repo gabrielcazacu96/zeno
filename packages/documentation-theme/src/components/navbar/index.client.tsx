@@ -4,7 +4,7 @@ import type { MenuItem, PageItem } from "nextra/normalize-pages"
 import type { FC, ReactNode } from "react"
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@zeno/ui/components/dropdown-menu"
-import { ArrowRightIcon, MenuIcon } from "@zeno/ui/icons"
+import { ChevronRightIcon, MenuIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { Anchor, Button } from "nextra/components"
 import { useFSRoute } from "nextra/hooks"
@@ -35,7 +35,7 @@ const NavbarMenu: FC<{
         )}
       >
         {children}
-        <ArrowRightIcon
+        <ChevronRightIcon
           className="*:origin-center *:transition-transform *:rotate-90"
           height="14"
         />

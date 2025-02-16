@@ -1,7 +1,7 @@
 import type { Item } from "nextra/normalize-pages"
 import type { FC } from "react"
 
-import { ArrowRightIcon } from "@zeno/ui/icons"
+import { ChevronRightIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import NextLink from "next/link"
 import { Fragment } from "react"
@@ -28,7 +28,7 @@ export const Breadcrumb: FC<{
         return (
           <Fragment key={item.route + item.name}>
             {index > 0 && (
-              <ArrowRightIcon
+              <ChevronRightIcon
                 className="shrink-0 rtl:rotate-180"
                 height="14"
               />

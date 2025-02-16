@@ -1,6 +1,6 @@
 import type { FC } from "react"
 
-import { ArrowRightIcon } from "@zeno/ui/icons"
+import { ChevronRightIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import NextLink from "next/link"
 
@@ -41,7 +41,7 @@ export const Pagination: FC = () => {
           href={previous.route}
           title={previous.title}
         >
-          <ArrowRightIcon
+          <ChevronRightIcon
             className={cn(classes.icon, "ltr:rotate-180")}
             height="20"
           />
@@ -55,7 +55,7 @@ export const Pagination: FC = () => {
           title={next.title}
         >
           {next.title}
-          <ArrowRightIcon
+          <ChevronRightIcon
             className={cn(classes.icon, "rtl:rotate-180")}
             height="20"
           />
