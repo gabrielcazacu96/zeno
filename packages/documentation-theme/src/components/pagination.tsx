@@ -1,8 +1,8 @@
 import type { FC } from "react"
 
+import { ArrowRightIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import NextLink from "next/link"
-import { ArrowRightIcon } from "nextra/icons"
 
 import { useConfig, useThemeConfig } from "../stores"
 

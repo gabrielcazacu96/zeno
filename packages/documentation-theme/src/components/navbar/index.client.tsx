@@ -9,10 +9,10 @@ import {
   MenuButton,
   MenuItems,
 } from "@headlessui/react"
+import { ArrowRightIcon, MenuIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { Anchor, Button } from "nextra/components"
 import { useFSRoute } from "nextra/hooks"
-import { ArrowRightIcon, MenuIcon } from "nextra/icons"
 
 import { setMenu, useConfig, useMenu, useThemeConfig } from "../../stores"
 

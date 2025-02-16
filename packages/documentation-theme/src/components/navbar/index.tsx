@@ -1,9 +1,9 @@
 import type { FC } from "react"
 
+import { BotIcon, GithubIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import NextLink from "next/link"
 import { Anchor } from "nextra/components"
-import { DiscordIcon, GitHubIcon } from "nextra/icons"
 import { element } from "nextra/schemas"
 import { z } from "zod"
 import { fromZodError } from "zod-validation-error"
@@ -11,12 +11,12 @@ import { fromZodError } from "zod-validation-error"
 import { ClientNavbar } from "./index.client"
 
 const propsSchema = z.strictObject({
-  chatIcon: element.default(<DiscordIcon width="24" />),
+  chatIcon: element.default(<BotIcon width="24" />),
   chatLink: z.string().optional(),
   children: element.optional(),
   logo: element,
   logoLink: z.union([z.string(), z.boolean()]).default(true),
-  projectIcon: element.default(<GitHubIcon height="24" />),
+  projectIcon: element.default(<GithubIcon height="24" />),
   projectLink: z.string().optional(),
 })
 

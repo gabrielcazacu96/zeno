@@ -1,8 +1,8 @@
 import type { ComponentProps, FC, ReactNode } from "react"
 
+import { ArrowRightIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { Button } from "nextra/components"
-import { ArrowRightIcon } from "nextra/icons"
 
 const SCROLL_TO_OPTIONS = { behavior: "smooth", top: 0 } as const
 

@@ -4,11 +4,11 @@ import type { Heading } from "nextra"
 import type { Item, MenuItem, PageItem } from "nextra/normalize-pages"
 import type { FC, FocusEventHandler, MouseEventHandler } from "react"
 
+import { ArrowRightIcon, ExpandIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { usePathname } from "next/navigation"
 import { Anchor, Button, Collapse } from "nextra/components"
 import { useFSRoute, useHash } from "nextra/hooks"
-import { ArrowRightIcon, ExpandIcon } from "nextra/icons"
 import { forwardRef, useEffect, useId, useRef, useState } from "react"
 import scrollIntoView from "scroll-into-view-if-needed"
 

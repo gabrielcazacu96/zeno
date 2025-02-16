@@ -2,11 +2,11 @@
 
 import type { FC } from "react"
 
+import { MoonIcon, SunIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { useTheme } from "next-themes"
 import { Select } from "nextra/components"
 import { useMounted } from "nextra/hooks"
-import { MoonIcon, SunIcon } from "nextra/icons"
 
 import { useThemeConfig } from "../stores"
 

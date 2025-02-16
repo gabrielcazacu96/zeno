@@ -2,11 +2,11 @@
 
 import type { FC } from "react"
 
+import { GlobeIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { addBasePath } from "next/dist/client/add-base-path"
 import { usePathname } from "next/navigation"
 import { Select } from "nextra/components"
-import { GlobeIcon } from "nextra/icons"
 
 import { useThemeConfig } from "../stores"
 
