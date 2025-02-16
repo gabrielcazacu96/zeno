@@ -158,9 +158,6 @@ importers:
 
   packages/documentation-theme:
     dependencies:
-      '@headlessui/react':
-        specifier: ^2.1.2
-        version: 2.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@zeno/ui':
         specifier: workspace:*
         version: link:../ui

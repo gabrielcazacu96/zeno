@@ -3,12 +3,7 @@
 import type { MenuItem, PageItem } from "nextra/normalize-pages"
 import type { FC, ReactNode } from "react"
 
-import {
-  MenuItem as _MenuItem,
-  Menu,
-  MenuButton,
-  MenuItems,
-} from "@headlessui/react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@zeno/ui/components/dropdown-menu"
 import { ArrowRightIcon, MenuIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { Anchor, Button } from "nextra/components"
@@ -32,23 +27,20 @@ const NavbarMenu: FC<{
     (menu.children || []).map(route => [route.name, route]),
   )
   return (
-    <Menu>
-      <MenuButton
-        className={({ focus }) =>
-          cn(
-            classes.link,
-            "items-center flex gap-1.5 cursor-pointer",
-            focus && "nextra-focus",
-          )}
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        className={cn(
+          classes.link,
+          "items-center flex gap-1.5 cursor-pointer",
+        )}
       >
         {children}
         <ArrowRightIcon
           className="*:origin-center *:transition-transform *:rotate-90"
           height="14"
         />
-      </MenuButton>
-      <MenuItems
-        anchor={{ gap: 10, padding: 16, to: "bottom" }}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
         className={cn(
           "focus-visible:nextra-focus",
           "nextra-scrollbar origin-top transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0 motion-reduce:transition-none",
@@ -58,29 +50,25 @@ const NavbarMenu: FC<{
           // headlessui adds max-height as style, use !important to override
           "max-h-[min(calc(100vh-5rem),256px)]!",
         )}
-        transition
       >
         {Object.entries(
 
           (menu.items as Record<string, { href?: string, title: string }>) || {},
         ).map(([key, item]) => (
-          <_MenuItem
-            as={Anchor}
-            className={({ focus }) =>
-              cn(
-                "block py-1.5 transition-colors ps-3 pe-9",
-                focus
-                  ? "text-gray-900 dark:text-gray-100"
-                  : "text-gray-600 dark:text-gray-400",
-              )}
-            href={item.href || routes[key]?.route}
+          <DropdownMenuItem
+            asChild
+            className={cn(
+              "block py-1.5 transition-colors ps-3 pe-9 text-gray-600 dark:text-gray-400",
+            )}
             key={key}
           >
-            {item.title}
-          </_MenuItem>
+            <Anchor href={item.href || routes[key]?.route}>
+              {item.title}
+            </Anchor>
+          </DropdownMenuItem>
         ))}
-      </MenuItems>
-    </Menu>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
