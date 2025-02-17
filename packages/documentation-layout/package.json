@@ -23,12 +23,12 @@
     "@zeno/ui": "workspace:*",
     "next-themes": "0.4.4",
     "scroll-into-view-if-needed": "3.1.0",
-    "zod": "3.22.3",
-    "zod-validation-error": "3.0.0",
-    "zustand": "5.0.1"
+    "zod": "^3.22.3",
+    "zod-validation-error": "^3.0.0",
+    "zustand": "5.0.3"
   },
   "devDependencies": {
-    "@types/react": "19.0.0",
+    "@types/react": "19.0.10",
     "@zeno/eslint-config": "workspace:*",
     "@zeno/typescript-config": "workspace:*",
     "react": "19.0.0"
