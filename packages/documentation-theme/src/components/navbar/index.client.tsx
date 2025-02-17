@@ -47,8 +47,6 @@ const NavbarMenu: FC<{
           "border border-black/5 dark:border-white/20",
           "backdrop-blur-md bg-nextra-bg/70",
           "z-20 rounded-md py-1 text-sm shadow-lg",
-          // headlessui adds max-height as style, use !important to override
-          "max-h-[min(calc(100vh-5rem),256px)]!",
         )}
       >
         {Object.entries(
