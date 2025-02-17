@@ -1,4 +1,4 @@
-import { Footer, Layout, Navbar } from "@zeno/documentation-theme"
+import { Footer, Layout, Navbar } from "@zeno/documentation-layout"
 import { Head } from "nextra/components"
 import { getPageMap } from "nextra/page-map"
 

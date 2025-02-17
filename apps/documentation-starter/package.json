@@ -12,7 +12,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@zeno/documentation-theme": "workspace:*",
+    "@zeno/documentation-layout": "workspace:*",
     "@zeno/ui": "workspace:*",
     "next": "15.1.6",
     "nextra": "4.2.4",

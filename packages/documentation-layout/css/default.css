@@ -1,7 +1,3 @@
-@source "../src/client/icons/*.svg";
-@source "../src/client/{components,hocs,mdx-components}/**/*.tsx";
-@variant dark (&:where(.dark *));
-
 @theme {
   --color-nextra-bg: rgb(var(--nextra-bg));
   --color-primary-50: hsl(
@@ -39,9 +35,5 @@
   --color-primary-800: hsl(
     var(--nextra-primary-hue) var(--nextra-primary-saturation)
       calc(var(--nextra-primary-lightness) - 13%)
-  );
-  --color-primary-900: hsl(
-    var(--nextra-primary-hue) var(--nextra-primary-saturation)
-      calc(var(--nextra-primary-lightness) - 21%)
   );
 }

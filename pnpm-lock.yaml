@@ -17,9 +17,9 @@ importers:
 
   apps/documentation:
     dependencies:
-      '@zeno/documentation-theme':
+      '@zeno/documentation-layout':
         specifier: workspace:*
-        version: link:../../packages/documentation-theme
+        version: link:../../packages/documentation-layout
       '@zeno/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -66,9 +66,9 @@ importers:
 
   apps/documentation-starter:
     dependencies:
-      '@zeno/documentation-theme':
+      '@zeno/documentation-layout':
         specifier: workspace:*
-        version: link:../../packages/documentation-theme
+        version: link:../../packages/documentation-layout
       '@zeno/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -156,7 +156,7 @@ importers:
         specifier: 5.7.3
         version: 5.7.3
 
-  packages/documentation-theme:
+  packages/documentation-layout:
     dependencies:
       '@zeno/ui':
         specifier: workspace:*

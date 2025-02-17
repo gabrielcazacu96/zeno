@@ -22,7 +22,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({ className, lite }) => {
   if (!darkMode) {
     return
   }
-  const IconToUse = mounted && resolvedTheme === "dark" ? MoonIcon : SunIcon
+  const ThemeIcon = mounted && resolvedTheme === "dark" ? MoonIcon : SunIcon
   const id = mounted ? (theme as keyof typeof themeSwitch) : "light"
   return (
     <Select
@@ -35,7 +35,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({ className, lite }) => {
       ]}
       selectedOption={(
         <>
-          <IconToUse height="12" />
+          <ThemeIcon height="12" />
           {!lite && themeSwitch[id]}
         </>
       )}
