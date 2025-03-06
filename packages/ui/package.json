@@ -8,7 +8,8 @@
       "./src/hooks/*.ts",
       "./src/hooks/*.tsx"
     ],
-    "./icons": "./src/icons.tsx",
+    "./icons": "./src/icons/index.tsx",
+    "./icons/*": "./src/icons/*.tsx",
     "./styles/*.css": "./src/styles/*.css",
     "./lib/*": "./src/lib/*.ts"
   },
