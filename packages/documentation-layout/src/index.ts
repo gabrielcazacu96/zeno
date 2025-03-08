@@ -6,6 +6,7 @@ export {
   NotFoundPage,
   ThemeSwitch,
 } from "./components"
+export { Head } from "./components/head"
 export { Layout } from "./layout"
 export { useMDXComponents } from "./mdx-components"
 export { Link } from "./mdx-components/link"

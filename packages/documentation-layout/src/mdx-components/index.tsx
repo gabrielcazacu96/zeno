@@ -4,15 +4,14 @@
 import type { MDXComponents } from "nextra/mdx-components"
 import type { ComponentProps, FC } from "react"
 
+import { Code } from "@zeno/ui/components/code"
+import { Summary } from "@zeno/ui/components/summary"
 /* eslint sort-keys: error */
 import { cn } from "@zeno/ui/lib/utils"
 import {
   Callout,
-  Code,
   Details,
   Pre,
-  SkipNavContent,
-  Summary,
   Table,
   withGitHubAlert,
   withIcons,
@@ -103,7 +102,6 @@ const DEFAULT_COMPONENTS = getNextraMDXComponents({
           metadata={metadata}
           toc={toc}
         >
-          <SkipNavContent />
           <main
             data-pagefind-body={
               (metadata as any).searchable !== false || undefined

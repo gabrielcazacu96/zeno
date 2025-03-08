@@ -1,9 +1,9 @@
 import type { FC } from "react"
 
+import { Anchor } from "@zeno/ui/components/anchor"
 import { BotIcon, GithubIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import NextLink from "next/link"
-import { Anchor } from "nextra/components"
 import { element } from "nextra/schemas"
 import { z } from "zod"
 import { fromZodError } from "zod-validation-error"

@@ -3,8 +3,8 @@
 import type { Heading } from "nextra"
 import type { FC } from "react"
 
+import { Anchor } from "@zeno/ui/components/anchor"
 import { cn } from "@zeno/ui/lib/utils"
-import { Anchor } from "nextra/components"
 import { useEffect, useRef } from "react"
 import scrollIntoView from "scroll-into-view-if-needed"
 

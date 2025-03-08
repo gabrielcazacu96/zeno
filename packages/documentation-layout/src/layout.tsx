@@ -2,7 +2,7 @@ import type { FC, ReactNode } from "react"
 
 /* eslint sort-keys: error */
 import { ThemeProvider } from "next-themes"
-import { Search, SkipNavLink } from "nextra/components"
+import { Search } from "nextra/components"
 import { element, stringOrElement } from "nextra/schemas"
 import { z } from "zod"
 import { fromZodError } from "zod-validation-error"
@@ -104,7 +104,6 @@ export const Layout: FC<LayoutProps> = ({ children, ...themeConfig }) => {
   return (
     <ThemeConfigProvider value={rest}>
       <ThemeProvider {...nextThemes}>
-        <SkipNavLink />
         {banner}
         <ConfigProvider footer={footer} navbar={navbar} pageMap={pageMap}>
           {/*
