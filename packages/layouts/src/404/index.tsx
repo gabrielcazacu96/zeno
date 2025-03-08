@@ -2,7 +2,7 @@ import type { FC, ReactNode } from "react"
 
 import { cn } from "@zeno/ui/lib/utils"
 
-import { H1 } from "../../mdx-components/heading"
+import { H1 } from "../mdx-components/heading"
 import { NotFoundLink } from "./index.client"
 
 type NotFoundPageProps = {
