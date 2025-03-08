@@ -6,10 +6,10 @@ import type { FC, FocusEventHandler, MouseEventHandler } from "react"
 
 import { Anchor } from "@zeno/ui/components/anchor"
 import { Button } from "@zeno/ui/components/button"
+import { Collapse } from "@zeno/ui/components/collapse"
 import { ChevronRightIcon, ExpandIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { usePathname } from "next/navigation"
-import { Collapse } from "nextra/components"
 import { forwardRef, useEffect, useId, useRef, useState } from "react"
 import scrollIntoView from "scroll-into-view-if-needed"
 

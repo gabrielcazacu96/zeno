@@ -6,7 +6,6 @@ import type { ComponentProps, FC } from "react"
 
 import { Code } from "@zeno/ui/components/code"
 import { Summary } from "@zeno/ui/components/summary"
-/* eslint sort-keys: error */
 import { cn } from "@zeno/ui/lib/utils"
 import {
   Callout,
