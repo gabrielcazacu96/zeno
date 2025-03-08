@@ -3,10 +3,11 @@
 import type { MenuItem, PageItem } from "nextra/normalize-pages"
 import type { FC, ReactNode } from "react"
 
+import { Button } from "@zeno/ui/components/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@zeno/ui/components/dropdown-menu"
 import { ChevronRightIcon, MenuIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
-import { Anchor, Button } from "nextra/components"
+import { Anchor } from "nextra/components"
 import { useFSRoute } from "nextra/hooks"
 
 import { setMenu, useConfig, useMenu, useThemeConfig } from "../../stores"
@@ -130,8 +131,9 @@ export const ClientNavbar: FC<{
 
       <Button
         aria-label="Menu"
-        className={({ active }) =>
-          cn("nextra-hamburger md:hidden", active && "bg-gray-400/20")}
+        className={
+          cn("nextra-hamburger md:hidden active:bg-gray-400/20")
+        }
         onClick={() => setMenu(previous => !previous)}
       >
         <MenuIcon className={cn({ open: menu })} height="24" />

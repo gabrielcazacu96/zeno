@@ -4,10 +4,11 @@ import type { Heading } from "nextra"
 import type { Item, MenuItem, PageItem } from "nextra/normalize-pages"
 import type { FC, FocusEventHandler, MouseEventHandler } from "react"
 
+import { Button } from "@zeno/ui/components/button"
 import { ChevronRightIcon, ExpandIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { usePathname } from "next/navigation"
-import { Anchor, Button, Collapse } from "nextra/components"
+import { Anchor, Collapse } from "nextra/components"
 import { useFSRoute, useHash } from "nextra/hooks"
 import { forwardRef, useEffect, useId, useRef, useState } from "react"
 import scrollIntoView from "scroll-into-view-if-needed"
@@ -457,13 +458,12 @@ export const Sidebar: FC<{ toc: Heading[] }> = ({ toc }) => {
               <Button
                 aria-controls={sidebarControlsId}
                 aria-expanded={isExpanded}
-                className={({ hover }) =>
+                className={
                   cn(
-                    "rounded-md p-2",
-                    hover
-                      ? "bg-gray-100 text-gray-900 dark:bg-primary-100/5 dark:text-gray-50"
-                      : "text-gray-600 dark:text-gray-400",
-                  )}
+                    "rounded-md p-2 text-gray-600 dark:text-gray-400",
+                    "hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-primary-100/5 dark:hover:text-gray-50",
+                  )
+                }
                 onClick={() => {
                   setIsExpanded(previous => !previous)
                   setToggleAnimation(true)

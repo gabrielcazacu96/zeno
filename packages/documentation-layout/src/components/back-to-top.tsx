@@ -1,8 +1,8 @@
 import type { ComponentProps, FC, ReactNode } from "react"
 
+import { Button } from "@zeno/ui/components/button"
 import { ChevronRightIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
-import { Button } from "nextra/components"
 
 const SCROLL_TO_OPTIONS = { behavior: "smooth", top: 0 } as const
 
@@ -27,13 +27,14 @@ export const BackToTop: FC<{
     <Button
       // elements with `aria-hidden: true` must not be focusable or contain focusable elements
       aria-hidden={hidden ? "true" : undefined}
-      className={({ disabled }) =>
+      className={
         cn(
           "flex items-center gap-1.5",
           "whitespace-nowrap", // Safari
-          disabled ? "opacity-0" : "opacity-100",
+          hidden ? "opacity-0" : "opacity-100",
           className,
-        )}
+        )
+      }
       disabled={hidden}
       onClick={scrollToTop}
     >
