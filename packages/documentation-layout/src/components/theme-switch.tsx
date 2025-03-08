@@ -6,8 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from "@zeno/ui/compo
 import { MoonIcon, SunIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { useTheme } from "next-themes"
-import { useMounted } from "nextra/hooks"
 
+import { useMounted } from "../hooks/use-mounted"
 import { useThemeConfig } from "../stores"
 
 type ThemeSwitchProps = {

@@ -10,10 +10,11 @@ import { ChevronRightIcon, ExpandIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { usePathname } from "next/navigation"
 import { Collapse } from "nextra/components"
-import { useFSRoute, useHash } from "nextra/hooks"
 import { forwardRef, useEffect, useId, useRef, useState } from "react"
 import scrollIntoView from "scroll-into-view-if-needed"
 
+import { useFSRoute } from "../hooks/use-fs-route"
+import { useHash } from "../hooks/use-hash"
 import {
   setFocusedRoute,
   setMenu,

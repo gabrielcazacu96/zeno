@@ -3,8 +3,8 @@
 import type { FC, ReactNode } from "react"
 
 import { usePathname } from "next/navigation"
-import { useMounted } from "nextra/hooks"
 
+import { useMounted } from "../../hooks/use-mounted"
 import { Link } from "../../mdx-components/link"
 import { useThemeConfig } from "../../stores"
 import { getGitIssueUrl } from "../../utils"

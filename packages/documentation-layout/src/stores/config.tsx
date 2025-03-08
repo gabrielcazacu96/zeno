@@ -3,9 +3,10 @@
 import type { PageMapItem } from "nextra"
 import type { FC, ReactElement, ReactNode } from "react"
 
-import { useFSRoute } from "nextra/hooks"
 import { normalizePages } from "nextra/normalize-pages"
 import { createContext, useContext } from "react"
+
+import { useFSRoute } from "../hooks/use-fs-route"
 
 const ConfigContext = createContext<null | ReturnType<typeof normalizePages>>(
   null,

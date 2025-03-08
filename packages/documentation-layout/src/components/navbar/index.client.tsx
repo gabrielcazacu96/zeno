@@ -8,8 +8,8 @@ import { Button } from "@zeno/ui/components/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@zeno/ui/components/dropdown-menu"
 import { ChevronRightIcon, MenuIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
-import { useFSRoute } from "nextra/hooks"
 
+import { useFSRoute } from "../../hooks/use-fs-route"
 import { setMenu, useConfig, useMenu, useThemeConfig } from "../../stores"
 
 const classes = {
