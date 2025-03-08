@@ -1,5 +1,5 @@
 {
-  "name": "@zeno/documentation-layout",
+  "name": "@zeno/layouts",
   "version": "0.0.0",
   "exports": {
     "./style.css": "./src/style.css",

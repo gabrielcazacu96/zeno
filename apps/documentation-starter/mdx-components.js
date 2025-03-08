@@ -1,4 +1,4 @@
-import { useMDXComponents as getThemeComponents } from "@zeno/documentation-layout"
+import { useMDXComponents as getThemeComponents } from "@zeno/layouts"
 
 // Get the default MDX components
 const themeComponents = getThemeComponents()
