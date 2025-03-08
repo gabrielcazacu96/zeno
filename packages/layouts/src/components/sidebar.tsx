@@ -6,7 +6,7 @@ import type { FC, FocusEventHandler, MouseEventHandler } from "react"
 
 import { Anchor } from "@zeno/ui/components/anchor"
 import { Button } from "@zeno/ui/components/button"
-import { Collapse } from "@zeno/ui/components/collapse"
+import { Collapsible } from "@zeno/ui/components/collapsible"
 import { ChevronRightIcon, ExpandIcon } from "@zeno/ui/icons"
 import { cn } from "@zeno/ui/lib/utils"
 import { usePathname } from "next/navigation"
@@ -166,7 +166,7 @@ const Folder: FC<FolderProps> = ({ anchors, item: _item, level, onFocus }) => {
         />
       </ComponentToUse>
       {item.children && (
-        <Collapse isOpen={open}>
+        <Collapsible open={open}>
           <Menu
             anchors={anchors}
             className={classes.border}
@@ -174,7 +174,7 @@ const Folder: FC<FolderProps> = ({ anchors, item: _item, level, onFocus }) => {
             directories={item.children}
             level={level}
           />
-        </Collapse>
+        </Collapsible>
       )}
     </li>
   )
@@ -307,7 +307,7 @@ export const MobileNav: FC = () => {
   }, [pathname, hash])
 
   const anchors = toc.filter(v => v.depth === 2)
-  const sidebarReference = useRef<HTMLUListElement>(null!)
+  const sidebarReference = useRef<HTMLUListElement>(undefined!)
 
   useEffect(() => {
     const activeElement = sidebarReference.current.querySelector("li.active")
@@ -424,14 +424,14 @@ export const Sidebar: FC<{ toc: Heading[] }> = ({ toc }) => {
         >
           {/* without !hideSidebar check <Collapse />'s inner.clientWidth on `layout: "raw"` will be 0 and element will not have width on initial loading */}
           {(!hideSidebar || !isExpanded) && (
-            <Collapse horizontal isOpen={isExpanded}>
+            <Collapsible open={isExpanded}>
               <Menu
                 anchors={anchors}
                 // The sidebar menu, shows only the docs directories.
                 directories={docsDirectories}
                 level={0}
               />
-            </Collapse>
+            </Collapsible>
           )}
         </div>
         {hasMenu && (

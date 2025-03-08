@@ -14,29 +14,40 @@ const ToggleGroupContext = React.createContext<
   variant: "default",
 })
 
-const ToggleGroup = React.forwardRef<
-  React.ElementRef<typeof ToggleGroupPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> &
-  VariantProps<typeof toggleVariants>
->(({ children, className, size, variant, ...props }, reference) => (
-  <ToggleGroupPrimitive.Root
-    className={cn("flex items-center justify-center gap-1", className)}
-    ref={reference}
-    {...props}
-  >
-    <ToggleGroupContext.Provider value={{ size, variant }}>
-      {children}
-    </ToggleGroupContext.Provider>
-  </ToggleGroupPrimitive.Root>
-))
+function ToggleGroup({
+  children,
+  className,
+  size,
+  variant,
+  ...props
+}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &
+  VariantProps<typeof toggleVariants>) {
+  return (
+    <ToggleGroupPrimitive.Root
+      className={cn(
+        "group/toggle-group flex w-fit items-center rounded-md data-[variant=outline]:shadow-xs",
+        className,
+      )}
+      data-size={size}
+      data-slot="toggle-group"
+      data-variant={variant}
+      {...props}
+    >
+      <ToggleGroupContext.Provider value={{ size, variant }}>
+        {children}
+      </ToggleGroupContext.Provider>
+    </ToggleGroupPrimitive.Root>
+  )
+}
 
-ToggleGroup.displayName = ToggleGroupPrimitive.Root.displayName
-
-const ToggleGroupItem = React.forwardRef<
-  React.ElementRef<typeof ToggleGroupPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> &
-  VariantProps<typeof toggleVariants>
->(({ children, className, size, variant, ...props }, reference) => {
+function ToggleGroupItem({
+  children,
+  className,
+  size,
+  variant,
+  ...props
+}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &
+  VariantProps<typeof toggleVariants>) {
   const context = React.useContext(ToggleGroupContext)
 
   return (
@@ -47,16 +58,18 @@ const ToggleGroupItem = React.forwardRef<
           size: context.size || size,
           variant: context.variant || variant,
         }),
+        "min-w-0 flex-1 shrink-0 rounded-none shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10 data-[variant=outline]:border-l-0 data-[variant=outline]:first:border-l",
         className,
       )}
-      ref={reference}
+      // eslint-disable-next-line unicorn/explicit-length-check
+      data-size={context.size || size}
+      data-slot="toggle-group-item"
+      data-variant={context.variant || variant}
       {...props}
     >
       {children}
     </ToggleGroupPrimitive.Item>
   )
-})
-
-ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName
+}
 
 export { ToggleGroup, ToggleGroupItem }
