@@ -1,9 +1,5 @@
 @theme {
   --color-nextra-bg: rgb(var(--nextra-bg));
-  --color-primary-50: hsl(
-    var(--nextra-primary-hue) var(--nextra-primary-saturation)
-      calc(var(--nextra-primary-lightness) + 52%)
-  );
   --color-primary-100: hsl(
     var(--nextra-primary-hue) var(--nextra-primary-saturation)
       calc(var(--nextra-primary-lightness) + 49%)
