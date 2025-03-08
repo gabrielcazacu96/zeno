@@ -7,9 +7,9 @@ import { element, stringOrElement } from "nextra/schemas"
 import { z } from "zod"
 import { fromZodError } from "zod-validation-error"
 
-import { LastUpdated } from "./components/last-updated"
-import { MobileNav } from "./components/sidebar"
-import { ConfigProvider, ThemeConfigProvider } from "./stores"
+import { LastUpdated } from "../components/last-updated"
+import { MobileNav } from "../components/sidebar"
+import { ConfigProvider, ThemeConfigProvider } from "../stores"
 
 const attributeSchema = z.custom<"class" | `data-${string}`>(
   value => value === "class" || value.startsWith("data-"),

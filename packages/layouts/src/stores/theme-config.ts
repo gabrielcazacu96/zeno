@@ -4,7 +4,7 @@ import type { ComponentProps } from "react"
 
 import { createContext, createElement, useContext } from "react"
 
-import type { ThemeConfigProps } from "../layout"
+import type { ThemeConfigProps } from "../documentation"
 
 const ThemeConfigContext = createContext<
   Omit<
