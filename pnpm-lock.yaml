@@ -212,6 +212,9 @@ importers:
       nextra:
         specifier: '>=4'
         version: 4.2.4(acorn@8.14.0)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.2)
+      react:
+        specifier: '>=18'
+        version: 19.0.0
       react-dom:
         specifier: '>=18'
         version: 19.0.0(react@19.0.0)
@@ -237,14 +240,11 @@ importers:
       '@zeno/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
-      react:
-        specifier: 19.0.0
-        version: 19.0.0
 
   packages/tailwind-config:
-    devDependencies:
+    dependencies:
       tailwindcss:
-        specifier: 4.0.12
+        specifier: '>=4'
         version: 4.0.12
 
   packages/typescript-config: {}
