@@ -1,4 +1,3 @@
-@import "@zeno/ui/styles/globals.css";
 @import "@zeno/layouts/style.css";
 
 @source "./app/**/*.{md,mdx}"
