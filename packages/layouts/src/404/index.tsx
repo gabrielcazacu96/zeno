@@ -20,7 +20,7 @@ export const NotFoundPage: FC<NotFoundPageProps> = ({
   return (
     <div
       className={cn(
-        "flex flex-col justify-center items-center h-[calc(100dvh-var(--nextra-navbar-height))]",
+        "flex flex-col justify-center items-center",
         className,
       )}
     >

@@ -35,12 +35,5 @@ export const nextJsConfig = [
       // React scope no longer necessary with new JSX transform.
       "react/react-in-jsx-scope": "off",
     }
-  },
-  {
-    // Nextra meta files define order using object keys.
-    files: ["**/_meta.js", "**/_meta.ts"],
-    rules: {
-      "perfectionist/sort-objects": "off",
-    }
   }
 ]
