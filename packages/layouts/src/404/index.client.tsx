@@ -2,31 +2,16 @@
 
 import type { FC, ReactNode } from "react"
 
-import { usePathname } from "next/navigation"
-
-import { useMounted } from "../hooks/use-mounted"
-import { Link } from "../mdx-components/link"
-import { useThemeConfig } from "../stores"
-import { getGitIssueUrl } from "../utils"
+import Link from "next/link"
 
 export const NotFoundLink: FC<{
   children: ReactNode
   labels: string
-}> = ({ children, labels }) => {
-  const config = useThemeConfig()
-  const pathname = usePathname()
-  const mounted = useMounted()
-  const reference = mounted && document.referrer
-  const referrer = reference ? ` from "${reference}"` : ""
-
+}> = ({ children }) => {
   return (
     <Link
       className="mt-6"
-      href={getGitIssueUrl({
-        labels,
-        repository: config.docsRepositoryBase,
-        title: `Found broken "${mounted ? pathname : ""}" link${referrer}. Please fix!`,
-      })}
+      href="#"
     >
       {children}
     </Link>

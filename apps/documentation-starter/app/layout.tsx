@@ -1,25 +1,8 @@
-import { Footer, Head, Layout, Navbar } from "@zeno/layouts"
-import { getPageMap } from "nextra/page-map"
+import { RootProvider } from "@zeno/layouts/base/provider"
 
 import "./globals.css"
+
 import React from "react"
-
-export const metadata = {
-  // https://nextjs.org/docs/app/building-your-application/optimizing/metadata
-}
-
-const navbar = (
-  <Navbar
-    logo={<b>Zeno</b>}
-  />
-)
-const footer = (
-  <Footer>
-    {new Date().getFullYear()}
-    {" "}
-    © Zeno.
-  </Footer>
-)
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -31,16 +14,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
       suppressHydrationWarning
     >
-      <Head />
       <body>
-        <Layout
-          docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
-          footer={footer}
-          navbar={navbar}
-          pageMap={await getPageMap()}
-        >
+        <RootProvider>
           {children}
-        </Layout>
+        </RootProvider>
       </body>
     </html>
   )

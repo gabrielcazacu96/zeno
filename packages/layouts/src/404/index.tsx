@@ -2,7 +2,6 @@ import type { FC, ReactNode } from "react"
 
 import { cn } from "@zeno/ui/lib/utils"
 
-import { H1 } from "../mdx-components/heading"
 import { NotFoundLink } from "./index.client"
 
 type NotFoundPageProps = {
@@ -25,7 +24,7 @@ export const NotFoundPage: FC<NotFoundPageProps> = ({
         className,
       )}
     >
-      {children || <H1>404: Page Not Found</H1>}
+      {children || <h1>404: Page Not Found</h1>}
       <NotFoundLink labels={labels}>{content}</NotFoundLink>
     </div>
   )
