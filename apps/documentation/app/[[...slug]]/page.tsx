@@ -1,3 +1,5 @@
+import { metadataImage } from "@/lib/metadata"
+import { source } from "@/lib/source"
 import {
   DocsBody,
   DocsDescription,
@@ -7,9 +9,6 @@ import {
 import { defaultMdxComponents } from "@zeno/layouts/ui"
 import { notFound } from "next/navigation"
 import React from "react"
-
-import { metadataImage } from "../../lib/metadata"
-import { source } from "../../lib/source"
 
 export async function generateMetadata(props: {
   params: Promise<{ slug?: string[] }>
