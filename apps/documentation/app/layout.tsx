@@ -1,8 +1,10 @@
 import { RootProvider } from "@zeno/layouts/ui"
 import { DocsLayout } from "@zeno/layouts/ui"
-import React from "react"
 
 import "./globals.css"
+
+import React from "react"
+
 import { source } from "../lib/source"
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
