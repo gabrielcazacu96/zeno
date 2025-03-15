@@ -37,6 +37,8 @@ export const config = [
           replacements: {
             prop: false,
             props: false,
+            param: false,
+            params: false,
           }
         }
       ]

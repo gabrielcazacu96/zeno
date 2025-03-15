@@ -23,7 +23,6 @@ export async function generateMetadata(props: {
   })
 }
 
-// eslint-disable-next-line unicorn/prevent-abbreviations
 export async function generateStaticParams() {
   return source.generateParams()
 }
