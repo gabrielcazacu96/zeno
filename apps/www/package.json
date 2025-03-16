@@ -1,5 +1,5 @@
 {
-  "name": "@zeno/documentation",
+  "name": "@zeno/www",
   "version": "0.0.0",
   "type": "module",
   "private": true,
