@@ -7,6 +7,9 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply text-[15px] sm:text-[15.5px] md:text-[16px] lg:text-[16.5px] xl:text-[17px];
+  }
   body {
     @apply bg-background text-foreground;
   }
