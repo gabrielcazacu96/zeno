@@ -5,7 +5,7 @@ import "./globals.css"
 
 import React from "react"
 
-import { source } from "../lib/source"
+import { documentation } from "../lib/source"
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -19,7 +19,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     >
       <body>
         <RootProvider>
-          <DocsLayout githubUrl="https://github.com/MathieuUrstein/zeno" nav={{ title: "Zeno Documentation" }} tree={source.pageTree}>
+          <DocsLayout githubUrl="https://github.com/MathieuUrstein/zeno" nav={{ title: "Zeno Documentation" }} tree={documentation.pageTree}>
             {children}
           </DocsLayout>
         </RootProvider>
