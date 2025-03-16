@@ -1,4 +1,4 @@
-import { RootProvider } from "@zeno/layouts/base/provider"
+import { RootProvider } from "@zeno/layouts/ui"
 
 import "./globals.css"
 

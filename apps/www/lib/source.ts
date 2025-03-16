@@ -1,18 +1,18 @@
 import { loader } from "@zeno/layouts/core"
 
-import { content } from "../.source"
+import { blogSource, contentSource, documentationSource } from "../.source"
 
 export const source = loader({
   baseUrl: "/",
-  source: content.toFumadocsSource(),
+  source: contentSource.toFumadocsSource(),
 })
 
 export const documentation = loader({
   baseUrl: "/docs",
-  source: content.toFumadocsSource(),
+  source: documentationSource.toFumadocsSource(),
 })
 
 export const blog = loader({
   baseUrl: "/blog",
-  source: content.toFumadocsSource(),
+  source: blogSource.toFumadocsSource(),
 })

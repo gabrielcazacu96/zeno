@@ -1,11 +1,8 @@
 import { RootProvider } from "@zeno/layouts/ui"
-import { DocsLayout } from "@zeno/layouts/ui"
 
 import "./globals.css"
 
 import React from "react"
-
-import { documentation } from "../lib/source"
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -19,9 +16,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     >
       <body>
         <RootProvider>
-          <DocsLayout githubUrl="https://github.com/MathieuUrstein/zeno" nav={{ title: "Zeno Documentation" }} tree={documentation.pageTree}>
-            {children}
-          </DocsLayout>
+          {children}
         </RootProvider>
       </body>
     </html>
