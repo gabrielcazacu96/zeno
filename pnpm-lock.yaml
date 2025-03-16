@@ -15,58 +15,6 @@ importers:
         specifier: 5.8.2
         version: 5.8.2
 
-  apps/documentation:
-    dependencies:
-      '@zeno/layouts':
-        specifier: workspace:*
-        version: link:../../packages/layouts
-      '@zeno/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
-      fumadocs-mdx:
-        specifier: 11.5.6
-        version: 11.5.6(acorn@8.14.0)(fumadocs-core@15.0.18(@types/react@19.0.10)(next@15.2.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(next@15.2.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
-      next:
-        specifier: 15.2.2
-        version: 15.2.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      react:
-        specifier: 19.0.0
-        version: 19.0.0
-      react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.0)
-      shiki:
-        specifier: 3.2.1
-        version: 3.2.1
-    devDependencies:
-      '@tailwindcss/postcss':
-        specifier: 4.0.13
-        version: 4.0.13
-      '@types/node':
-        specifier: 22.13.10
-        version: 22.13.10
-      '@types/react':
-        specifier: 19.0.10
-        version: 19.0.10
-      '@types/react-dom':
-        specifier: 19.0.4
-        version: 19.0.4(@types/react@19.0.10)
-      '@zeno/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/eslint-config
-      '@zeno/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
-      postcss:
-        specifier: 8.5.3
-        version: 8.5.3
-      tailwindcss:
-        specifier: 4.0.13
-        version: 4.0.13
-      typescript:
-        specifier: 5.8.2
-        version: 5.8.2
-
   apps/documentation-starter:
     dependencies:
       '@zeno/layouts':
@@ -133,6 +81,61 @@ importers:
       react-dom:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
+    devDependencies:
+      '@tailwindcss/postcss':
+        specifier: 4.0.13
+        version: 4.0.13
+      '@types/node':
+        specifier: 22.13.10
+        version: 22.13.10
+      '@types/react':
+        specifier: 19.0.10
+        version: 19.0.10
+      '@types/react-dom':
+        specifier: 19.0.4
+        version: 19.0.4(@types/react@19.0.10)
+      '@zeno/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@zeno/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
+      postcss:
+        specifier: 8.5.3
+        version: 8.5.3
+      tailwindcss:
+        specifier: 4.0.13
+        version: 4.0.13
+      typescript:
+        specifier: 5.8.2
+        version: 5.8.2
+
+  apps/www:
+    dependencies:
+      '@zeno/layouts':
+        specifier: workspace:*
+        version: link:../../packages/layouts
+      '@zeno/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      fumadocs-mdx:
+        specifier: 11.5.6
+        version: 11.5.6(acorn@8.14.0)(fumadocs-core@15.0.18(@types/react@19.0.10)(next@15.2.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(next@15.2.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      next:
+        specifier: 15.2.2
+        version: 15.2.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react:
+        specifier: 19.0.0
+        version: 19.0.0
+      react-dom:
+        specifier: 19.0.0
+        version: 19.0.0(react@19.0.0)
+      shiki:
+        specifier: 3.2.1
+        version: 3.2.1
+      zod:
+        specifier: 3.24.2
+        version: 3.24.2
     devDependencies:
       '@tailwindcss/postcss':
         specifier: 4.0.13
@@ -396,7 +399,7 @@ importers:
         specifier: 1.1.2
         version: 1.1.2(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       zod:
-        specifier: 3.24.2
+        specifier: '>=3'
         version: 3.24.2
     devDependencies:
       '@types/node':
