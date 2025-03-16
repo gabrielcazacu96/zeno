@@ -1,31 +1,20 @@
-import { defineDocs } from "fumadocs-mdx/config"
+import { defineDocs, frontmatterSchema } from "fumadocs-mdx/config"
+import { z } from "zod"
 
 export const contentSource = defineDocs({
   dir: "content",
-  docs: {
-    // options for `doc` collection
-  },
-  meta: {
-    // options for `meta` collection
-  },
 })
 
 export const documentationSource = defineDocs({
   dir: "content/docs",
-  docs: {
-    // options for `doc` collection
-  },
-  meta: {
-    // options for `meta` collection
-  },
 })
 
 export const blogSource = defineDocs({
   dir: "content/blog",
   docs: {
-    // options for `doc` collection
-  },
-  meta: {
-    // options for `meta` collection
+    schema: frontmatterSchema.extend({
+      author: z.string(),
+      date: z.string().date().or(z.date()).optional(),
+    }),
   },
 })
