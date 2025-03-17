@@ -14,6 +14,7 @@ export const blogSource = defineDocs({
   docs: {
     schema: frontmatterSchema.extend({
       author: z.string(),
+      date: z.optional(z.date()),
     }),
   },
 })

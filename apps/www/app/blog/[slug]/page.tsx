@@ -1,14 +1,9 @@
 import type { Metadata } from "next"
 
-import {
-  DocsBody,
-  DocsDescription,
-  DocsPage,
-  DocsTitle,
-} from "@zeno/layouts/ui"
+import { BlogBody } from "@zeno/layouts/blog/body"
+import { BlogHeader } from "@zeno/layouts/blog/header"
+import { BlogPage } from "@zeno/layouts/blog/page"
 import { defaultMdxComponents } from "@zeno/layouts/ui"
-import { Button } from "@zeno/ui/components/button"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import React from "react"
 
@@ -46,52 +41,15 @@ export default async function Page(props: {
   const MDX = page.data.body
 
   return (
-    <>
-      <div
-        className="container rounded-xl border py-12 md:px-8"
-        style={{
-          backgroundBlendMode: "difference, difference, normal",
-          backgroundColor: "black",
-          backgroundImage: [
-            "linear-gradient(140deg, hsla(274,94%,54%,0.3), transparent 50%)",
-            "linear-gradient(to left top, hsla(260,90%,50%,0.8), transparent 50%)",
-            "radial-gradient(circle at 100% 100%, hsla(240,100%,82%,1), hsla(240,40%,40%,1) 17%, hsla(240,40%,40%,0.5) 20%, transparent)",
-          ].join(", "),
-        }}
-      >
-        <h1 className="mb-2 text-3xl font-bold text-white">
-          {page.data.title}
-        </h1>
-        <p className="mb-4 text-white/80">{page.data.description}</p>
-        <Button
-          asChild
-        >
-          <Link href="/blog">
-            Back
-          </Link>
-        </Button>
-      </div>
-      <article className="container flex flex-col px-0 py-8 lg:flex-row lg:px-4">
-        <div className="prose min-w-0 flex-1 p-4">
-          <MDX
-            components={{
-              ...defaultMdxComponents,
-            }}
-          />
-        </div>
-        <div className="flex flex-col gap-4 border-l p-4 text-sm lg:w-[250px]">
-          <div>
-            <p className="mb-1 text-fd-muted-foreground">Written by</p>
-            <p className="font-medium">{page.data.author}</p>
-          </div>
-          <div>
-            <p className="mb-1 text-sm text-fd-muted-foreground">At</p>
-            <p className="font-medium">
-              {new Date(page.data.lastModified ?? page.file.name).toDateString()}
-            </p>
-          </div>
-        </div>
-      </article>
-    </>
+    <BlogPage>
+      <BlogHeader {...page.data} />
+      <BlogBody>
+        <MDX
+          components={{
+            ...defaultMdxComponents,
+          }}
+        />
+      </BlogBody>
+    </BlogPage>
   )
 }
