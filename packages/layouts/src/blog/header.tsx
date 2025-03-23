@@ -1,7 +1,8 @@
 import Image from "next/image"
 
-export function BlogHeader({ author, date, description, lastModified, title }: {
+export function BlogHeader({ author, banner, date, description, lastModified, title }: {
   author?: string
+  banner?: string
   className?: string
   date?: Date | string
   description?: string
@@ -19,17 +20,27 @@ export function BlogHeader({ author, date, description, lastModified, title }: {
       {description && <p className="mb-4 text-muted-foreground text-lg">{description}</p>}
       {author && (
         <div className="mt-6 mx-auto flex gap-4 items-center justify-center">
-          <Image alt={`${author} profile picture`} className="rounded-full" height={40} src="https://images.unsplash.com/photo-1499996860823-5214fcc65f8f?q=80&w=1366&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" width={40} />
+          <Image alt={`${author} profile picture`} className="rounded-full size-12" height={50} src="https://images.unsplash.com/photo-1499996860823-5214fcc65f8f?q=80&w=1366&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" width={50} />
           <div className="flex flex-col text-left">
             <div>{author}</div>
             {(date ?? lastModified) && (
-              <div className="text-muted-foreground">
+              <div className="text-muted-foreground text-sm">
                 {new Date(date ?? lastModified ?? Date.now()).toDateString()}
-&nbsp;·&nbsp;x min read
+                &nbsp;·&nbsp;x min read
               </div>
             )}
           </div>
         </div>
+      )}
+      {banner && (
+        <Image
+          alt={title}
+          className="rounded-lg mt-8 aspect-video"
+          height={3456}
+          layout="responsive"
+          src={banner}
+          width={5184}
+        />
       )}
     </div>
   )
