@@ -11,6 +11,7 @@ export const config = [
   ...baseConfig,
   react.configs.flat.recommended,
   {
+    ...react.configs.flat.recommended,
     languageOptions: {
       ...react.configs.flat.recommended.languageOptions,
       globals: {
