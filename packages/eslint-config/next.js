@@ -1,5 +1,5 @@
 import next from "@next/eslint-plugin-next"
-import { config as reactConfig } from "./react-internal.js"
+import { config as reactConfig } from "./react.js"
 
 /**
  * A custom ESLint configuration for libraries that use Next.js.
