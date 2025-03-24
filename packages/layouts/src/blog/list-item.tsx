@@ -36,7 +36,7 @@ export function BlogListItem({ author, banner, date, description, index, lastMod
           alt={title}
           className="rounded-lg mt-2 aspect-video"
           height={3456}
-          layout="responsive"
+          priority={index !== undefined && index < 3}
           src={banner}
           width={5184}
         />
