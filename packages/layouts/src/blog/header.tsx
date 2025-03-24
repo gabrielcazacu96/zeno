@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-export function BlogHeader({ author, banner, date, description, lastModified, title }: {
+interface BlogHeaderProps {
   author?: string
   banner?: string
   className?: string
@@ -8,10 +8,12 @@ export function BlogHeader({ author, banner, date, description, lastModified, ti
   description?: string
   lastModified?: Date | string
   title: string
-}) {
+}
+
+export function BlogHeader({ author, banner, date, description, lastModified, title }: BlogHeaderProps) {
   return (
     <div
-      className="container py-12 text-center"
+      className="container pt-12 text-center"
     >
       <div className="font-medium uppercase mb-6">Technology</div>
       <h1 className="text-5xl font-bold text-white">
@@ -37,7 +39,7 @@ export function BlogHeader({ author, banner, date, description, lastModified, ti
           alt={title}
           className="rounded-lg mt-8 aspect-video"
           height={3456}
-          layout="responsive"
+          priority
           src={banner}
           width={5184}
         />

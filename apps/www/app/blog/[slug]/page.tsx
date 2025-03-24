@@ -41,9 +41,9 @@ export default async function Page(props: {
   const MDX = page.data.body
 
   return (
-    <BlogPage>
+    <BlogPage toc={page.data.toc}>
       <BlogHeader {...page.data} />
-      <BlogBody>
+      <BlogBody toc={page.data.toc}>
         <MDX
           components={{
             ...defaultMdxComponents,
