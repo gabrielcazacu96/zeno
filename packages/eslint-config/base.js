@@ -39,6 +39,7 @@ export const config = [
             props: false,
             param: false,
             params: false,
+            ref: false,
           }
         }
       ]
