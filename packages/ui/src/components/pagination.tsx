@@ -7,7 +7,7 @@ import * as React from "react"
 
 import type { Button } from "./button"
 
-import { cn } from "../lib/utils"
+import { cn } from "../lib/utilities"
 import { buttonVariants } from "./button"
 
 type PaginationLinkProps = Pick<React.ComponentProps<typeof Button>, "size"> & React.ComponentProps<"a"> &
