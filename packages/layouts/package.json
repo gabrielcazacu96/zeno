@@ -31,6 +31,7 @@
     "@types/mdx": "2.0.13",
     "@types/react": "19.0.10",
     "@zeno/eslint-config": "workspace:*",
-    "@zeno/typescript-config": "workspace:*"
+    "@zeno/typescript-config": "workspace:*",
+    "eslint": "9.23.0"
   }
 }
