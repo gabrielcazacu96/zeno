@@ -25,7 +25,7 @@ export async function generateMetadata(props: {
   })
 }
 
-export function generateStaticParams(): { slug: string }[] {
+export function generateStaticParams(): { slug: string | undefined }[] {
   return blog.getPages().map(page => ({
     slug: page.slugs[0],
   }))

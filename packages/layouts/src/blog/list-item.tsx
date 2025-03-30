@@ -1,4 +1,4 @@
-import { cn } from "@zeno/ui/lib/utils"
+import { cn } from "@zeno/ui/lib/utilities"
 import Image from "next/image"
 import Link from "next/link"
 

@@ -1,7 +1,7 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared"
 import type { HTMLAttributes, ReactNode } from "react"
 
-import { cn } from "@zeno/ui/lib/utils"
+import { cn } from "@zeno/ui/lib/utilities"
 import { layoutVariables } from "fumadocs-ui/layouts/docs/shared"
 
 import type { PageTree } from "../core"

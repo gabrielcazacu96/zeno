@@ -1,7 +1,7 @@
 import type { ComponentProps, ReactNode } from "react"
 
 import { Text } from "@zeno/ui/icons"
-import { cn } from "@zeno/ui/lib/utils"
+import { cn } from "@zeno/ui/lib/utilities"
 import { Toc, TOCItems, TOCScrollArea } from "fumadocs-ui/components/layout/toc"
 
 import type { TableOfContents } from "../core"

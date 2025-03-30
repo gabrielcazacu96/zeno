@@ -1,6 +1,6 @@
 import type { FC, ReactNode } from "react"
 
-import { cn } from "@zeno/ui/lib/utils"
+import { cn } from "@zeno/ui/lib/utilities"
 
 import { NotFoundLink } from "./index.client"
 
