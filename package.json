@@ -4,6 +4,9 @@
   "scripts": {
     "build": "turbo build",
     "check-types": "turbo check-types",
+    "ci": "turbo run build check-types lint test e2e",
+    "ci:force": "turbo run build check-types lint test e2e --force",
+    "ci:graph": "turbo run build check-types lint test e2e --graph=turbo-graph.html",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix"
