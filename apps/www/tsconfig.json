@@ -2,6 +2,9 @@
   "extends": "@zeno/typescript-config/nextjs.json",
   "compilerOptions": {},
   "include": [
-    ".next/types/**/*.ts"
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx"
   ]
 }

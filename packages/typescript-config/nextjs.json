@@ -9,11 +9,9 @@
     "plugins": [{ "name": "next" }]
   },
   "include": [
-    "${configDir}/**/*.ts",
-    "${configDir}/**/*.tsx",
     "${configDir}/next-env.d.ts",
-    "${configDir}/next.config.ts",
-    "${configDir}/next.config.mjs",
-    "${configDir}/.next/types/**/*.ts"
+    "${configDir}/.next/types/**/*.ts",
+    "${configDir}/**/*.ts",
+    "${configDir}/**/*.tsx"
   ]
 }
