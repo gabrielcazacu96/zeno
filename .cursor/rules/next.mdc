@@ -1,0 +1,17 @@
+---
+description: 
+globs: *.tsx
+alwaysApply: false
+---
+- Use NextJs 15 conventions.
+- Minimize the usage of client components ("use client").
+- Always use functional components.
+- Never use class components.
+- Implement props with interfaces.
+- For components use functions instead of lambdas.
+- Write declarative JSX with clear and readable structure.
+- Avoid unnecessary curly braces in conditionals.
+- Use concise syntax for simple statements.
+- Always add loading and error states to data fetching components.
+- Use semantic HTML elements where possible.
+- Use Tailwind for styling.
