@@ -1,0 +1,36 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
+  "extends": ["ultracite"],
+  "files": {
+    "includes": ["**", "!**/src/types.ts"]
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "useSortedAttributes": "on",
+        "useSortedKeys": "on"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "semicolons": "asNeeded"
+    },
+    "globals": ["Deno"]
+  },
+  "linter": {
+    "rules": {
+      "nursery": {
+        // Tailwind CSS uses @apply which is not supported by Biome
+        "noUnknownAtRule": "off",
+        "useSortedClasses": {
+          "level": "error",
+          "options": {
+            "functions": ["clsx"]
+          }
+        }
+      }
+    }
+  }
+}

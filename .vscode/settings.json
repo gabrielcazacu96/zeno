@@ -1,36 +1,18 @@
 {
-  // Auto fix on save
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
-
-    // Imports are managed through EsLint
-    "source.organizeImports": "never"
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
   },
-  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  "editor.formatOnSave": false,
-  "eslint.format.enable": true,
-
-  // Stylistic rules as info, but still auto fix them
-  "eslint.rules.customizations": [
-    {
-      "rule": "@stylistic/*",
-      "fixable": true,
-      "severity": "info"
-    },
-    {
-      "rule": "perfectionist/*",
-      "fixable": true,
-      "severity": "info"
-    }
-  ],
-
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
-  ],
-
-  // Formatting is managed by Eslint
-  "prettier.enable": false,
+  "editor.defaultFormatter": "biomejs.biome",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "emmet.showExpandedAbbreviation": "never",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "typescript.tsdk": "./node_modules/typescript/lib",
+  "[javascript][typescript][javascriptreact][typescriptreact][json][jsonc][css][graphql]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  }
 }
