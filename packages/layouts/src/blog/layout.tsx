@@ -2,7 +2,6 @@ import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared"
 import type { HTMLAttributes, ReactNode } from "react"
 
 import { cn } from "@zeno/ui/lib/utilities"
-import { layoutVariables } from "fumadocs-ui/layouts/docs/shared"
 
 import type { PageTree } from "../core"
 
@@ -40,7 +39,6 @@ export function BlogLayout({
           props.containerProps?.className,
         )}
         style={{
-          ...layoutVariables,
           ...props.containerProps?.style,
         }}
       >
