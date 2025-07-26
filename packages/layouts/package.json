@@ -23,15 +23,15 @@
   },
   "dependencies": {
     "@zeno/ui": "workspace:*",
-    "fumadocs-core": "15.1.2",
-    "fumadocs-mdx": "11.5.7",
-    "fumadocs-ui": "15.1.2"
+    "fumadocs-core": "15.6.6",
+    "fumadocs-mdx": "11.7.1",
+    "fumadocs-ui": "15.6.6"
   },
   "devDependencies": {
     "@types/mdx": "2.0.13",
-    "@types/react": "19.0.10",
+    "@types/react": "19.1.8",
     "@zeno/eslint-config": "workspace:*",
     "@zeno/typescript-config": "workspace:*",
-    "eslint": "9.23.0"
+    "eslint": "9.32.0"
   }
 }
