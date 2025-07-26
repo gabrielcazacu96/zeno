@@ -14,8 +14,6 @@
     "./lib/*": "./src/lib/*.ts"
   },
   "scripts": {
-    "lint": "eslint . --max-warnings 0",
-    "lint:fix": "eslint . --fix",
     "check-types": "tsc --noEmit"
   },
   "peerDependencies": {
@@ -75,10 +73,8 @@
     "@types/node": "24.1.0",
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",
-    "@zeno/eslint-config": "workspace:*",
     "@zeno/tailwind-config": "workspace:*",
     "@zeno/typescript-config": "workspace:*",
-    "eslint": "9.32.0",
     "typescript": "5.8.3"
   }
 }

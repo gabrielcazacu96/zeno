@@ -1,6 +1,6 @@
 {
   "recommendations": [
-    "dbaeumer.vscode-eslint",
+    "biomejs.biome",
     "stivo.tailwind-fold",
     "unifiedjs.vscode-mdx",
     "YoavBls.pretty-ts-errors"
