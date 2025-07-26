@@ -3,8 +3,8 @@ import {
   DocsDescription,
   DocsPage,
   DocsTitle,
+  defaultMdxComponents,
 } from "@zeno/layouts/ui"
-import { defaultMdxComponents } from "@zeno/layouts/ui"
 import { notFound } from "next/navigation"
 import React from "react"
 

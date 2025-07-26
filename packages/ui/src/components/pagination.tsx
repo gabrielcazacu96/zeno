@@ -3,15 +3,13 @@ import {
   ChevronRightIcon,
   MoreHorizontalIcon,
 } from "lucide-react"
-import * as React from "react"
-
-import type { Button } from "./button"
-
+import type * as React from "react"
 import { cn } from "../lib/utilities"
+import type { Button } from "./button"
 import { buttonVariants } from "./button"
 
-type PaginationLinkProps = Pick<React.ComponentProps<typeof Button>, "size"> & React.ComponentProps<"a"> &
-  {
+type PaginationLinkProps = Pick<React.ComponentProps<typeof Button>, "size"> &
+  React.ComponentProps<"a"> & {
     isActive?: boolean
   }
 
@@ -75,7 +73,7 @@ function PaginationLink({
           size,
           variant: isActive ? "outline" : "ghost",
         }),
-        className,
+        className
       )}
       data-active={isActive}
       data-slot="pagination-link"

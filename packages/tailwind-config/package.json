@@ -1,11 +1,11 @@
 {
-    "name": "@zeno/tailwind-config",
-    "version": "0.0.0",
-    "private": true,
-    "exports": {
-        "./globals.css": "./globals.css"
-    },
-    "peerDependencies": {
-        "tailwindcss": ">=4"
-    }
+  "name": "@zeno/tailwind-config",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./globals.css": "./globals.css"
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=4"
+  }
 }

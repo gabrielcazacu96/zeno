@@ -2,9 +2,13 @@ import { RootProvider } from "@zeno/layouts/ui"
 
 import "./globals.css"
 
-import React from "react"
+import type React from "react"
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html
       // Required to be set
@@ -15,9 +19,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       <body>
-        <RootProvider>
-          {children}
-        </RootProvider>
+        <RootProvider>{children}</RootProvider>
       </body>
     </html>
   )

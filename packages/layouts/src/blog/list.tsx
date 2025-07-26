@@ -1,3 +1,7 @@
 export function BlogList({ children }: { children: React.ReactNode }) {
-  return <main className="container px-6 mx-auto max-w-4xl py-6 grid grid-cols-12 justify-center">{children}</main>
+  return (
+    <main className="container mx-auto grid max-w-4xl grid-cols-12 justify-center px-6 py-6">
+      {children}
+    </main>
+  )
 }

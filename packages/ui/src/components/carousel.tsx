@@ -30,7 +30,9 @@ type CarouselProps = {
 
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
 
-const CarouselContext = React.createContext<CarouselContextProps | undefined>(undefined)
+const CarouselContext = React.createContext<CarouselContextProps | undefined>(
+  undefined
+)
 
 function Carousel({
   children,
@@ -46,7 +48,7 @@ function Carousel({
       ...opts,
       axis: orientation === "horizontal" ? "x" : "y",
     },
-    plugins,
+    plugins
   )
   const [canScrollPrevious, setCanScrollPrevious] = React.useState(false)
   const [canScrollNext, setCanScrollNext] = React.useState(false)
@@ -70,17 +72,16 @@ function Carousel({
       if (event.key === "ArrowLeft") {
         event.preventDefault()
         scrollPrevious()
-      }
-      else if (event.key === "ArrowRight") {
+      } else if (event.key === "ArrowRight") {
         event.preventDefault()
         scrollNext()
       }
     },
-    [scrollPrevious, scrollNext],
+    [scrollPrevious, scrollNext]
   )
 
   React.useEffect(() => {
-    if (!api || !setApi) return
+    if (!(api && setApi)) return
     setApi(api)
   }, [api, setApi])
 
@@ -98,7 +99,7 @@ function Carousel({
   return (
     <CarouselContext.Provider
       value={{
-        api: api,
+        api,
         canScrollNext,
         canScrollPrev: canScrollPrevious,
         carouselRef: carouselReference,
@@ -136,7 +137,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
         className={cn(
           "flex",
           orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
-          className,
+          className
         )}
         {...props}
       />
@@ -153,7 +154,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
       className={cn(
         "min-w-0 shrink-0 grow-0 basis-full",
         orientation === "horizontal" ? "pl-4" : "pt-4",
-        className,
+        className
       )}
       data-slot="carousel-item"
       role="group"
@@ -175,9 +176,9 @@ function CarouselNext({
       className={cn(
         "absolute size-8 rounded-full",
         orientation === "horizontal"
-          ? "top-1/2 -right-12 -translate-y-1/2"
-          : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
-        className,
+          ? "-right-12 -translate-y-1/2 top-1/2"
+          : "-bottom-12 -translate-x-1/2 left-1/2 rotate-90",
+        className
       )}
       data-slot="carousel-next"
       disabled={!canScrollNext}
@@ -205,9 +206,9 @@ function CarouselPrevious({
       className={cn(
         "absolute size-8 rounded-full",
         orientation === "horizontal"
-          ? "top-1/2 -left-12 -translate-y-1/2"
-          : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
-        className,
+          ? "-left-12 -translate-y-1/2 top-1/2"
+          : "-top-12 -translate-x-1/2 left-1/2 rotate-90",
+        className
       )}
       data-slot="carousel-previous"
       disabled={!canScrollPrev}

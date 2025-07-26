@@ -1,6 +1,5 @@
-import type { FC, ReactNode } from "react"
-
 import { cn } from "@zeno/ui/lib/utilities"
+import type { FC, ReactNode } from "react"
 
 import { NotFoundLink } from "./index.client"
 
@@ -18,12 +17,7 @@ export const NotFoundPage: FC<NotFoundPageProps> = ({
   labels = "bug",
 }) => {
   return (
-    <div
-      className={cn(
-        "flex flex-col justify-center items-center",
-        className,
-      )}
-    >
+    <div className={cn("flex flex-col items-center justify-center", className)}>
       {children || <h1>404: Page Not Found</h1>}
       <NotFoundLink labels={labels}>{content}</NotFoundLink>
     </div>
