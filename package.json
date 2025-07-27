@@ -4,9 +4,9 @@
   "scripts": {
     "build": "turbo build",
     "check-types": "turbo check-types",
-    "ci": "turbo run build check-types lint test e2e",
-    "ci:force": "turbo run build check-types lint test e2e --force",
-    "ci:graph": "turbo run build check-types lint test e2e --graph=turbo-graph.html",
+    "ci": "pnpm run lint && turbo run build check-types test e2e",
+    "ci:force": "turbo run build check-types test e2e --force",
+    "ci:graph": "turbo run build check-types test e2e --graph=turbo-graph.html",
     "dev": "turbo dev",
     "format": "ultracite format",
     "lint": "ultracite lint"
@@ -15,7 +15,7 @@
     "@biomejs/biome": "2.1.2",
     "turbo": "2.5.5",
     "typescript": "5.8.3",
-    "ultracite": "5.0.49"
+    "ultracite": "5.1.1"
   },
   "packageManager": "pnpm@10.6.2",
   "engines": {
