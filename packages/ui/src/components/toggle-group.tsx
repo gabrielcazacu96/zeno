@@ -1,9 +1,9 @@
 "use client"
 
+// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group"
-import { type VariantProps } from "class-variance-authority"
-import * as React from "react"
-
+import type { VariantProps } from "class-variance-authority"
+import React from "react"
 import { cn } from "../lib/utilities"
 import { toggleVariants } from "./toggle"
 
@@ -15,10 +15,10 @@ const ToggleGroupContext = React.createContext<
 })
 
 function ToggleGroup({
-  children,
   className,
-  size,
   variant,
+  size,
+  children,
   ...props
 }: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &
   VariantProps<typeof toggleVariants>) {
@@ -26,7 +26,7 @@ function ToggleGroup({
     <ToggleGroupPrimitive.Root
       className={cn(
         "group/toggle-group flex w-fit items-center rounded-md data-[variant=outline]:shadow-xs",
-        className,
+        className
       )}
       data-size={size}
       data-slot="toggle-group"
@@ -41,10 +41,10 @@ function ToggleGroup({
 }
 
 function ToggleGroupItem({
-  children,
   className,
-  size,
+  children,
   variant,
+  size,
   ...props
 }: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &
   VariantProps<typeof toggleVariants>) {
@@ -54,14 +54,12 @@ function ToggleGroupItem({
     <ToggleGroupPrimitive.Item
       className={cn(
         toggleVariants({
-          // eslint-disable-next-line unicorn/explicit-length-check
           size: context.size || size,
           variant: context.variant || variant,
         }),
         "min-w-0 flex-1 shrink-0 rounded-none shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10 data-[variant=outline]:border-l-0 data-[variant=outline]:first:border-l",
-        className,
+        className
       )}
-      // eslint-disable-next-line unicorn/explicit-length-check
       data-size={context.size || size}
       data-slot="toggle-group-item"
       data-variant={context.variant || variant}

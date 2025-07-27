@@ -38,5 +38,4 @@ Testing and Quality Assurance
 
 Project structure
 
-- The Eslint configuration is located at `packages/eslint-config`.
 - The Typescript configuration is located at `packages/typescript-config`.

@@ -1,7 +1,7 @@
 @import "@zeno/tailwind-config/globals.css";
 @import "./theme.css";
 
-@plugin 'tailwindcss-animate';
+@plugin "tailwindcss-animate";
 
 @layer base {
   * {

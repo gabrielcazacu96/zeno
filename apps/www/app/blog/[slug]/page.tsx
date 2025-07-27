@@ -1,11 +1,9 @@
-import type { Metadata } from "next"
-
 import { BlogBody } from "@zeno/layouts/blog/body"
 import { BlogHeader } from "@zeno/layouts/blog/header"
 import { BlogPage } from "@zeno/layouts/blog/page"
 import { defaultMdxComponents } from "@zeno/layouts/ui"
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import React from "react"
 
 import { createMetadata } from "../../../lib/metadata"
 import { blog } from "../../../lib/source"
@@ -16,7 +14,9 @@ export async function generateMetadata(props: {
   const params = await props.params
   const page = blog.getPage([params.slug])
 
-  if (!page) notFound()
+  if (!page) {
+    notFound()
+  }
 
   return createMetadata({
     description:
@@ -26,7 +26,7 @@ export async function generateMetadata(props: {
 }
 
 export function generateStaticParams(): { slug: string | undefined }[] {
-  return blog.getPages().map(page => ({
+  return blog.getPages().map((page) => ({
     slug: page.slugs[0],
   }))
 }
@@ -37,7 +37,9 @@ export default async function Page(props: {
   const params = await props.params
   const page = blog.getPage([params.slug])
 
-  if (!page) notFound()
+  if (!page) {
+    notFound()
+  }
   const MDX = page.data.body
 
   return (

@@ -3,10 +3,9 @@ import {
   DocsDescription,
   DocsPage,
   DocsTitle,
+  defaultMdxComponents,
 } from "@zeno/layouts/ui"
-import { defaultMdxComponents } from "@zeno/layouts/ui"
 import { notFound } from "next/navigation"
-import React from "react"
 
 import { metadataImage } from "../../../lib/metadata"
 import { documentation } from "../../../lib/source"
@@ -16,7 +15,9 @@ export async function generateMetadata(props: {
 }) {
   const parameters = await props.params
   const page = documentation.getPage(parameters.slug)
-  if (!page) notFound()
+  if (!page) {
+    notFound()
+  }
 
   return metadataImage.withImage(page.slugs, {
     description: page.data.description,
@@ -24,7 +25,7 @@ export async function generateMetadata(props: {
   })
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return documentation.generateParams()
 }
 
@@ -33,7 +34,9 @@ export default async function Page(props: {
 }) {
   const parameters = await props.params
   const page = documentation.getPage(parameters.slug)
-  if (!page) notFound()
+  if (!page) {
+    notFound()
+  }
 
   const MDX = page.data.body
 

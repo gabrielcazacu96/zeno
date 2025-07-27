@@ -14,8 +14,8 @@
       "dependsOn": ["^e2e"]
     },
     "e2e:watch": {
-        "cache": false,
-        "persistent": true
+      "cache": false,
+      "persistent": true
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -28,15 +28,11 @@
       "persistent": true
     },
     "test": {
-      "dependsOn": [
-          "build",
-          "check-types",
-          "lint"
-      ]
+      "dependsOn": ["build", "check-types", "lint"]
     },
     "test:watch": {
-        "cache": false,
-        "persistent": true
+      "cache": false,
+      "persistent": true
     }
   }
 }

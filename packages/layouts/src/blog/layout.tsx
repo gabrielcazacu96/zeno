@@ -1,7 +1,6 @@
+import { cn } from "@zeno/ui/lib/utilities"
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared"
 import type { HTMLAttributes, ReactNode } from "react"
-
-import { cn } from "@zeno/ui/lib/utilities"
 
 import type { PageTree } from "../core"
 
@@ -9,19 +8,16 @@ import { type PageStyles, StylesProvider, TreeContextProvider } from "../ui"
 
 export interface BlogLayoutProps extends BaseLayoutProps {
   /**
-     * Props for the `div` container
-     */
+   * Props for the `div` container
+   */
   containerProps?: HTMLAttributes<HTMLDivElement>
 
   tree: PageTree.Root
 }
 
-export function BlogLayout({
-  children,
-  ...props
-}: BlogLayoutProps): ReactNode {
+export function BlogLayout({ children, ...props }: BlogLayoutProps): ReactNode {
   const variables = cn(
-    "[--fd-tocnav-height:36px] md:[--fd-sidebar-width:268px] lg:[--fd-sidebar-width:286px] xl:[--fd-toc-width:286px] xl:[--fd-tocnav-height:0px]",
+    "[--fd-tocnav-height:36px] md:[--fd-sidebar-width:268px] lg:[--fd-sidebar-width:286px] xl:[--fd-toc-width:286px] xl:[--fd-tocnav-height:0px]"
   )
   const pageStyles: PageStyles = {
     toc: cn("max-xl:hidden"),
@@ -34,9 +30,9 @@ export function BlogLayout({
         id="nd-docs-layout"
         {...props.containerProps}
         className={cn(
-          "flex flex-1 flex-row pe-(--fd-layout-offset) container",
+          "container flex flex-1 flex-row pe-(--fd-layout-offset)",
           variables,
-          props.containerProps?.className,
+          props.containerProps?.className
         )}
         style={{
           ...props.containerProps?.style,

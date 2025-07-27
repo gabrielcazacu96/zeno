@@ -1,8 +1,9 @@
 "use client"
 
+// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as TogglePrimitive from "@radix-ui/react-toggle"
 import { cva, type VariantProps } from "class-variance-authority"
-import * as React from "react"
+import type * as React from "react"
 
 import { cn } from "../lib/utilities"
 
@@ -25,13 +26,13 @@ const toggleVariants = cva(
           "border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground",
       },
     },
-  },
+  }
 )
 
 function Toggle({
   className,
-  size,
   variant,
+  size,
   ...props
 }: React.ComponentProps<typeof TogglePrimitive.Root> &
   VariantProps<typeof toggleVariants>) {

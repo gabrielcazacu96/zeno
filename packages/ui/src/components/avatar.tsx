@@ -1,7 +1,8 @@
 "use client"
 
+// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
-import * as React from "react"
+import type * as React from "react"
 
 import { cn } from "../lib/utilities"
 
@@ -13,25 +14,9 @@ function Avatar({
     <AvatarPrimitive.Root
       className={cn(
         "relative flex size-8 shrink-0 overflow-hidden rounded-full",
-        className,
+        className
       )}
       data-slot="avatar"
-      {...props}
-    />
-  )
-}
-
-function AvatarFallback({
-  className,
-  ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
-  return (
-    <AvatarPrimitive.Fallback
-      className={cn(
-        "bg-muted flex size-full items-center justify-center rounded-full",
-        className,
-      )}
-      data-slot="avatar-fallback"
       {...props}
     />
   )
@@ -50,4 +35,20 @@ function AvatarImage({
   )
 }
 
-export { Avatar, AvatarFallback, AvatarImage }
+function AvatarFallback({
+  className,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
+  return (
+    <AvatarPrimitive.Fallback
+      className={cn(
+        "flex size-full items-center justify-center rounded-full bg-muted",
+        className
+      )}
+      data-slot="avatar-fallback"
+      {...props}
+    />
+  )
+}
+
+export { Avatar, AvatarImage, AvatarFallback }

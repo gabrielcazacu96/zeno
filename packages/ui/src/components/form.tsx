@@ -1,9 +1,8 @@
 "use client"
 
 import type * as LabelPrimitive from "@radix-ui/react-label"
-
 import { Slot } from "@radix-ui/react-slot"
-import * as React from "react"
+import React from "react"
 import {
   Controller,
   type ControllerProps,
@@ -13,7 +12,6 @@ import {
   useFormContext,
   useFormState,
 } from "react-hook-form"
-
 import { cn } from "../lib/utilities"
 import { Label } from "./label"
 
@@ -27,7 +25,7 @@ type FormFieldContextValue<
 }
 
 const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue,
+  {} as FormFieldContextValue
 )
 
 const FormField = <
@@ -71,39 +69,8 @@ type FormItemContextValue = {
 }
 
 const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue,
+  {} as FormItemContextValue
 )
-
-function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
-  const { error, formDescriptionId, formItemId, formMessageId } = useFormField()
-
-  return (
-    <Slot
-      aria-describedby={
-        error
-          ? `${formDescriptionId} ${formMessageId}`
-          : `${formDescriptionId}`
-      }
-      aria-invalid={!!error}
-      data-slot="form-control"
-      id={formItemId}
-      {...props}
-    />
-  )
-}
-
-function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
-  const { formDescriptionId } = useFormField()
-
-  return (
-    <p
-      className={cn("text-muted-foreground text-sm", className)}
-      data-slot="form-description"
-      id={formDescriptionId}
-      {...props}
-    />
-  )
-}
 
 function FormItem({ className, ...props }: React.ComponentProps<"div">) {
   const id = React.useId()
@@ -127,10 +94,39 @@ function FormLabel({
 
   return (
     <Label
-      className={cn("data-[error=true]:text-destructive-foreground", className)}
+      className={cn("data-[error=true]:text-destructive", className)}
       data-error={!!error}
       data-slot="form-label"
       htmlFor={formItemId}
+      {...props}
+    />
+  )
+}
+
+function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
+  const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
+
+  return (
+    <Slot
+      aria-describedby={
+        error ? `${formDescriptionId} ${formMessageId}` : `${formDescriptionId}`
+      }
+      aria-invalid={!!error}
+      data-slot="form-control"
+      id={formItemId}
+      {...props}
+    />
+  )
+}
+
+function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
+  const { formDescriptionId } = useFormField()
+
+  return (
+    <p
+      className={cn("text-muted-foreground text-sm", className)}
+      data-slot="form-description"
+      id={formDescriptionId}
       {...props}
     />
   )
@@ -141,12 +137,12 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
   const body = error ? String(error?.message ?? "") : props.children
 
   if (!body) {
-    return
+    return null
   }
 
   return (
     <p
-      className={cn("text-destructive-foreground text-sm", className)}
+      className={cn("text-destructive text-sm", className)}
       data-slot="form-message"
       id={formMessageId}
       {...props}
@@ -157,12 +153,12 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
 }
 
 export {
+  useFormField,
   Form,
-  FormControl,
-  FormDescription,
-  FormField,
   FormItem,
   FormLabel,
+  FormControl,
+  FormDescription,
   FormMessage,
-  useFormField,
+  FormField,
 }

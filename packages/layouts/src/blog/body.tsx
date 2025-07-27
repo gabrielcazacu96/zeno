@@ -1,8 +1,11 @@
-import type { ComponentProps, ReactNode } from "react"
-
 import { cn } from "@zeno/ui/lib/utilities"
 import { AnchorProvider } from "fumadocs-core/toc"
-import { TOCItems, TOCProvider, TOCScrollArea } from "fumadocs-ui/components/layout/toc"
+import {
+  TOCItems,
+  TOCProvider,
+  TOCScrollArea,
+} from "fumadocs-ui/components/layout/toc"
+import type { ComponentProps, ReactNode } from "react"
 
 import type { TableOfContents } from "../core"
 
@@ -11,14 +14,19 @@ export interface BlogBodyProps extends ComponentProps<"article"> {
   toc?: TableOfContents
 }
 
-export function BlogBody({ children, className, toc = [], ...props }: BlogBodyProps) {
+export function BlogBody({
+  children,
+  className,
+  toc = [],
+  ...props
+}: BlogBodyProps) {
   return (
     <AnchorProvider toc={toc}>
       <div className="flex justify-center gap-6">
         <article {...props} className={cn("prose max-w-3xl pt-12", className)}>
           {children}
         </article>
-        <div className="sticky top-0 py-6 max-h-screen">
+        <div className="sticky top-0 max-h-screen py-6">
           <TOCProvider toc={toc}>
             <TOCScrollArea>
               <TOCItems />
