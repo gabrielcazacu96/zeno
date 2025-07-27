@@ -1,5 +1,6 @@
 "use client"
 
+// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group"
 import type { VariantProps } from "class-variance-authority"
 import React from "react"

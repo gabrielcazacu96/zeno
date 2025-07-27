@@ -1,5 +1,6 @@
 "use client"
 
+// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu"
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react"
 import type * as React from "react"

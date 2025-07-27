@@ -1,5 +1,6 @@
 "use client"
 
+// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as SliderPrimitive from "@radix-ui/react-slider"
 import React from "react"
 

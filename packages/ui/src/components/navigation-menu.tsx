@@ -1,5 +1,6 @@
 "use client"
 
+// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu"
 import { cva } from "class-variance-authority"
 import { ChevronDownIcon } from "lucide-react"
