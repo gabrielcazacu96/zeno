@@ -55,14 +55,12 @@ function ToggleGroupItem({
     <ToggleGroupPrimitive.Item
       className={cn(
         toggleVariants({
-          // eslint-disable-next-line unicorn/explicit-length-check
           size: context.size || size,
           variant: context.variant || variant,
         }),
         "min-w-0 flex-1 shrink-0 rounded-none shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10 data-[variant=outline]:border-l-0 data-[variant=outline]:first:border-l",
         className
       )}
-      // eslint-disable-next-line unicorn/explicit-length-check
       data-size={context.size || size}
       data-slot="toggle-group-item"
       data-variant={context.variant || variant}
