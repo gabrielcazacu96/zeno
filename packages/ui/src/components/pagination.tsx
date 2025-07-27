@@ -5,13 +5,7 @@ import {
 } from "lucide-react"
 import type * as React from "react"
 import { cn } from "../lib/utilities"
-import type { Button } from "./button"
-import { buttonVariants } from "./button"
-
-type PaginationLinkProps = Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<"a"> & {
-    isActive?: boolean
-  }
+import { type Button, buttonVariants } from "./button"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -37,26 +31,14 @@ function PaginationContent({
   )
 }
 
-function PaginationEllipsis({
-  className,
-  ...props
-}: React.ComponentProps<"span">) {
-  return (
-    <span
-      aria-hidden
-      className={cn("flex size-9 items-center justify-center", className)}
-      data-slot="pagination-ellipsis"
-      {...props}
-    >
-      <MoreHorizontalIcon className="size-4" />
-      <span className="sr-only">More pages</span>
-    </span>
-  )
-}
-
 function PaginationItem({ ...props }: React.ComponentProps<"li">) {
   return <li data-slot="pagination-item" {...props} />
 }
+
+type PaginationLinkProps = {
+  isActive?: boolean
+} & Pick<React.ComponentProps<typeof Button>, "size"> &
+  React.ComponentProps<"a">
 
 function PaginationLink({
   className,
@@ -81,23 +63,6 @@ function PaginationLink({
   )
 }
 
-function PaginationNext({
-  className,
-  ...props
-}: React.ComponentProps<typeof PaginationLink>) {
-  return (
-    <PaginationLink
-      aria-label="Go to next page"
-      className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
-      size="default"
-      {...props}
-    >
-      <span className="hidden sm:block">Next</span>
-      <ChevronRightIcon />
-    </PaginationLink>
-  )
-}
-
 function PaginationPrevious({
   className,
   ...props
@@ -115,12 +80,46 @@ function PaginationPrevious({
   )
 }
 
+function PaginationNext({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) {
+  return (
+    <PaginationLink
+      aria-label="Go to next page"
+      className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
+      size="default"
+      {...props}
+    >
+      <span className="hidden sm:block">Next</span>
+      <ChevronRightIcon />
+    </PaginationLink>
+  )
+}
+
+function PaginationEllipsis({
+  className,
+  ...props
+}: React.ComponentProps<"span">) {
+  return (
+    <span
+      aria-hidden
+      className={cn("flex size-9 items-center justify-center", className)}
+      data-slot="pagination-ellipsis"
+      {...props}
+    >
+      <MoreHorizontalIcon className="size-4" />
+      <span className="sr-only">More pages</span>
+    </span>
+  )
+}
+
 export {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
   PaginationLink,
-  PaginationNext,
+  PaginationItem,
   PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
 }

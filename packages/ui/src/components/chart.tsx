@@ -11,11 +11,11 @@ const THEMES = { dark: ".dark", light: "" } as const
 
 export type ChartConfig = {
   [k in string]: {
-    icon?: React.ComponentType
     label?: React.ReactNode
+    icon?: React.ComponentType
   } & (
-    | { color?: never; theme: Record<keyof typeof THEMES, string> }
     | { color?: string; theme?: never }
+    | { color?: never; theme: Record<keyof typeof THEMES, string> }
   )
 }
 
@@ -23,24 +23,32 @@ type ChartContextProps = {
   config: ChartConfig
 }
 
-const ChartContext = React.createContext<ChartContextProps | undefined>(
-  undefined
-)
+const ChartContext = React.createContext<ChartContextProps | null>(null)
+
+function useChart() {
+  const context = React.useContext(ChartContext)
+
+  if (!context) {
+    throw new Error("useChart must be used within a <ChartContainer />")
+  }
+
+  return context
+}
 
 function ChartContainer({
-  children,
-  className,
-  config,
   id,
+  className,
+  children,
+  config,
   ...props
 }: React.ComponentProps<"div"> & {
+  config: ChartConfig
   children: React.ComponentProps<
     typeof RechartsPrimitive.ResponsiveContainer
   >["children"]
-  config: ChartConfig
 }) {
   const uniqueId = React.useId()
-  const chartId = `chart-${id || uniqueId.replaceAll(":", "")}`
+  const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`
 
   return (
     <ChartContext.Provider value={{ config }}>
@@ -62,28 +70,18 @@ function ChartContainer({
   )
 }
 
-function useChart() {
-  const context = React.useContext(ChartContext)
-
-  if (!context) {
-    throw new Error("useChart must be used within a <ChartContainer />")
-  }
-
-  return context
-}
-
-const ChartStyle = ({ config, id }: { config: ChartConfig; id: string }) => {
+const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
     ([, filteredConfig]) => filteredConfig.theme || filteredConfig.color
   )
 
-  if (colorConfig.length === 0) {
-    return
+  if (!colorConfig.length) {
+    return null
   }
 
   return (
     <style
-      // biome-ignore lint/security/noDangerouslySetInnerHtml: Expected
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: Shadcn
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(
@@ -94,7 +92,7 @@ ${colorConfig
     const color =
       itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
       itemConfig.color
-    return color ? `  --color-${key}: ${color};` : undefined
+    return color ? `  --color-${key}: ${color};` : null
   })
   .join("\n")}
 }
@@ -110,31 +108,31 @@ const ChartTooltip = RechartsPrimitive.Tooltip
 
 function ChartTooltipContent({
   active,
-  className,
-  color,
-  formatter,
-  hideIndicator = false,
-  hideLabel = false,
-  indicator = "dot",
-  label,
-  labelClassName,
-  labelFormatter,
-  labelKey,
-  nameKey,
   payload,
-}: React.ComponentProps<"div"> &
-  React.ComponentProps<typeof RechartsPrimitive.Tooltip> & {
-    hideIndicator?: boolean
+  className,
+  indicator = "dot",
+  hideLabel = false,
+  hideIndicator = false,
+  label,
+  labelFormatter,
+  labelClassName,
+  formatter,
+  color,
+  nameKey,
+  labelKey,
+}: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
+  React.ComponentProps<"div"> & {
     hideLabel?: boolean
-    indicator?: "dashed" | "dot" | "line"
-    labelKey?: string
+    hideIndicator?: boolean
+    indicator?: "line" | "dot" | "dashed"
     nameKey?: string
+    labelKey?: string
   }) {
   const { config } = useChart()
 
   const tooltipLabel = React.useMemo(() => {
     if (hideLabel || !payload?.length) {
-      return
+      return null
     }
 
     const [item] = payload
@@ -154,7 +152,7 @@ function ChartTooltipContent({
     }
 
     if (!value) {
-      return
+      return null
     }
 
     return <div className={cn("font-medium", labelClassName)}>{value}</div>
@@ -169,7 +167,7 @@ function ChartTooltipContent({
   ])
 
   if (!(active && payload?.length)) {
-    return
+    return null
   }
 
   const nestLabel = payload.length === 1 && indicator !== "dot"
@@ -181,9 +179,9 @@ function ChartTooltipContent({
         className
       )}
     >
-      {nestLabel ? undefined : tooltipLabel}
+      {nestLabel ? null : tooltipLabel}
       <div className="grid gap-1.5">
-        {/** biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Up to Shadcn */}
+        {/** biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Shadcn */}
         {payload.map((item, index) => {
           const key = `${nameKey || item.name || item.dataKey || "value"}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
@@ -232,7 +230,7 @@ function ChartTooltipContent({
                     )}
                   >
                     <div className="grid gap-1.5">
-                      {nestLabel ? tooltipLabel : undefined}
+                      {nestLabel ? tooltipLabel : null}
                       <span className="text-muted-foreground">
                         {itemConfig?.label || item.name}
                       </span>
@@ -258,18 +256,18 @@ const ChartLegend = RechartsPrimitive.Legend
 function ChartLegendContent({
   className,
   hideIcon = false,
-  nameKey,
   payload,
   verticalAlign = "bottom",
-}: Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> &
-  React.ComponentProps<"div"> & {
+  nameKey,
+}: React.ComponentProps<"div"> &
+  Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
     hideIcon?: boolean
     nameKey?: string
   }) {
   const { config } = useChart()
 
   if (!payload?.length) {
-    return
+    return null
   }
 
   return (
@@ -350,9 +348,9 @@ function getPayloadConfigFromPayload(
 
 export {
   ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
   ChartStyle,
-  ChartTooltip,
-  ChartTooltipContent,
 }

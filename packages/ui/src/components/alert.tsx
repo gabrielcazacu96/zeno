@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority"
-import type * as React from "react"
+import type React from "react"
 
 import { cn } from "../lib/utilities"
 
@@ -11,9 +11,9 @@ const alertVariants = cva(
     },
     variants: {
       variant: {
-        default: "bg-background text-foreground",
+        default: "bg-card text-card-foreground",
         destructive:
-          "text-destructive-foreground [&>svg]:text-current *:data-[slot=alert-description]:text-destructive-foreground/80",
+          "text-destructive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-destructive/90",
       },
     },
   }
@@ -29,6 +29,19 @@ function Alert({
       className={cn(alertVariants({ variant }), className)}
       data-slot="alert"
       role="alert"
+      {...props}
+    />
+  )
+}
+
+function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(
+        "col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight",
+        className
+      )}
+      data-slot="alert-title"
       {...props}
     />
   )
@@ -50,17 +63,4 @@ function AlertDescription({
   )
 }
 
-function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      className={cn(
-        "col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight",
-        className
-      )}
-      data-slot="alert-title"
-      {...props}
-    />
-  )
-}
-
-export { Alert, AlertDescription, AlertTitle }
+export { Alert, AlertTitle, AlertDescription }

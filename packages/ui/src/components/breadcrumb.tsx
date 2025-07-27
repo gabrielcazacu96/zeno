@@ -1,6 +1,6 @@
 import { Slot } from "@radix-ui/react-slot"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
-import type * as React from "react"
+import type React from "react"
 
 import { cn } from "../lib/utilities"
 
@@ -8,21 +8,16 @@ function Breadcrumb({ ...props }: React.ComponentProps<"nav">) {
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />
 }
 
-function BreadcrumbEllipsis({
-  className,
-  ...props
-}: React.ComponentProps<"span">) {
+function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
   return (
-    <span
-      aria-hidden="true"
-      className={cn("flex size-9 items-center justify-center", className)}
-      data-slot="breadcrumb-ellipsis"
-      role="presentation"
+    <ol
+      className={cn(
+        "flex flex-wrap items-center gap-1.5 break-words text-muted-foreground text-sm sm:gap-2.5",
+        className
+      )}
+      data-slot="breadcrumb-list"
       {...props}
-    >
-      <MoreHorizontal className="size-4" />
-      <span className="sr-only">More</span>
-    </span>
+    />
   )
 }
 
@@ -49,19 +44,6 @@ function BreadcrumbLink({
     <Comp
       className={cn("transition-colors hover:text-foreground", className)}
       data-slot="breadcrumb-link"
-      {...props}
-    />
-  )
-}
-
-function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
-  return (
-    <ol
-      className={cn(
-        "flex flex-wrap items-center gap-1.5 break-words text-muted-foreground text-sm sm:gap-2.5",
-        className
-      )}
-      data-slot="breadcrumb-list"
       {...props}
     />
   )
@@ -99,12 +81,30 @@ function BreadcrumbSeparator({
   )
 }
 
+function BreadcrumbEllipsis({
+  className,
+  ...props
+}: React.ComponentProps<"span">) {
+  return (
+    <span
+      aria-hidden="true"
+      className={cn("flex size-9 items-center justify-center", className)}
+      data-slot="breadcrumb-ellipsis"
+      role="presentation"
+      {...props}
+    >
+      <MoreHorizontal className="size-4" />
+      <span className="sr-only">More</span>
+    </span>
+  )
+}
+
 export {
   Breadcrumb,
-  BreadcrumbEllipsis,
+  BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
+  BreadcrumbEllipsis,
 }

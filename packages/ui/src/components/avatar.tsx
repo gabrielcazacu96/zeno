@@ -22,6 +22,19 @@ function Avatar({
   )
 }
 
+function AvatarImage({
+  className,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Image>) {
+  return (
+    <AvatarPrimitive.Image
+      className={cn("aspect-square size-full", className)}
+      data-slot="avatar-image"
+      {...props}
+    />
+  )
+}
+
 function AvatarFallback({
   className,
   ...props
@@ -38,17 +51,4 @@ function AvatarFallback({
   )
 }
 
-function AvatarImage({
-  className,
-  ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Image>) {
-  return (
-    <AvatarPrimitive.Image
-      className={cn("aspect-square size-full", className)}
-      data-slot="avatar-image"
-      {...props}
-    />
-  )
-}
-
-export { Avatar, AvatarFallback, AvatarImage }
+export { Avatar, AvatarImage, AvatarFallback }

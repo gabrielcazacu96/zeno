@@ -7,8 +7,8 @@ import type * as React from "react"
 import { cn } from "../lib/utilities"
 
 function ScrollArea({
-  children,
   className,
+  children,
   ...props
 }: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
   return (
@@ -18,7 +18,7 @@ function ScrollArea({
       {...props}
     >
       <ScrollAreaPrimitive.Viewport
-        className="size-full rounded-[inherit] outline-ring/50 ring-ring/10 transition-[color,box-shadow] focus-visible:outline-1 focus-visible:ring-4 dark:outline-ring/40 dark:ring-ring/20"
+        className="size-full rounded-[inherit] outline-none transition-[color,box-shadow] focus-visible:outline-1 focus-visible:ring-[3px] focus-visible:ring-ring/50"
         data-slot="scroll-area-viewport"
       >
         {children}
