@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+// biome-ignore lint/performance/noNamespaceImport: Recharts requires namespace import
 import * as RechartsPrimitive from "recharts"
 
 import { cn } from "../lib/utilities"
@@ -73,7 +74,7 @@ function useChart() {
 
 const ChartStyle = ({ config, id }: { config: ChartConfig; id: string }) => {
   const colorConfig = Object.entries(config).filter(
-    ([, config]) => config.theme || config.color
+    ([, filteredConfig]) => filteredConfig.theme || filteredConfig.color
   )
 
   if (colorConfig.length === 0) {
@@ -82,6 +83,7 @@ const ChartStyle = ({ config, id }: { config: ChartConfig; id: string }) => {
 
   return (
     <style
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: Expected
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(
@@ -181,6 +183,7 @@ function ChartTooltipContent({
     >
       {nestLabel ? undefined : tooltipLabel}
       <div className="grid gap-1.5">
+        {/** biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Up to Shadcn */}
         {payload.map((item, index) => {
           const key = `${nameKey || item.name || item.dataKey || "value"}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)

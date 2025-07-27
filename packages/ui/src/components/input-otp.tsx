@@ -38,6 +38,9 @@ function InputOTPGroup({ className, ...props }: React.ComponentProps<"div">) {
 
 function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
   return (
+    // biome-ignore lint/a11y/useFocusableInteractive: Expected
+    // biome-ignore lint/a11y/useSemanticElements: Expected
+    // biome-ignore lint/a11y/useAriaPropsForRole: Expected
     <div data-slot="input-otp-separator" role="separator" {...props}>
       <MinusIcon />
     </div>

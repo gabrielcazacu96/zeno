@@ -322,7 +322,7 @@ function SidebarProvider({
   const [_open, _setOpen] = React.useState(defaultOpen)
   const open = openProp ?? _open
   const setOpen = React.useCallback(
-    (value: ((value: boolean) => boolean) | boolean) => {
+    (value: ((currentValue: boolean) => boolean) | boolean) => {
       const openState = typeof value === "function" ? value(open) : value
       if (setOpenProp) {
         setOpenProp(openState)
@@ -331,7 +331,7 @@ function SidebarProvider({
       }
 
       // This sets the cookie to keep the sidebar state.
-      // eslint-disable-next-line unicorn/no-document-cookie
+      // biome-ignore lint/suspicious/noDocumentCookie: Expected
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
     },
     [setOpenProp, open]
@@ -339,7 +339,9 @@ function SidebarProvider({
 
   // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
-    return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
+    return isMobile
+      ? setOpenMobile((isOpen) => !isOpen)
+      : setOpen((isOpen) => !isOpen)
   }, [isMobile, setOpen])
 
   // Adds a keyboard shortcut to toggle the sidebar.

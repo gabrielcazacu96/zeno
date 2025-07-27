@@ -53,12 +53,12 @@ function Carousel({
   const [canScrollPrevious, setCanScrollPrevious] = React.useState(false)
   const [canScrollNext, setCanScrollNext] = React.useState(false)
 
-  const onSelect = React.useCallback((api: CarouselApi) => {
-    if (!api) {
+  const onSelect = React.useCallback((selectedApi: CarouselApi) => {
+    if (!selectedApi) {
       return
     }
-    setCanScrollPrevious(api.canScrollPrev())
-    setCanScrollNext(api.canScrollNext())
+    setCanScrollPrevious(selectedApi.canScrollPrev())
+    setCanScrollNext(selectedApi.canScrollNext())
   }, [])
 
   const scrollPrevious = React.useCallback(() => {
@@ -116,6 +116,7 @@ function Carousel({
         scrollPrev: scrollPrevious,
       }}
     >
+      {/** biome-ignore lint/a11y/useSemanticElements: needs to be a div */}
       <div
         aria-roledescription="carousel"
         className={cn("relative", className)}

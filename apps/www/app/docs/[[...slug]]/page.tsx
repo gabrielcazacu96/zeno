@@ -25,7 +25,7 @@ export async function generateMetadata(props: {
   })
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return documentation.generateParams()
 }
 
