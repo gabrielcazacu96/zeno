@@ -12,6 +12,7 @@ This Turborepo includes the following packages/apps:
 - `web`: another [Next.js](https://nextjs.org/) app
 - `@zeno/ui`: a stub React component library shared by both `web` and `docs` applications
 - `@zeno/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `@zeno/supabase-nextjs`: a library for working with Supabase in Next.js
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 

@@ -1,0 +1,13 @@
+{
+  "name": "@zeno/supabase-nextjs",
+  "scripts": {},
+  "peerDependencies": {
+    "@supabase/ssr": ">=0",
+    "@supabase/supabase-js": ">=2",
+    "supabase": ">=2",
+    "next": ">=14"
+  },
+  "devDependencies": {
+    "@zeno/typescript-config": "workspace:*"
+  }
+}
