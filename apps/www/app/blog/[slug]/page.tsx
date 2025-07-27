@@ -4,7 +4,6 @@ import { BlogPage } from "@zeno/layouts/blog/page"
 import { defaultMdxComponents } from "@zeno/layouts/ui"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import React from "react"
 
 import { createMetadata } from "../../../lib/metadata"
 import { blog } from "../../../lib/source"
@@ -15,7 +14,9 @@ export async function generateMetadata(props: {
   const params = await props.params
   const page = blog.getPage([params.slug])
 
-  if (!page) notFound()
+  if (!page) {
+    notFound()
+  }
 
   return createMetadata({
     description:
@@ -36,7 +37,9 @@ export default async function Page(props: {
   const params = await props.params
   const page = blog.getPage([params.slug])
 
-  if (!page) notFound()
+  if (!page) {
+    notFound()
+  }
   const MDX = page.data.body
 
   return (

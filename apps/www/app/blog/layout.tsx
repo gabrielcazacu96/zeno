@@ -3,11 +3,7 @@ import type React from "react"
 
 import { blog } from "../../lib/source"
 
-export default async function Layout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <BlogLayout
       githubUrl="https://github.com/MathieuUrstein/zeno"

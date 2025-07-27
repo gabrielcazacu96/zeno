@@ -4,7 +4,7 @@ import "./globals.css"
 
 import type React from "react"
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
