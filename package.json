@@ -8,17 +8,17 @@
     "ci:force": "turbo run build check-types test e2e --force",
     "ci:graph": "turbo run build check-types test e2e --graph=turbo-graph.html",
     "dev": "turbo dev",
-    "format": "ultracite format",
-    "lint": "ultracite lint"
+    "lint": "ultracite check",
+    "lint:fix": "ultracite fix"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.1.2",
-    "turbo": "2.5.5",
+    "@biomejs/biome": "2.3.8",
+    "turbo": "2.6.3",
     "typescript": "5.8.3",
-    "ultracite": "5.1.1"
+    "ultracite": "6.3.10"
   },
   "packageManager": "pnpm@10.6.2",
   "engines": {
-    "node": ">=18"
+    "node": "24.x"
   }
 }
