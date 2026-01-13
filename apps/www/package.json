@@ -13,14 +13,14 @@
     "@zeno/layouts": "workspace:*",
     "@zeno/ui": "workspace:*",
     "fumadocs-mdx": "11.7.1",
-    "next": "15.5.9",
+    "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "shiki": "3.8.1",
     "zod": "4.0.10"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "4.1.11",
+    "@tailwindcss/postcss": "4.1.18",
     "@types/node": "24.1.0",
     "@types/react": "19.2.8",
     "@types/react-dom": "19.2.3",
