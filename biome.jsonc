@@ -1,15 +1,32 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
-  "extends": ["ultracite"],
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"],
   "files": {
-    "includes": ["**", "!**/src/types.ts"]
+    "includes": ["!**/src/types.ts"]
   },
+  "overrides": [
+    {
+      "includes": ["**/tests/**"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "useTopLevelRegex": "off"
+          }
+        }
+      }
+    }
+  ],
   "assist": {
     "actions": {
       "source": {
         "useSortedAttributes": "on",
         "useSortedKeys": "on"
       }
+    }
+  },
+  "html": {
+    "parser": {
+      "interpolation": true
     }
   },
   "javascript": {
@@ -21,15 +38,24 @@
   },
   "linter": {
     "rules": {
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "off"
+      },
       "nursery": {
-        // Tailwind CSS uses @apply which is not supported by Biome
-        "noUnknownAtRule": "off",
+        "noLeakedRender": "off",
         "useSortedClasses": {
           "level": "error",
           "options": {
             "functions": ["clsx"]
           }
         }
+      },
+      "style": {
+        "noMagicNumbers": "off",
+        "useConsistentTypeDefinitions": "off"
+      },
+      "suspicious": {
+        "noUnknownAtRules": "off"
       }
     }
   }

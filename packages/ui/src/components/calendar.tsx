@@ -147,27 +147,23 @@ function Calendar({
         DayButton: CalendarDayButton,
         // biome-ignore lint/nursery/noNestedComponentDefinitions: Shadcn
         // biome-ignore lint/nursery/noShadow: Shadcn
-        Root: ({ className, rootRef, ...props }) => {
-          return (
-            <div
-              className={cn(className)}
-              data-slot="calendar"
-              ref={rootRef}
-              {...props}
-            />
-          )
-        },
+        Root: ({ className, rootRef, ...props }) => (
+          <div
+            className={cn(className)}
+            data-slot="calendar"
+            ref={rootRef}
+            {...props}
+          />
+        ),
         // biome-ignore lint/nursery/noNestedComponentDefinitions: Shadcn
         // biome-ignore lint/nursery/noShadow: Shadcn
-        WeekNumber: ({ children, ...props }) => {
-          return (
-            <td {...props}>
-              <div className="flex size-(--cell-size) items-center justify-center text-center">
-                {children}
-              </div>
-            </td>
-          )
-        },
+        WeekNumber: ({ children, ...props }) => (
+          <td {...props}>
+            <div className="flex size-(--cell-size) items-center justify-center text-center">
+              {children}
+            </div>
+          </td>
+        ),
         ...components,
       }}
       formatters={{
