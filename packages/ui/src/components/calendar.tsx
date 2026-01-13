@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/noNestedComponentDefinitions: Shadcn */
 "use client"
 
 import {
@@ -56,7 +57,10 @@ function Calendar({
           defaultClassNames.caption_label
         ),
         day: cn(
-          "relative w-full h-full p-0 text-center [&:first-child[data-selected=true]_button]:rounded-l-md [&:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none",
+          "relative w-full h-full p-0 text-center [&:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none",
+          props.showWeekNumber
+            ? "[&:nth-child(2)[data-selected=true]_button]:rounded-l-md"
+            : "[&:first-child[data-selected=true]_button]:rounded-l-md",
           defaultClassNames.day
         ),
         disabled: cn(
@@ -122,43 +126,45 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        // biome-ignore lint/nursery/noNestedComponentDefinitions: Shadcn
-        // biome-ignore lint/nursery/noShadow: Shadcn
-        Chevron: ({ className, orientation, ...props }) => {
+        Chevron: ({ className: classNameProp, orientation, ...restProps }) => {
           if (orientation === "left") {
             return (
-              <ChevronLeftIcon className={cn("size-4", className)} {...props} />
+              <ChevronLeftIcon
+                className={cn("size-4", classNameProp)}
+                data-testid="calendar-previous-month"
+                {...restProps}
+              />
             )
           }
 
           if (orientation === "right") {
             return (
               <ChevronRightIcon
-                className={cn("size-4", className)}
-                {...props}
+                className={cn("size-4", classNameProp)}
+                data-testid="calendar-next-month"
+                {...restProps}
               />
             )
           }
 
           return (
-            <ChevronDownIcon className={cn("size-4", className)} {...props} />
+            <ChevronDownIcon
+              className={cn("size-4", classNameProp)}
+              {...restProps}
+            />
           )
         },
         DayButton: CalendarDayButton,
-        // biome-ignore lint/nursery/noNestedComponentDefinitions: Shadcn
-        // biome-ignore lint/nursery/noShadow: Shadcn
-        Root: ({ className, rootRef, ...props }) => (
+        Root: ({ className: classNameProp, rootRef, ...restProps }) => (
           <div
-            className={cn(className)}
+            className={cn(classNameProp)}
             data-slot="calendar"
             ref={rootRef}
-            {...props}
+            {...restProps}
           />
         ),
-        // biome-ignore lint/nursery/noNestedComponentDefinitions: Shadcn
-        // biome-ignore lint/nursery/noShadow: Shadcn
-        WeekNumber: ({ children, ...props }) => (
-          <td {...props}>
+        WeekNumber: ({ children, ...restProps }) => (
+          <td {...restProps}>
             <div className="flex size-(--cell-size) items-center justify-center text-center">
               {children}
             </div>
