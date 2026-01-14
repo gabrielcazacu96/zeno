@@ -73,7 +73,6 @@ function SidebarProvider({
   const [_open, _setOpen] = React.useState(defaultOpen)
   const open = openProp ?? _open
   const setOpen = React.useCallback(
-    // biome-ignore lint/nursery/noShadow: Shadcn
     (value: boolean | ((value: boolean) => boolean)) => {
       const openState = typeof value === "function" ? value(open) : value
       if (setOpenProp) {
