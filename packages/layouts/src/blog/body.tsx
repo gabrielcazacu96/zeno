@@ -1,4 +1,4 @@
-import { cn } from "@zeno/ui/lib/utilities"
+import { cn } from "@zeno/ui/lib/utils"
 import { AnchorProvider } from "fumadocs-core/toc"
 import {
   TOCItems,

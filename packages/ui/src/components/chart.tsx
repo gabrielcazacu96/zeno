@@ -4,7 +4,7 @@ import React from "react"
 // biome-ignore lint/performance/noNamespaceImport: Recharts requires namespace import
 import * as RechartsPrimitive from "recharts"
 
-import { cn } from "../lib/utilities"
+import { cn } from "../lib/utils"
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { dark: ".dark", light: "" } as const

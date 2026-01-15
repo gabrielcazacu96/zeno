@@ -5,7 +5,7 @@ import type * as React from "react"
 // biome-ignore lint/performance/noNamespaceImport: react-resizable-panels requires namespace import
 import * as ResizablePrimitive from "react-resizable-panels"
 
-import { cn } from "../lib/utilities"
+import { cn } from "../lib/utils"
 
 function ResizablePanelGroup({
   className,
