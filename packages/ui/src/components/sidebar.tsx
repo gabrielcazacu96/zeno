@@ -3,7 +3,7 @@
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import { PanelLeftIcon } from "lucide-react"
-import React from "react"
+import * as React from "react"
 import { useIsMobile } from "../hooks/use-mobile"
 import { cn } from "../lib/utils"
 import { Button } from "./button"
@@ -82,21 +82,15 @@ function SidebarProvider({
       }
 
       // This sets the cookie to keep the sidebar state.
-      // biome-ignore lint/suspicious/noDocumentCookie: Shadcn
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
     },
     [setOpenProp, open]
   )
 
   // Helper to toggle the sidebar.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Shadcn
-  const toggleSidebar = React.useCallback(
-    () =>
-      isMobile
-        ? setOpenMobile((toggleOpen) => !toggleOpen)
-        : setOpen((toggleOpen) => !toggleOpen),
-    [isMobile, setOpen, setOpenMobile]
-  )
+  const toggleSidebar = React.useCallback(() => {
+    return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
+  }, [isMobile, setOpen, setOpenMobile])
 
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
@@ -118,7 +112,6 @@ function SidebarProvider({
   // This makes it easier to style the sidebar with Tailwind classes.
   const state = open ? "expanded" : "collapsed"
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Shadcn
   const contextValue = React.useMemo<SidebarContextProps>(
     () => ({
       isMobile,
@@ -613,10 +606,9 @@ function SidebarMenuSkeleton({
   showIcon?: boolean
 }) {
   // Random width between 50 to 90%.
-  const width = React.useMemo(
-    () => `${Math.floor(Math.random() * 40) + 50}%`,
-    []
-  )
+  const width = React.useMemo(() => {
+    return `${Math.floor(Math.random() * 40) + 50}%`
+  }, [])
 
   return (
     <div

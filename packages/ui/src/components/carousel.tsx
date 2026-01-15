@@ -4,7 +4,7 @@ import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
-import React from "react"
+import * as React from "react"
 import { cn } from "../lib/utils"
 import { Button } from "./button"
 
@@ -60,12 +60,10 @@ function Carousel({
   const [canScrollPrev, setCanScrollPrev] = React.useState(false)
   const [canScrollNext, setCanScrollNext] = React.useState(false)
 
-  const onSelect = React.useCallback((selectedApi: CarouselApi) => {
-    if (!selectedApi) {
-      return
-    }
-    setCanScrollPrev(selectedApi.canScrollPrev())
-    setCanScrollNext(selectedApi.canScrollNext())
+  const onSelect = React.useCallback((api: CarouselApi) => {
+    if (!api) return
+    setCanScrollPrev(api.canScrollPrev())
+    setCanScrollNext(api.canScrollNext())
   }, [])
 
   const scrollPrev = React.useCallback(() => {
@@ -90,16 +88,12 @@ function Carousel({
   )
 
   React.useEffect(() => {
-    if (!(api && setApi)) {
-      return
-    }
+    if (!(api && setApi)) return
     setApi(api)
   }, [api, setApi])
 
   React.useEffect(() => {
-    if (!api) {
-      return
-    }
+    if (!api) return
     onSelect(api)
     api.on("reInit", onSelect)
     api.on("select", onSelect)
@@ -123,7 +117,6 @@ function Carousel({
         scrollPrev,
       }}
     >
-      {/** biome-ignore lint/a11y/useSemanticElements: Shadcn */}
       <div
         aria-roledescription="carousel"
         className={cn("relative", className)}
@@ -163,7 +156,6 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
   const { orientation } = useCarousel()
 
   return (
-    // biome-ignore lint/a11y/useSemanticElements: shadcn
     <div
       aria-roledescription="slide"
       className={cn(

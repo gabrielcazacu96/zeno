@@ -1,6 +1,5 @@
 "use client"
 
-// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as HoverCardPrimitive from "@radix-ui/react-hover-card"
 import type * as React from "react"
 

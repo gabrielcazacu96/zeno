@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/correctness/noNestedComponentDefinitions: Shadcn */
 "use client"
 
 import {
@@ -6,7 +5,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "lucide-react"
-import React from "react"
+import * as React from "react"
 import {
   type DayButton,
   DayPicker,
@@ -126,50 +125,46 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        Chevron: ({ className: classNameProp, orientation, ...restProps }) => {
+        Chevron: ({ className, orientation, ...props }) => {
           if (orientation === "left") {
             return (
-              <ChevronLeftIcon
-                className={cn("size-4", classNameProp)}
-                data-testid="calendar-previous-month"
-                {...restProps}
-              />
+              <ChevronLeftIcon className={cn("size-4", className)} {...props} />
             )
           }
 
           if (orientation === "right") {
             return (
               <ChevronRightIcon
-                className={cn("size-4", classNameProp)}
-                data-testid="calendar-next-month"
-                {...restProps}
+                className={cn("size-4", className)}
+                {...props}
               />
             )
           }
 
           return (
-            <ChevronDownIcon
-              className={cn("size-4", classNameProp)}
-              {...restProps}
-            />
+            <ChevronDownIcon className={cn("size-4", className)} {...props} />
           )
         },
         DayButton: CalendarDayButton,
-        Root: ({ className: classNameProp, rootRef, ...restProps }) => (
-          <div
-            className={cn(classNameProp)}
-            data-slot="calendar"
-            ref={rootRef}
-            {...restProps}
-          />
-        ),
-        WeekNumber: ({ children, ...restProps }) => (
-          <td {...restProps}>
-            <div className="flex size-(--cell-size) items-center justify-center text-center">
-              {children}
-            </div>
-          </td>
-        ),
+        Root: ({ className, rootRef, ...props }) => {
+          return (
+            <div
+              className={cn(className)}
+              data-slot="calendar"
+              ref={rootRef}
+              {...props}
+            />
+          )
+        },
+        WeekNumber: ({ children, ...props }) => {
+          return (
+            <td {...props}>
+              <div className="flex size-(--cell-size) items-center justify-center text-center">
+                {children}
+              </div>
+            </td>
+          )
+        },
         ...components,
       }}
       formatters={{
@@ -193,9 +188,7 @@ function CalendarDayButton({
 
   const ref = React.useRef<HTMLButtonElement>(null)
   React.useEffect(() => {
-    if (modifiers.focused) {
-      ref.current?.focus()
-    }
+    if (modifiers.focused) ref.current?.focus()
   }, [modifiers.focused])
 
   return (
