@@ -18,35 +18,57 @@
           }
         }
       }
+    },
+    {
+      "includes": ["packages/ui/src/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "noNoninteractiveElementInteractions": "off",
+            "noRedundantRoles": "off",
+            "useAriaPropsForRole": "off",
+            "useFocusableInteractive": "off",
+            "useKeyWithClickEvents": "off",
+            "useSemanticElements": "off"
+          },
+          "correctness": {
+            "noNestedComponentDefinitions": "off",
+            "useExhaustiveDependencies": "off"
+          },
+          "performance": {
+            "noNamespaceImport": "off"
+          },
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
+          },
+          "style": {
+            "noNestedTernary": "off",
+            "useBlockStatements": "off"
+          },
+          "suspicious": {
+            "noArrayIndexKey": "off",
+            "noDocumentCookie": "off"
+          }
+        }
+      }
     }
   ],
   "assist": {
     "actions": {
       "source": {
-        "useSortedAttributes": "on",
         "useSortedKeys": "on"
       }
-    }
-  },
-  "html": {
-    "parser": {
-      "interpolation": true
     }
   },
   "javascript": {
     "formatter": {
       "quoteStyle": "double",
       "semicolons": "asNeeded"
-    },
-    "globals": ["Deno"]
+    }
   },
   "linter": {
     "rules": {
-      "complexity": {
-        "noExcessiveCognitiveComplexity": "off"
-      },
       "nursery": {
-        "noLeakedRender": "off",
         "useSortedClasses": {
           "level": "error",
           "options": {
@@ -55,11 +77,7 @@
         }
       },
       "style": {
-        "noMagicNumbers": "off",
         "useConsistentTypeDefinitions": "off"
-      },
-      "suspicious": {
-        "noUnknownAtRules": "off"
       }
     }
   }
