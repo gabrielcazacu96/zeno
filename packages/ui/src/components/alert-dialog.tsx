@@ -1,9 +1,8 @@
 "use client"
 
-// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 import type * as React from "react"
-import { cn } from "../lib/utilities"
+import { cn } from "../lib/utils"
 import { buttonVariants } from "./button"
 
 function AlertDialog({

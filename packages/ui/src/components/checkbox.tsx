@@ -1,11 +1,10 @@
 "use client"
 
-// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox"
 import { CheckIcon } from "lucide-react"
 import type * as React from "react"
 
-import { cn } from "../lib/utilities"
+import { cn } from "../lib/utils"
 
 function Checkbox({
   className,
@@ -21,7 +20,7 @@ function Checkbox({
       {...props}
     >
       <CheckboxPrimitive.Indicator
-        className="flex items-center justify-center text-current transition-none"
+        className="grid place-content-center text-current transition-none"
         data-slot="checkbox-indicator"
       >
         <CheckIcon className="size-3.5" />

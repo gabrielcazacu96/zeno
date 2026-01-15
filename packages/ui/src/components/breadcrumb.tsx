@@ -1,8 +1,8 @@
 import { Slot } from "@radix-ui/react-slot"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
-import type React from "react"
+import type * as React from "react"
 
-import { cn } from "../lib/utilities"
+import { cn } from "../lib/utils"
 
 function Breadcrumb({ ...props }: React.ComponentProps<"nav">) {
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />
@@ -51,7 +51,6 @@ function BreadcrumbLink({
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
   return (
-    // biome-ignore lint/a11y/useFocusableInteractive: Up to Shadcn
     <span
       aria-current="page"
       aria-disabled="true"

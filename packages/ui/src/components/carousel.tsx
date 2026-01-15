@@ -4,8 +4,8 @@ import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
-import React from "react"
-import { cn } from "../lib/utilities"
+import * as React from "react"
+import { cn } from "../lib/utils"
 import { Button } from "./button"
 
 type CarouselApi = UseEmblaCarouselType[1]
@@ -60,12 +60,10 @@ function Carousel({
   const [canScrollPrev, setCanScrollPrev] = React.useState(false)
   const [canScrollNext, setCanScrollNext] = React.useState(false)
 
-  const onSelect = React.useCallback((selectedApi: CarouselApi) => {
-    if (!selectedApi) {
-      return
-    }
-    setCanScrollPrev(selectedApi.canScrollPrev())
-    setCanScrollNext(selectedApi.canScrollNext())
+  const onSelect = React.useCallback((api: CarouselApi) => {
+    if (!api) return
+    setCanScrollPrev(api.canScrollPrev())
+    setCanScrollNext(api.canScrollNext())
   }, [])
 
   const scrollPrev = React.useCallback(() => {
@@ -90,16 +88,12 @@ function Carousel({
   )
 
   React.useEffect(() => {
-    if (!(api && setApi)) {
-      return
-    }
+    if (!(api && setApi)) return
     setApi(api)
   }, [api, setApi])
 
   React.useEffect(() => {
-    if (!api) {
-      return
-    }
+    if (!api) return
     onSelect(api)
     api.on("reInit", onSelect)
     api.on("select", onSelect)
@@ -123,7 +117,6 @@ function Carousel({
         scrollPrev,
       }}
     >
-      {/** biome-ignore lint/a11y/useSemanticElements: Shadcn */}
       <div
         aria-roledescription="carousel"
         className={cn("relative", className)}
@@ -190,8 +183,8 @@ function CarouselPrevious({
       className={cn(
         "absolute size-8 rounded-full",
         orientation === "horizontal"
-          ? "-left-12 -translate-y-1/2 top-1/2"
-          : "-top-12 -translate-x-1/2 left-1/2 rotate-90",
+          ? "top-1/2 -left-12 -translate-y-1/2"
+          : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
       data-slot="carousel-previous"
@@ -220,8 +213,8 @@ function CarouselNext({
       className={cn(
         "absolute size-8 rounded-full",
         orientation === "horizontal"
-          ? "-right-12 -translate-y-1/2 top-1/2"
-          : "-bottom-12 -translate-x-1/2 left-1/2 rotate-90",
+          ? "top-1/2 -right-12 -translate-y-1/2"
+          : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
       data-slot="carousel-next"

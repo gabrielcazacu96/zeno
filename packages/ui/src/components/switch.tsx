@@ -1,10 +1,9 @@
 "use client"
 
-// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as SwitchPrimitive from "@radix-ui/react-switch"
 import type * as React from "react"
 
-import { cn } from "../lib/utilities"
+import { cn } from "../lib/utils"
 
 function Switch({
   className,

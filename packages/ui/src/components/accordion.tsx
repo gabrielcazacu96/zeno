@@ -1,10 +1,10 @@
 "use client"
 
-// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
 import { ChevronDownIcon } from "lucide-react"
 import type * as React from "react"
-import { cn } from "../lib/utilities"
+
+import { cn } from "../lib/utils"
 
 function Accordion({
   ...props

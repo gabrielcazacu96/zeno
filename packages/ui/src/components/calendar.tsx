@@ -5,13 +5,13 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "lucide-react"
-import React from "react"
+import * as React from "react"
 import {
   type DayButton,
   DayPicker,
   getDefaultClassNames,
 } from "react-day-picker"
-import { cn } from "../lib/utilities"
+import { cn } from "../lib/utils"
 import { Button, buttonVariants } from "./button"
 
 function Calendar({
@@ -56,7 +56,10 @@ function Calendar({
           defaultClassNames.caption_label
         ),
         day: cn(
-          "relative w-full h-full p-0 text-center [&:first-child[data-selected=true]_button]:rounded-l-md [&:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none",
+          "relative w-full h-full p-0 text-center [&:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none",
+          props.showWeekNumber
+            ? "[&:nth-child(2)[data-selected=true]_button]:rounded-l-md"
+            : "[&:first-child[data-selected=true]_button]:rounded-l-md",
           defaultClassNames.day
         ),
         disabled: cn(
@@ -122,8 +125,6 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        // biome-ignore lint/nursery/noNestedComponentDefinitions: Shadcn
-        // biome-ignore lint/nursery/noShadow: Shadcn
         Chevron: ({ className, orientation, ...props }) => {
           if (orientation === "left") {
             return (
@@ -145,8 +146,6 @@ function Calendar({
           )
         },
         DayButton: CalendarDayButton,
-        // biome-ignore lint/nursery/noNestedComponentDefinitions: Shadcn
-        // biome-ignore lint/nursery/noShadow: Shadcn
         Root: ({ className, rootRef, ...props }) => {
           return (
             <div
@@ -157,8 +156,6 @@ function Calendar({
             />
           )
         },
-        // biome-ignore lint/nursery/noNestedComponentDefinitions: Shadcn
-        // biome-ignore lint/nursery/noShadow: Shadcn
         WeekNumber: ({ children, ...props }) => {
           return (
             <td {...props}>
@@ -191,9 +188,7 @@ function CalendarDayButton({
 
   const ref = React.useRef<HTMLButtonElement>(null)
   React.useEffect(() => {
-    if (modifiers.focused) {
-      ref.current?.focus()
-    }
+    if (modifiers.focused) ref.current?.focus()
   }, [modifiers.focused])
 
   return (

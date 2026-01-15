@@ -15,9 +15,9 @@
     "check-types": "tsc --noEmit"
   },
   "peerDependencies": {
-    "next": ">=14",
-    "react": ">=18",
-    "react-dom": ">=18"
+    "next": ">=16",
+    "react": ">=19",
+    "react-dom": ">=19"
   },
   "dependencies": {
     "@zeno/ui": "workspace:*",
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/mdx": "2.0.13",
-    "@types/react": "19.1.8",
+    "@types/react": "19.2.8",
     "@zeno/typescript-config": "workspace:*"
   }
 }
