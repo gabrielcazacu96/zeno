@@ -3,10 +3,10 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "check-types": "turbo check-types",
-    "ci": "pnpm run lint && turbo run build check-types test e2e",
-    "ci:force": "turbo run build check-types test e2e --force",
-    "ci:graph": "turbo run build check-types test e2e --graph=turbo-graph.html",
+    "types:check": "turbo types:check",
+    "ci": "pnpm run lint && turbo run build types:check test e2e",
+    "ci:force": "turbo run build types:check test e2e --force",
+    "ci:graph": "turbo run build types:check test e2e --graph=turbo-graph.html",
     "dev": "turbo dev",
     "lint": "ultracite check",
     "lint:fix": "ultracite fix"

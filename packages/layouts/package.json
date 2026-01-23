@@ -12,7 +12,7 @@
     ]
   },
   "scripts": {
-    "check-types": "tsc --noEmit"
+    "types:check": "tsc --noEmit"
   },
   "peerDependencies": {
     "next": ">=16",
