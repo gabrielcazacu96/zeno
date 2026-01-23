@@ -1,4 +1,5 @@
 "use client"
+import { cn } from "@zeno/ui/lib/utils"
 import { buttonVariants } from "fumadocs-ui/components/ui/button"
 import {
   Popover,
@@ -14,7 +15,6 @@ import {
   MessageCircleIcon,
 } from "lucide-react"
 import { useMemo, useState } from "react"
-import { cn } from "@/lib/cn"
 
 const cache = new Map<string, string>()
 
