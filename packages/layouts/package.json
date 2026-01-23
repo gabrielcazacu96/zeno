@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/mdx": "2.0.13",
-    "@types/react": "19.2.8",
+    "@types/react": "19.2.9",
     "@zeno/typescript": "workspace:*"
   }
 }

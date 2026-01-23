@@ -146,7 +146,7 @@ In your project's `tsconfig.json`:
 
 ```json
 {
-  "extends": "@zeno/typescript-config/nextjs.json",
+  "extends": "@zeno/typescript/nextjs.json",
   "compilerOptions": {
     // Your project-specific overrides
   },

@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack -p 5001",
+    "dev": "next dev -p 5001",
     "build": "next build",
     "start": "next start",
     "types:check": "tsc --noEmit"
@@ -21,8 +21,8 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.1.18",
-    "@types/node": "24.1.0",
-    "@types/react": "19.2.8",
+    "@types/node": "25.0.10",
+    "@types/react": "19.2.9",
     "@types/react-dom": "19.2.3",
     "@zeno/typescript": "workspace:*",
     "postcss": "8.5.6",
