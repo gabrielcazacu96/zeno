@@ -60,9 +60,9 @@ importers:
       '@types/react-dom':
         specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.8)
-      '@zeno/typescript-config':
+      '@zeno/typescript':
         specifier: workspace:*
-        version: link:../../packages/typescript-config
+        version: link:../../packages/typescript
       postcss:
         specifier: 8.5.6
         version: 8.5.6
@@ -103,9 +103,9 @@ importers:
       '@types/react':
         specifier: 19.2.8
         version: 19.2.8
-      '@zeno/typescript-config':
+      '@zeno/typescript':
         specifier: workspace:*
-        version: link:../typescript-config
+        version: link:../typescript
 
   packages/supabase-nextjs:
     dependencies:
@@ -122,9 +122,9 @@ importers:
         specifier: '>=2'
         version: 2.31.8
     devDependencies:
-      '@zeno/typescript-config':
+      '@zeno/typescript':
         specifier: workspace:*
-        version: link:../typescript-config
+        version: link:../typescript
 
   packages/tailwind-config:
     dependencies:
@@ -132,7 +132,7 @@ importers:
         specifier: '>=4'
         version: 4.0.12
 
-  packages/typescript-config: {}
+  packages/typescript: {}
 
   packages/ui:
     dependencies:
@@ -293,9 +293,9 @@ importers:
       '@zeno/tailwind-config':
         specifier: workspace:*
         version: link:../tailwind-config
-      '@zeno/typescript-config':
+      '@zeno/typescript':
         specifier: workspace:*
-        version: link:../typescript-config
+        version: link:../typescript
       typescript:
         specifier: 5.9.3
         version: 5.9.3

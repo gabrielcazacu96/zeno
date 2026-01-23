@@ -8,6 +8,6 @@
     "next": ">=16"
   },
   "devDependencies": {
-    "@zeno/typescript-config": "workspace:*"
+    "@zeno/typescript": "workspace:*"
   }
 }

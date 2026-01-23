@@ -38,4 +38,4 @@ Testing and Quality Assurance
 
 Project structure
 
-- The Typescript configuration is located at `packages/typescript-config`.
+- The Typescript configuration is located at `packages/typescript`.
