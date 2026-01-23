@@ -6,7 +6,7 @@
  * ```js
  * images: {
  *   loader: "custom",
- *   loaderFile: "@zeno/supabase-nextjs/image-loader.tsx",
+ *   loaderFile: "@zeno/supabase/image-loader.tsx",
  * },
  * ```
  */

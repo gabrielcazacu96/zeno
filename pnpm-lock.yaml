@@ -107,7 +107,7 @@ importers:
         specifier: workspace:*
         version: link:../typescript
 
-  packages/supabase-nextjs:
+  packages/supabase:
     dependencies:
       '@supabase/ssr':
         specifier: '>=0'

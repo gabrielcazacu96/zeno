@@ -1,5 +1,5 @@
 {
-  "name": "@zeno/supabase-nextjs",
+  "name": "@zeno/supabase",
   "scripts": {},
   "peerDependencies": {
     "@supabase/ssr": ">=0",
