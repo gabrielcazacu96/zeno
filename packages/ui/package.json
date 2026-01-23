@@ -72,7 +72,7 @@
     "@types/node": "24.10.1",
     "@types/react": "19.2.8",
     "@types/react-dom": "19.2.3",
-    "@zeno/tailwind-config": "workspace:*",
+    "@zeno/tailwind": "workspace:*",
     "@zeno/typescript": "workspace:*",
     "typescript": "5.9.3"
   }

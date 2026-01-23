@@ -1,5 +1,5 @@
 {
-  "name": "@zeno/tailwind-config",
+  "name": "@zeno/tailwind",
   "version": "0.0.0",
   "private": true,
   "exports": {

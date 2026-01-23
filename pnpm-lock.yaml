@@ -126,7 +126,7 @@ importers:
         specifier: workspace:*
         version: link:../typescript
 
-  packages/tailwind-config:
+  packages/tailwind:
     dependencies:
       tailwindcss:
         specifier: '>=4'
@@ -290,9 +290,9 @@ importers:
       '@types/react-dom':
         specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.8)
-      '@zeno/tailwind-config':
+      '@zeno/tailwind':
         specifier: workspace:*
-        version: link:../tailwind-config
+        version: link:../tailwind
       '@zeno/typescript':
         specifier: workspace:*
         version: link:../typescript

@@ -1,4 +1,4 @@
-@import "@zeno/tailwind-config/globals.css";
+@import "@zeno/tailwind/globals.css";
 @import "./theme.css";
 
 @plugin "tailwindcss-animate";
