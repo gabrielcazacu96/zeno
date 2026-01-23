@@ -1,0 +1,22 @@
+{
+  "pages": [
+    "index",
+    "---Documentation---",
+    "documentation/deployment",
+    "---Forms---",
+    "forms/getting-started",
+    "---Monorepo---",
+    "monorepo/testing",
+    "monorepo/typescript",
+    "monorepo/ultracite",
+    "monorepo/vscode",
+    "---Next---",
+    "next/deployment",
+    "---UI---",
+    "ui/blocks",
+    "ui/components",
+    "ui/motions",
+    "ui/tailwind",
+    "ui/templates"
+  ]
+}
