@@ -1,8 +1,11 @@
 {
   "recommendations": [
     "biomejs.biome",
+    "bradlc.vscode-tailwindcss",
+    "ms-playwright.playwright",
     "stivo.tailwind-fold",
     "unifiedjs.vscode-mdx",
+    "vitest.explorer",
     "YoavBls.pretty-ts-errors"
   ]
 }
