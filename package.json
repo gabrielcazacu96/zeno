@@ -8,6 +8,8 @@
     "ci:force": "turbo run types:check build test e2e --force",
     "ci:graph": "turbo run types:check build test e2e --graph=turbo-graph.html",
     "dev": "turbo dev",
+    "e2e": "NODE_ENV=test && turbo run e2e",
+    "e2e:watch": "NODE_ENV=test && turbo run dev e2e:watch",
     "lint": "ultracite check",
     "lint:fix": "ultracite fix",
     "test": "NODE_ENV=test && turbo run test",
