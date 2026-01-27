@@ -162,6 +162,6 @@ In your project's `tsconfig.json`:
 base.json
 └── strict.json
     └── strictest.json
-        ├── react.json
-        └── nextjs.json
+        └── react.json
+            └── nextjs.json
 ```
