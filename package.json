@@ -9,7 +9,9 @@
     "ci:graph": "turbo run types:check build test e2e --graph=turbo-graph.html",
     "dev": "turbo dev",
     "lint": "ultracite check",
-    "lint:fix": "ultracite fix"
+    "lint:fix": "ultracite fix",
+    "test": "NODE_ENV=test && turbo run test",
+    "test:watch": "NODE_ENV=test && turbo run dev test:watch"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.11",

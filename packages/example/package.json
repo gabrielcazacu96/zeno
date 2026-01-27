@@ -1,0 +1,12 @@
+{
+  "name": "@zeno/example",
+  "scripts": {
+    "test": "vitest --run",
+    "test:watch": "vitest watch"
+  },
+  "devDependencies": {
+    "@zeno/vitest": "workspace:*",
+    "typescript": "5.9.3",
+    "vitest": "4.0.18"
+  }
+}
