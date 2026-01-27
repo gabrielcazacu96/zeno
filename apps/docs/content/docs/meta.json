@@ -20,6 +20,7 @@
     "ui/components",
     "ui/motions",
     "ui/templates",
+    "ui/theming",
     "---Database---",
     "database/supabase",
     "database/drizzle",

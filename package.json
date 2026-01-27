@@ -4,9 +4,9 @@
   "scripts": {
     "build": "turbo build",
     "types:check": "turbo types:check",
-    "ci": "pnpm run lint && turbo run build types:check test e2e",
-    "ci:force": "turbo run build types:check test e2e --force",
-    "ci:graph": "turbo run build types:check test e2e --graph=turbo-graph.html",
+    "ci": "pnpm run lint && turbo run types:check build test e2e",
+    "ci:force": "turbo run types:check build test e2e --force",
+    "ci:graph": "turbo run types:check build test e2e --graph=turbo-graph.html",
     "dev": "turbo dev",
     "lint": "ultracite check",
     "lint:fix": "ultracite fix"
