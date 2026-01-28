@@ -12,7 +12,7 @@
     "---Building UI---",
     "building-ui/components",
     "building-ui/theming",
-    "building-ui/motions",
+    "building-ui/animations",
     "---User Management---",
     "user-management/authentication",
     "user-management/authorization",
