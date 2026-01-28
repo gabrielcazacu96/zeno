@@ -1,9 +1,9 @@
 {
   "pages": [
     "index",
-    "roadmap",
     "technologies",
     "services",
+    "roadmap",
     "---Getting Started---",
     "...getting-started",
     "---Dev Environment---",
@@ -32,14 +32,14 @@
     "---I18N---",
     "i18n/index",
     "---Contents---",
+    "contents/emails",
     "contents/cms",
     "contents/pdfs",
-    "contents/emails",
-    "---Integrations---",
-    "integrations/sentry",
     "---Testing---",
     "testing/unit-testing",
     "testing/e2e-testing",
+    "---Integrations---",
+    "integrations/sentry",
     "---Deployment---",
     "deployment/ci-cd"
   ]
