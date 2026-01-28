@@ -94,6 +94,9 @@ importers:
       '@zeno/typescript':
         specifier: workspace:*
         version: link:../typescript
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/example:
     devDependencies:
