@@ -1,0 +1,5 @@
+{
+  "title": "Project Structure",
+  "icon": "FolderTree",
+  "pages": ["monorepo", "ide", "linting-formatting", "ai-setup", "environments"]
+}
