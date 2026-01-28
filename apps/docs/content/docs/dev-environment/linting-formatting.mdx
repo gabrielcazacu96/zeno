@@ -1,7 +1,78 @@
 ---
 title: Linting & Formatting
-description: Code linting and formatting with Ultracite
-icon: ListCheck
+description: Code quality with Ultracite and Biome
+icon: Sparkles
 ---
 
-Linting & formatting guide coming soon.
+Zeno uses [Ultracite](https://ultracite.ai), a zero-config preset built on [Biome](https://biomejs.dev) for lightning-fast linting and formatting.
+
+## Commands
+
+```bash
+# Check for issues
+pnpm lint
+
+# Auto-fix issues
+pnpm lint:fix
+```
+
+## Configuration
+
+The `biome.jsonc` at the root extends Ultracite presets:
+
+```json
+{
+  "extends": [
+    "ultracite/biome/core",
+    "ultracite/biome/react",
+    "ultracite/biome/next"
+  ]
+}
+```
+
+## Key Rules
+
+### Code Style
+- Double quotes for strings
+- No semicolons (ASI)
+- Sorted Tailwind classes
+
+### TypeScript
+- Prefer `unknown` over `any`
+- Use `const` by default
+- Explicit return types when helpful
+
+### React
+- Function components only
+- Hooks at top level
+- Semantic HTML and ARIA
+
+### Performance
+- No spread in accumulators
+- Top-level regex
+- Specific imports over namespace
+
+## Editor Integration
+
+Biome integrates with VSCode/Cursor for real-time feedback. See [IDE Setup](/docs/dev-environment/ide).
+
+## Overrides
+
+Add package-specific overrides in `biome.jsonc`:
+
+```json
+{
+  "overrides": [
+    {
+      "includes": ["packages/ui/src/**"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "useExhaustiveDependencies": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```

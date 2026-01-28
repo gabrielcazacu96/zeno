@@ -1,7 +1,78 @@
 ---
 title: Monorepo
-description: Monorepo configuration and best practices
+description: Turborepo-powered monorepo for scalable TypeScript development
 icon: Boxes
 ---
 
-Monorepo guide coming soon.
+Zeno uses [Turborepo](https://turbo.build/repo) for monorepo management, providing fast builds and intelligent caching.
+
+## Structure
+
+```
+zeno/
+├── apps/           # Applications (Next.js apps, docs, etc.)
+├── packages/       # Shared libraries
+│   ├── ui/         # React components (@zeno/ui)
+│   ├── typescript/ # TypeScript configs (@zeno/typescript)
+│   ├── tailwind/   # Tailwind config (@zeno/tailwind)
+│   ├── vitest/     # Vitest config (@zeno/vitest)
+│   └── e2e/        # Playwright tests (@zeno/e2e)
+├── turbo.json      # Turborepo configuration
+└── pnpm-workspace.yaml
+```
+
+## Commands
+
+```bash
+# Development
+pnpm dev              # Start all dev servers
+
+# Building
+pnpm build            # Build all packages
+
+# Type checking
+pnpm types:check      # Check TypeScript across all packages
+
+# Testing
+pnpm test             # Run unit tests
+pnpm e2e              # Run E2E tests
+
+# Linting
+pnpm lint             # Check code quality
+pnpm lint:fix         # Auto-fix issues
+
+# CI
+pnpm ci               # Run full CI pipeline
+```
+
+## Filtering
+
+Run commands for specific packages:
+
+```bash
+pnpm turbo run dev --filter @zeno/docs
+pnpm turbo run build --filter @zeno/ui
+```
+
+## Adding Dependencies
+
+```bash
+# Add to root
+pnpm add -D <package> -w
+
+# Add to specific package
+pnpm add <package> --filter @zeno/ui
+```
+
+## Workspace References
+
+Reference internal packages using `workspace:*`:
+
+```json
+{
+  "dependencies": {
+    "@zeno/ui": "workspace:*",
+    "@zeno/typescript": "workspace:*"
+  }
+}
+```

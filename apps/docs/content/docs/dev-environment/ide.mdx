@@ -1,7 +1,62 @@
 ---
-title: IDE
-description: IDE configuration and extensions
+title: IDE Setup
+description: Configuring VSCode and Cursor for Zeno development
 icon: Code
 ---
 
-IDE setup guide coming soon.
+Zeno is optimized for [VSCode](https://code.visualstudio.com) and [Cursor](https://cursor.sh).
+
+## Recommended Extensions
+
+Install these extensions for the best experience:
+
+| Extension | Purpose |
+|-----------|---------|
+| [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) | Linting & formatting |
+| [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) | Tailwind autocomplete |
+| [Pretty TypeScript Errors](https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors) | Readable TS errors |
+| [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens) | Inline error display |
+
+## Settings
+
+Add to your `.vscode/settings.json`:
+
+```json
+{
+  "editor.defaultFormatter": "biomejs.biome",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "quickfix.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}
+```
+
+## Cursor AI
+
+For Cursor users, the project includes AI rules in `.cursor/rules/` that provide context-aware assistance:
+
+- **Ultracite rules** — Code standards and best practices
+- **AGENTS.md** — Project structure and conventions
+
+These help Cursor understand the codebase and generate compliant code.
+
+## TypeScript
+
+Zeno uses strict TypeScript configurations from `@zeno/typescript`:
+
+- `base.json` — Core settings
+- `strict.json` — Strict mode enabled
+- `strictest.json` — Maximum strictness
+- `react.json` — React/JSX support
+- `nextjs.json` — Next.js specific
+
+Example `tsconfig.json`:
+
+```json
+{
+  "extends": "@zeno/typescript/nextjs"
+}
+```

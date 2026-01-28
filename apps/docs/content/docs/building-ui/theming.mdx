@@ -1,7 +1,110 @@
 ---
 title: Theming
-description: Theming configuration and best practices
+description: Customizing your app's appearance with Tailwind CSS 4
 icon: Palette
 ---
 
-Theming guide coming soon.
+Zeno uses [Tailwind CSS 4](https://tailwindcss.com) with CSS variables for theming, supporting light and dark modes.
+
+## Setup
+
+Import the base styles in your app:
+
+```css
+@import "@zeno/tailwind/globals.css";
+@import "@zeno/ui/styles/globals.css";
+```
+
+## CSS Variables
+
+Theme colors are defined as CSS variables in `theme.css`:
+
+```css
+:root {
+  --background: var(--color-white);
+  --foreground: var(--color-gray-950);
+  --primary: var(--color-gray-900);
+  --primary-foreground: var(--color-gray-50);
+  --secondary: var(--color-gray-100);
+  --muted: var(--color-gray-100);
+  --accent: var(--color-gray-100);
+  --destructive: var(--color-error-600);
+  --border: var(--color-gray-200);
+  --ring: var(--color-gray-400);
+  --radius: 0.625rem;
+}
+
+.dark {
+  --background: var(--color-gray-950);
+  --foreground: var(--color-gray-50);
+  /* ... dark mode overrides */
+}
+```
+
+## Using Theme Colors
+
+Reference theme colors in Tailwind classes:
+
+```tsx
+<div className="bg-background text-foreground">
+  <button className="bg-primary text-primary-foreground">
+    Primary Button
+  </button>
+  <span className="text-muted-foreground">Muted text</span>
+</div>
+```
+
+## Available Colors
+
+| Variable | Light | Dark |
+|----------|-------|------|
+| `background` | White | Gray 950 |
+| `foreground` | Gray 950 | Gray 50 |
+| `primary` | Gray 900 | Gray 200 |
+| `secondary` | Gray 100 | Gray 800 |
+| `muted` | Gray 100 | Gray 800 |
+| `accent` | Gray 100 | Gray 700 |
+| `destructive` | Error 600 | Error 400 |
+| `border` | Gray 200 | 10% white |
+| `card` | White | Gray 900 |
+| `popover` | White | Gray 800 |
+
+## Dark Mode
+
+Dark mode uses the `.dark` class on the root element. Use `next-themes` for automatic switching:
+
+```tsx
+import { ThemeProvider } from "next-themes"
+
+function App({ children }) {
+  return (
+    <ThemeProvider attribute="class" defaultTheme="system">
+      {children}
+    </ThemeProvider>
+  )
+}
+```
+
+## Customizing
+
+Override variables in your app's CSS:
+
+```css
+:root {
+  --primary: var(--color-blue-600);
+  --primary-foreground: var(--color-white);
+  --radius: 0.5rem;
+}
+```
+
+## Utilities
+
+The `cn` function merges Tailwind classes safely:
+
+```tsx
+import { cn } from "@zeno/ui/lib/utils"
+
+// Merges and deduplicates classes
+cn("px-4 py-2", "px-6") // → "py-2 px-6"
+cn("text-red-500", isError && "text-red-700")
+```

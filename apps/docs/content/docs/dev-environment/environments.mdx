@@ -1,7 +1,107 @@
 ---
 title: Environments
-description: Managing development, staging, and production environments
-icon: Copy
+description: Managing environment variables and configurations
+icon: Settings
 ---
 
-Environments guide coming soon.
+Zeno uses environment variables for configuration across different environments.
+
+## Environment Files
+
+```
+.env                 # Default values (committed)
+.env.local           # Local overrides (not committed)
+.env.development     # Development-specific
+.env.production      # Production-specific
+.env.test            # Test-specific
+```
+
+## Loading Order
+
+Environment variables are loaded in this order (later overrides earlier):
+
+1. `.env`
+2. `.env.local`
+3. `.env.[NODE_ENV]`
+4. `.env.[NODE_ENV].local`
+
+## Next.js Variables
+
+For Next.js apps, prefix public variables with `NEXT_PUBLIC_`:
+
+```bash
+# Server-only (secure)
+DATABASE_URL=postgres://...
+API_SECRET=secret123
+
+# Browser-accessible
+NEXT_PUBLIC_API_URL=https://api.example.com
+NEXT_PUBLIC_APP_NAME=My App
+```
+
+## TypeScript Support
+
+Create a typed env file for autocomplete:
+
+```typescript
+// env.ts
+export const env = {
+  DATABASE_URL: process.env.DATABASE_URL!,
+  API_SECRET: process.env.API_SECRET!,
+  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL!,
+}
+```
+
+## Vitest Environment
+
+Tests use `.env.test` and `NODE_ENV=test`:
+
+```typescript
+// vitest.config.ts
+import { loadEnv } from "vite"
+
+export default defineConfig({
+  test: {
+    env: loadEnv("test", process.cwd(), ""),
+  },
+})
+```
+
+## Turborepo
+
+Pass environment variables to Turborepo tasks:
+
+```json
+// turbo.json
+{
+  "globalEnv": ["NODE_ENV"],
+  "tasks": {
+    "build": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "e2e": {
+      "passThroughEnv": ["PLAYWRIGHT_*"]
+    }
+  }
+}
+```
+
+## Security
+
+- **Never commit secrets** — Use `.env.local` for sensitive values
+- **Use `.gitignore`** — Ensure `.env*.local` is ignored
+- **Validate at startup** — Check required vars exist
+- **Rotate credentials** — Update secrets regularly
+
+Example validation:
+
+```typescript
+function validateEnv() {
+  const required = ["DATABASE_URL", "API_SECRET"]
+  for (const key of required) {
+    if (!process.env[key]) {
+      throw new Error(`Missing required env var: ${key}`)
+    }
+  }
+}
+```

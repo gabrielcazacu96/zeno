@@ -1,7 +1,88 @@
 ---
 title: AI Setup
-description: Configure AI tools for development
-icon: Sparkles
+description: AI-first development with Cursor and coding assistants
+icon: Bot
 ---
 
-AI setup guide coming soon.
+Zeno embraces AI-assisted development. The codebase is designed to work seamlessly with AI coding tools.
+
+## Cursor Integration
+
+[Cursor](https://cursor.sh) is the recommended AI-powered editor. Zeno includes:
+
+### AGENTS.md
+
+The root `AGENTS.md` file provides AI assistants with:
+
+- Project overview and structure
+- Development commands
+- TypeScript conventions
+- React/Next.js patterns
+- Testing guidelines
+
+### Cursor Rules
+
+Custom rules in `.cursor/rules/` provide context-specific guidance:
+
+```
+.cursor/rules/
+└── ultracite.mdc    # Code quality standards
+```
+
+Rules are automatically loaded when working with matching files.
+
+## AI-Friendly Patterns
+
+Zeno follows patterns that help AI understand and generate better code:
+
+### Explicit Types
+
+```typescript
+// Good - AI understands the contract
+interface UserProps {
+  id: string
+  name: string
+  email: string
+}
+
+function UserCard({ id, name, email }: UserProps) {
+  // ...
+}
+```
+
+### Descriptive Names
+
+```typescript
+// Good - self-documenting
+const isUserAuthenticated = checkAuth()
+const hasAdminPermissions = user.role === "admin"
+
+// Avoid
+const auth = checkAuth()
+const admin = user.role === "admin"
+```
+
+### Co-located Types
+
+Keep types near their usage for better AI context:
+
+```typescript
+// types defined in the same file or nearby
+interface CreateUserInput {
+  name: string
+  email: string
+}
+
+async function createUser(input: CreateUserInput) {
+  // AI has full context
+}
+```
+
+## LLM Documentation
+
+Zeno docs support LLM-friendly formats:
+
+- `/llms.mdx` — Structured documentation for AI
+- `/llms-full.txt` — Complete docs in plain text
+
+These help AI assistants provide accurate guidance about Zeno.

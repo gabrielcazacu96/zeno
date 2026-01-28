@@ -4,4 +4,129 @@ description: Build your first application with Zeno
 icon: Rocket
 ---
 
-First app tutorial coming soon.
+Create a new Next.js application using Zeno's shared packages.
+
+## Create the App
+
+Create a new directory in `apps/`:
+
+```bash
+mkdir apps/my-app
+cd apps/my-app
+```
+
+Initialize `package.json`:
+
+```json
+{
+  "name": "@zeno/my-app",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "types:check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@zeno/ui": "workspace:*",
+    "next": "^16.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@zeno/tailwind": "workspace:*",
+    "@zeno/typescript": "workspace:*",
+    "typescript": "^5.9.0"
+  }
+}
+```
+
+## Configure TypeScript
+
+Create `tsconfig.json`:
+
+```json
+{
+  "extends": "@zeno/typescript/nextjs"
+}
+```
+
+## Configure Tailwind
+
+Create `app/global.css`:
+
+```css
+@import "@zeno/tailwind/globals.css";
+@import "@zeno/ui/styles/globals.css";
+```
+
+## Create Layout
+
+Create `app/layout.tsx`:
+
+```tsx
+import "./global.css"
+
+interface LayoutProps {
+  children: React.ReactNode
+}
+
+export default function RootLayout({ children }: LayoutProps) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  )
+}
+```
+
+## Create Homepage
+
+Create `app/page.tsx`:
+
+```tsx
+import { Button } from "@zeno/ui/components/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@zeno/ui/components/card"
+
+export default function HomePage() {
+  return (
+    <main className="flex min-h-screen items-center justify-center p-8">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Welcome to Zeno</CardTitle>
+          <CardDescription>
+            Your app is ready for development.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex gap-2">
+          <Button>Get Started</Button>
+          <Button variant="outline">Learn More</Button>
+        </CardContent>
+      </Card>
+    </main>
+  )
+}
+```
+
+## Install & Run
+
+From the root directory:
+
+```bash
+pnpm install
+pnpm turbo run dev --filter @zeno/my-app
+```
+
+Visit `http://localhost:3000` to see your app.
+
+## Next Steps
+
+- Add more [components](/docs/building-ui/components)
+- Customize the [theme](/docs/building-ui/theming)
+- Set up [testing](/docs/testing/unit-testing)

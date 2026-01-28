@@ -1,7 +1,108 @@
 ---
 title: Unit Testing
 description: Unit testing with Vitest
-icon: ListChecks
+icon: FlaskConical
 ---
 
-Unit testing guide coming soon.
+Zeno uses [Vitest](https://vitest.dev) for fast, modern unit testing with native TypeScript support.
+
+## Setup
+
+Tests use the shared config from `@zeno/vitest`:
+
+```typescript
+// vitest.config.ts
+import { loadEnv } from "vite"
+import tsconfigPaths from "vite-tsconfig-paths"
+import { defineConfig } from "vitest/config"
+
+export default defineConfig({
+  plugins: [tsconfigPaths()],
+  test: {
+    env: loadEnv("test", process.cwd(), ""),
+  },
+})
+```
+
+## Writing Tests
+
+```typescript
+import { describe, expect, test } from "vitest"
+
+describe("Calculator", () => {
+  test("adds two numbers", () => {
+    expect(1 + 2).toBe(3)
+  })
+
+  test("handles edge cases", () => {
+    expect(0 + 0).toBe(0)
+    expect(-1 + 1).toBe(0)
+  })
+})
+```
+
+## Commands
+
+```bash
+# Run tests once
+pnpm test
+
+# Watch mode
+pnpm test:watch
+
+# Run for specific package
+pnpm turbo run test --filter @zeno/example
+```
+
+## Testing React Components
+
+Use `@testing-library/react` (included in `@zeno/vitest`):
+
+```typescript
+import { render, screen } from "@testing-library/react"
+import { describe, expect, test } from "vitest"
+import { Button } from "@zeno/ui/components/button"
+
+describe("Button", () => {
+  test("renders with text", () => {
+    render(<Button>Click me</Button>)
+    expect(screen.getByRole("button")).toHaveTextContent("Click me")
+  })
+})
+```
+
+## Mocking
+
+```typescript
+import { vi, describe, expect, test } from "vitest"
+
+const mockFetch = vi.fn()
+
+describe("API", () => {
+  test("fetches data", async () => {
+    mockFetch.mockResolvedValue({ data: "test" })
+    const result = await mockFetch()
+    expect(result.data).toBe("test")
+  })
+})
+```
+
+## Environment Variables
+
+Tests run with `NODE_ENV=test`. Load env vars in your config:
+
+```typescript
+test: {
+  env: loadEnv("test", process.cwd(), ""),
+}
+```
+
+Create a `.env.test` file for test-specific variables.
+
+## Best Practices
+
+- Write assertions inside `test()` blocks
+- Use `async/await` instead of done callbacks
+- Don't commit `.only` or `.skip`
+- Keep tests focused and independent
+- Use descriptive test names

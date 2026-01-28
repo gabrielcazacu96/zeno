@@ -1,7 +1,120 @@
 ---
 title: Components
-description: Reusable UI components
+description: Reusable UI components built with Shadcn UI
 icon: LayoutGrid
 ---
 
-Components documentation coming soon.
+Zeno includes a comprehensive component library based on [Shadcn UI](https://ui.shadcn.com), built with Radix primitives and Tailwind CSS.
+
+## Installation
+
+Components are available from `@zeno/ui`:
+
+```tsx
+import { Button } from "@zeno/ui/components/button"
+import { Card } from "@zeno/ui/components/card"
+```
+
+## Available Components
+
+### Layout
+- `Card` — Container with header, content, footer
+- `Separator` — Visual divider
+- `Resizable` — Resizable panel groups
+- `ScrollArea` — Custom scrollbars
+- `AspectRatio` — Maintain aspect ratios
+
+### Forms
+- `Button` — Buttons with variants
+- `Input` — Text inputs
+- `Textarea` — Multi-line text
+- `Checkbox` — Checkboxes
+- `RadioGroup` — Radio buttons
+- `Select` — Dropdowns
+- `Switch` — Toggle switches
+- `Slider` — Range sliders
+- `Calendar` — Date pickers
+- `InputOTP` — One-time password input
+- `Form` — Form handling with react-hook-form
+
+### Feedback
+- `Alert` — Alert messages
+- `AlertDialog` — Confirmation dialogs
+- `Dialog` — Modal dialogs
+- `Drawer` — Slide-out panels
+- `Sheet` — Side panels
+- `Sonner` — Toast notifications
+- `Skeleton` — Loading placeholders
+- `Spinner` — Loading spinners
+- `Progress` — Progress indicators
+
+### Navigation
+- `Tabs` — Tab navigation
+- `NavigationMenu` — Main navigation
+- `Breadcrumb` — Breadcrumb trails
+- `Pagination` — Page navigation
+- `Sidebar` — Sidebar navigation
+- `Menubar` — Menu bar
+- `DropdownMenu` — Dropdown menus
+- `ContextMenu` — Right-click menus
+
+### Data Display
+- `Table` — Data tables
+- `Avatar` — User avatars
+- `Badge` — Status badges
+- `Tooltip` — Hover tooltips
+- `HoverCard` — Hover cards
+- `Popover` — Popovers
+- `Carousel` — Image carousels
+- `Chart` — Charts with Recharts
+- `Accordion` — Collapsible sections
+- `Collapsible` — Toggle content
+
+### Utilities
+- `Command` — Command palette
+- `Kbd` — Keyboard shortcuts
+- `Empty` — Empty state placeholder
+
+## Example Usage
+
+```tsx
+import { Button } from "@zeno/ui/components/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@zeno/ui/components/card"
+
+function Example() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Welcome</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Button variant="default">Get Started</Button>
+        <Button variant="outline">Learn More</Button>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+## Button Variants
+
+```tsx
+<Button variant="default">Default</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="link">Link</Button>
+<Button variant="destructive">Destructive</Button>
+```
+
+## Styling
+
+All components use the `cn` utility for class merging:
+
+```tsx
+import { cn } from "@zeno/ui/lib/utils"
+
+<Button className={cn("custom-class", isActive && "active")}>
+  Click me
+</Button>
+```

@@ -1,7 +1,129 @@
 ---
 title: E2E Testing
 description: End-to-end testing with Playwright
-icon: MonitorCheck
+icon: Monitor
 ---
 
-E2E testing guide coming soon.
+Zeno uses [Playwright](https://playwright.dev) for reliable end-to-end testing across browsers.
+
+## Setup
+
+E2E tests are located in `packages/e2e/`:
+
+```
+packages/e2e/
+├── playwright.config.ts
+├── tests/
+│   └── docs/
+│       └── example.spec.ts
+└── test-results/
+```
+
+## Configuration
+
+```typescript
+// playwright.config.ts
+import { defineConfig, devices } from "@playwright/test"
+
+export default defineConfig({
+  testDir: "./tests",
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 3 : 0,
+  reporter: process.env.CI ? "html" : "list",
+  use: {
+    trace: "on-first-retry",
+  },
+  projects: [
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+    },
+  ],
+  webServer: {
+    command: "cd ../../apps/docs && npm run start -- -p 5002",
+    url: "http://localhost:5002",
+    reuseExistingServer: !process.env.CI,
+  },
+})
+```
+
+## Writing Tests
+
+```typescript
+import { expect, test } from "@playwright/test"
+
+test("homepage loads successfully", async ({ page }) => {
+  const response = await page.goto("http://localhost:5002", {
+    waitUntil: "networkidle",
+  })
+  await expect(response?.status()).toBe(200)
+})
+
+test("navigation works", async ({ page }) => {
+  await page.goto("http://localhost:5002")
+  await page.click('a[href="/docs"]')
+  await expect(page).toHaveURL(/.*docs/)
+})
+```
+
+## Commands
+
+```bash
+# Run E2E tests
+pnpm e2e
+
+# Watch mode (with dev server)
+pnpm e2e:watch
+
+# Run specific test file
+pnpm turbo run e2e -- tests/docs/example.spec.ts
+```
+
+## CI Configuration
+
+In CI, tests run with:
+- HTML reporter for artifacts
+- 3 retries on failure
+- 30-second timeout
+- Trace collection on first retry
+
+## Page Object Pattern
+
+For larger test suites, use page objects:
+
+```typescript
+// pages/home.ts
+import { Page } from "@playwright/test"
+
+export class HomePage {
+  constructor(private page: Page) {}
+
+  async goto() {
+    await this.page.goto("http://localhost:5002")
+  }
+
+  async clickDocs() {
+    await this.page.click('a[href="/docs"]')
+  }
+}
+
+// tests/navigation.spec.ts
+import { test, expect } from "@playwright/test"
+import { HomePage } from "../pages/home"
+
+test("navigate to docs", async ({ page }) => {
+  const home = new HomePage(page)
+  await home.goto()
+  await home.clickDocs()
+  await expect(page).toHaveURL(/.*docs/)
+})
+```
+
+## Best Practices
+
+- Use `networkidle` for page loads
+- Prefer role-based selectors (`getByRole`, `getByText`)
+- Don't use `test.only` in committed code
+- Keep tests independent
+- Use fixtures for shared setup
