@@ -1,0 +1,40 @@
+---
+title: "@zeno/supabase"
+description: Supabase integration utilities for Next.js.
+icon: Database
+---
+
+The `@zeno/supabase` package provides utilities for integrating Supabase with Next.js applications.
+
+## Features
+
+- **Client-side Supabase client** - Browser-safe Supabase client
+- **Server-side Supabase client** - Server components and API routes
+- **Middleware integration** - Authentication middleware for protected routes
+- **Image loader** - Next.js image loader for Supabase Storage
+
+## Usage
+
+### Client Component
+
+```tsx
+import { createClient } from "@zeno/supabase/client"
+
+const supabase = createClient()
+```
+
+### Server Component
+
+```tsx
+import { createClient } from "@zeno/supabase/server"
+
+const supabase = await createClient()
+```
+
+### Middleware
+
+```ts
+import { createSupabaseMiddleware } from "@zeno/supabase/middleware"
+
+export const middleware = createSupabaseMiddleware()
+```

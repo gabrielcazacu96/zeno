@@ -1,0 +1,14 @@
+{
+  "title": "Packages",
+  "description": "Zeno pre-built packages",
+  "icon": "Package",
+  "root": true,
+  "pages": [
+    "index",
+    "---Packages---",
+    "ui",
+    "supabase",
+    "tailwind",
+    "typescript"
+  ]
+}

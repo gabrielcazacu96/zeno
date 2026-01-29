@@ -1,0 +1,13 @@
+{
+  "title": "CLI",
+  "description": "Zeno command line interface",
+  "icon": "Terminal",
+  "root": true,
+  "pages": [
+    "index",
+    "---Getting Started---",
+    "installation",
+    "---Commands---",
+    "commands"
+  ]
+}
