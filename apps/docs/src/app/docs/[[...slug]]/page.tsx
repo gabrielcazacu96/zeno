@@ -1,3 +1,5 @@
+import { findSiblings, type Item } from "fumadocs-core/page-tree"
+import { Card, Cards } from "fumadocs-ui/components/card"
 import {
   DocsBody,
   DocsDescription,
@@ -44,10 +46,43 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
           components={getMDXComponents({
             // this allows you to link to other pages with relative file paths
             a: createRelativeLink(source, page),
+            // biome-ignore lint/correctness/noNestedComponentDefinitions: STFU
+            DocsCategory: ({ url }) => {
+              return <DocsCategory url={url ?? page.url} />
+            },
           })}
         />
       </DocsBody>
     </DocsPage>
+  )
+}
+
+function DocsCategory({ url }: { url: string }) {
+  return (
+    <Cards>
+      {/** biome-ignore lint/suspicious/useIterableCallbackReturn: it does */}
+      {findSiblings(source.getPageTree(), url).map((item) => {
+        if (item.type === "separator") {
+          return
+        }
+        if (item.type === "folder" && !item.index) {
+          return
+        }
+
+        const renderedItem: Item =
+          item.type === "folder" && item.index ? item.index : (item as Item)
+
+        return (
+          <Card
+            href={renderedItem.url}
+            key={renderedItem.url}
+            title={renderedItem.name}
+          >
+            {renderedItem.description}
+          </Card>
+        )
+      })}
+    </Cards>
   )
 }
 
