@@ -5,10 +5,10 @@
   "root": true,
   "pages": [
     "index",
-    "---Packages---",
-    "ui",
-    "supabase",
-    "tailwind",
-    "typescript"
+    "---Insights---",
+    "audit-trails",
+    "bug-tracking",
+    "crons-monitoring",
+    "uptime-monitoring"
   ]
 }
