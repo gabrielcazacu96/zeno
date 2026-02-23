@@ -1,12 +1,10 @@
-import {
-  BookOpen,
-  Layers,
-  Layers2Icon,
-  type LucideIcon,
-  Puzzle,
-  RocketIcon,
-} from "@zeno/ui/icons"
 import Link from "fumadocs-core/link"
+import {
+  type Folder,
+  findPath,
+  getPageTreeRoots,
+  type Item,
+} from "fumadocs-core/page-tree"
 import {
   NavbarMenu,
   NavbarMenuContent,
@@ -14,61 +12,41 @@ import {
   NavbarMenuTrigger,
 } from "fumadocs-ui/layouts/home/navbar"
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared"
+import type { ReactNode } from "react"
+import { source } from "@/lib/source"
 
 interface SubMenuLinkProps {
-  description: string
+  description: ReactNode
   href: string
-  icon: LucideIcon
-  title: string
+  icon: ReactNode
+  title: ReactNode
 }
 
-function SubMenuLink({
-  description,
-  href,
-  icon: Icon,
-  title,
-}: SubMenuLinkProps) {
+function SubMenuLink({ description, href, icon, title }: SubMenuLinkProps) {
   return (
     <NavbarMenuLink href={href}>
-      <Icon className="mb-2 rounded-md bg-fd-primary p-1 text-fd-primary-foreground" />
+      <div className="mb-2 self-start rounded-md bg-fd-primary p-1 text-fd-primary-foreground [&>svg]:size-4">
+        {icon}
+      </div>
       <p className="font-medium">{title}</p>
       <p className="text-fd-muted-foreground text-sm">{description}</p>
     </NavbarMenuLink>
   )
 }
 
-const docsMenuItems: SubMenuLinkProps[] = [
-  {
-    description: "Get started with Zeno in minutes.",
-    href: "/docs/foundation",
-    icon: Layers2Icon,
-    title: "1. Foundation",
-  },
-  {
-    description: "Data, users, UI, and testing.",
-    href: "/docs/core-framework",
-    icon: Layers,
-    title: "2. Core Framework",
-  },
-  {
-    description: "Tables, forms, uploaders, and content.",
-    href: "/docs/feature-modules",
-    icon: Puzzle,
-    title: "3. Feature Modules",
-  },
-  {
-    description: "Deploy and monitor your application.",
-    href: "/docs/production",
-    icon: RocketIcon,
-    title: "4. Going to Production",
-  },
-  {
-    description: "CLI tools and command reference.",
-    href: "/docs/reference",
-    icon: BookOpen,
-    title: "5. Reference",
-  },
-]
+function getDocsMenuItems(): SubMenuLinkProps[] {
+  const roots = getPageTreeRoots(source.getPageTree())
+  return roots
+    .filter((root): root is Folder => "type" in root && root.type === "folder")
+    .map((folder) => ({
+      description: folder.index?.description ?? folder.description ?? "",
+      href:
+        (findPath(folder.children, (node) => node.type === "page")?.[0] as Item)
+          ?.url ?? "/",
+      icon: folder.icon,
+      title: folder.name,
+    }))
+}
 
 export function baseOptions(): BaseLayoutProps {
   return {
@@ -79,6 +57,7 @@ export function baseOptions(): BaseLayoutProps {
 }
 
 export function homeOptions(): BaseLayoutProps {
+  const docsMenuItems = getDocsMenuItems()
   return {
     ...baseOptions(),
     links: [
@@ -88,8 +67,8 @@ export function homeOptions(): BaseLayoutProps {
         url: "/",
       },
       {
-        items: docsMenuItems.map(({ description: _, icon: Icon, ...item }) => ({
-          icon: <Icon />,
+        items: docsMenuItems.map((item) => ({
+          icon: item.icon,
           text: item.title,
           url: item.href,
         })),
