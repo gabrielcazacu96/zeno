@@ -1,0 +1,21 @@
+{
+  "title": "1. Foundation",
+  "description": "Getting started with Zeno",
+  "icon": "Layers2",
+  "root": true,
+  "pages": [
+    "index",
+    "technologies",
+    "roadmap",
+    "---Getting Started---",
+    "...getting-started",
+    "---Development---",
+    "development/local-setup",
+    "---Use Cases---",
+    "getting-started/use-cases/static-website",
+    "getting-started/use-cases/blog",
+    "getting-started/use-cases/documentation",
+    "getting-started/use-cases/saas",
+    "getting-started/use-cases/crm"
+  ]
+}

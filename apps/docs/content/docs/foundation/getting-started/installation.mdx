@@ -1,0 +1,76 @@
+---
+title: Installation
+description: Get started with Zeno in minutes
+icon: Download
+status: in progress
+---
+
+## Requirements
+
+- **Node.js 24+**
+- **pnpm 10+**
+
+## Quick Start
+
+Clone the Zeno repository:
+
+```bash
+git clone https://github.com/your-org/zeno.git
+cd zeno
+```
+
+Install dependencies:
+
+```bash
+pnpm install
+```
+
+Start development servers:
+
+```bash
+pnpm dev
+```
+
+## Verify Installation
+
+Run the full CI pipeline to ensure everything works:
+
+```bash
+pnpm ci
+```
+
+This runs:
+1. Linting with Ultracite
+2. TypeScript type checking
+3. Build all packages
+4. Unit tests with Vitest
+5. E2E tests with Playwright
+
+## Package Manager
+
+Zeno uses [pnpm](https://pnpm.io) for fast, disk-efficient package management. Install it globally:
+
+```bash
+npm install -g pnpm
+```
+
+Or use Corepack (included with Node.js):
+
+```bash
+corepack enable
+corepack prepare pnpm@latest --activate
+```
+
+## Editor Setup
+
+For the best experience, use VSCode or Cursor with the recommended extensions:
+
+1. Install [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome)
+2. Install [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+
+See [IDE Setup](/docs/foundation/getting-started/ide) for full configuration.
+
+## Next Steps
+
+- [Monorepo](/docs/foundation/getting-started/monorepo) — Understand the codebase layout
+- [UI Primitives](/docs/core-framework/building-ui/components) — Explore the UI library

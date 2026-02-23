@@ -1,0 +1,23 @@
+{
+  "title": "2. Core Framework",
+  "description": "The core building blocks of Zeno",
+  "icon": "Layers",
+  "root": true,
+  "pages": [
+    "index",
+    "---Data Management---",
+    "data-management/schemas",
+    "data-management/database",
+    "data-management/real-time",
+    "---User Management---",
+    "user-management/authentication",
+    "user-management/authorization",
+    "---UI & Experience---",
+    "building-ui/components",
+    "building-ui/theming",
+    "building-ui/animations",
+    "---Testing---",
+    "testing/unit-testing",
+    "testing/e2e-testing"
+  ]
+}

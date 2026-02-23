@@ -1,0 +1,16 @@
+{
+  "title": "4. Going to Production",
+  "description": "Deploy and monitor your application",
+  "icon": "Rocket",
+  "root": true,
+  "pages": [
+    "index",
+    "---Deployment---",
+    "deployment/ci-cd",
+    "---Monitoring & Insights---",
+    "monitoring/audit-trails",
+    "monitoring/bug-tracking",
+    "monitoring/crons-monitoring",
+    "monitoring/uptime-monitoring"
+  ]
+}

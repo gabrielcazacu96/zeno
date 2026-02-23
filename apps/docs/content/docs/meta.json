@@ -1,3 +1,9 @@
 {
-  "pages": ["(framework)", "packages", "cli"]
+  "pages": [
+    "foundation",
+    "core-framework",
+    "feature-modules",
+    "production",
+    "reference"
+  ]
 }

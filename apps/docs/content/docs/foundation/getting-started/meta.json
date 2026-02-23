@@ -1,0 +1,4 @@
+{
+  "title": "Getting Started",
+  "pages": ["installation", "monorepo", "ide", "linting-formatting", "ai-setup"]
+}

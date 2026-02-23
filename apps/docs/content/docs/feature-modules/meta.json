@@ -1,0 +1,19 @@
+{
+  "title": "3. Feature Modules",
+  "description": "Advanced feature modules",
+  "icon": "Puzzle",
+  "root": true,
+  "pages": [
+    "index",
+    "---Complex Interfaces---",
+    "components/tables",
+    "components/forms",
+    "components/uploaders",
+    "components/searches",
+    "---Content Generation---",
+    "contents/i18n",
+    "contents/emails",
+    "contents/cms",
+    "contents/pdf"
+  ]
+}

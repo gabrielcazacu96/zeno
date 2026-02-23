@@ -1,0 +1,50 @@
+---
+title: CLI Commands
+description: Complete reference for Zeno CLI commands.
+icon: List
+status: in progress
+---
+
+## zeno create
+
+Create a new Zeno project.
+
+```bash
+zeno create <project-name> [options]
+```
+
+### Options
+
+| Option | Description |
+|--------|-------------|
+| `--template` | Project template to use |
+| `--skip-install` | Skip dependency installation |
+
+## zeno add
+
+Add a component or package to your project.
+
+```bash
+zeno add <component> [options]
+```
+
+### Options
+
+| Option | Description |
+|--------|-------------|
+| `--path` | Custom installation path |
+| `--overwrite` | Overwrite existing files |
+
+## zeno generate
+
+Generate code scaffolding.
+
+```bash
+zeno generate <type> <name> [options]
+```
+
+### Types
+
+- `model` - Generate a database model
+- `api` - Generate API routes
+- `page` - Generate a page component

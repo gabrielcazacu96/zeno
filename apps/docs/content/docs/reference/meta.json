@@ -1,0 +1,7 @@
+{
+  "title": "5. Reference",
+  "description": "CLI and command reference",
+  "icon": "BookOpen",
+  "root": true,
+  "pages": ["index", "---CLI---", "cli/cli-installation", "cli/cli-commands"]
+}
