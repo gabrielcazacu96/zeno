@@ -32,7 +32,7 @@ function LayoutTabs({
       {options.map((option, i) => (
         <Link
           className={cn(
-            "inline-flex items-center gap-2 text-nowrap border-transparent border-b-2 pb-1.5 font-medium text-fd-muted-foreground text-sm transition-colors hover:text-fd-accent-foreground",
+            "inline-flex items-center gap-1 text-nowrap border-transparent border-b-2 pb-1.5 font-medium text-fd-muted-foreground text-sm transition-colors hover:text-fd-accent-foreground [&_svg]:size-4!",
             option.unlisted && selected !== option && "hidden",
             selected === option && "border-fd-primary text-fd-primary"
           )}
@@ -40,6 +40,7 @@ function LayoutTabs({
           // biome-ignore lint/suspicious/noArrayIndexKey: can't do better
           key={i}
         >
+          {option.icon}
           {option.title}
         </Link>
       ))}
