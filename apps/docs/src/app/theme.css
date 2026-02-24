@@ -51,8 +51,7 @@
   --color-fd-diff-add-symbol: rgb(10, 200, 100);
 }
 
-.dark #nd-sidebar {
-  --color-fd-muted: var(--color-muted);
-  --color-fd-secondary: var(--color-secondary);
-  --color-fd-muted-foreground: var(--color-muted-foreground);
+#nd-sidebar {
+  background-color: transparent;
+  border-color: transparent;
 }
