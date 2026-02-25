@@ -22,7 +22,7 @@ export function DocsLayoutHeaderTabs() {
       className="z-30 hidden *:mx-auto *:max-w-(--fd-layout-width) md:top-[56px] md:block lg:top-[59px] xl:top-[61px]"
       id="nd-docs-nav"
     >
-      <div className="border-b bg-fd-background px-4 py-1.5">
+      <div className="border-b bg-fd-background/80 px-4 py-1.5 backdrop-blur-lg">
         <Tabs>
           <TabsList>
             {tabs.map((option, i) => (
