@@ -2,8 +2,7 @@
 @import "./theme.css";
 @import "fumadocs-ui/css/preset.css";
 
-#nd-nav,
-#nd-docs-nav {
+#nd-nav {
   left: 0;
   right: 0;
   position: fixed;

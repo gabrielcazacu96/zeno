@@ -19,10 +19,10 @@ export function DocsLayoutHeaderTabs() {
 
   return (
     <div
-      className="z-30 hidden *:mx-auto *:max-w-(--fd-layout-width) md:top-[56px] md:block lg:top-[59px] xl:top-[61px]"
-      id="nd-docs-nav"
+      className="fixed inset-x-0 top-20 hidden border-b bg-fd-background *:mx-auto *:max-w-(--fd-layout-width) md:top-[46px] md:block lg:top-[49px] xl:top-[51px]"
+      id="nd-header-tabs"
     >
-      <div className="border-b bg-fd-background/80 px-4 py-1.5 backdrop-blur-lg">
+      <div className="px-4 py-1.5">
         <Tabs>
           <TabsList>
             {tabs.map((option, i) => (
