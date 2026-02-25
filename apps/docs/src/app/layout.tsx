@@ -1,6 +1,9 @@
 import { RootProvider } from "fumadocs-ui/provider/next"
 import "./global.css"
+import { HomeLayout } from "fumadocs-ui/layouts/home"
 import { Inter } from "next/font/google"
+import { NavbarScrollHide } from "@/components/layout/navbar-scroll-hide"
+import { homeOptions } from "@/lib/layout.shared"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -10,7 +13,10 @@ export default function Layout({ children }: LayoutProps<"/">) {
   return (
     <html className={inter.className} lang="en" suppressHydrationWarning>
       <body className="flex min-h-screen flex-col">
-        <RootProvider>{children}</RootProvider>
+        <RootProvider>
+          <HomeLayout {...homeOptions()}>{children}</HomeLayout>
+        </RootProvider>
+        <NavbarScrollHide />
       </body>
     </html>
   )

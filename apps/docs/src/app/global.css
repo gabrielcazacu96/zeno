@@ -1,3 +1,32 @@
 @import "@zeno/ui/styles/globals.css";
 @import "./theme.css";
 @import "fumadocs-ui/css/preset.css";
+
+#nd-nav {
+  left: 0;
+  right: 0;
+  position: fixed;
+}
+
+#nd-page {
+  @apply md:mt-20;
+}
+
+#nd-sidebar {
+  padding-top: calc((1 - var(--nd-nav-hide-progress, 0)) * 90px);
+}
+
+#nd-toc {
+  padding-top: calc(
+    ((1 - var(--nd-nav-hide-progress, 0)) * 90px) +
+    (var(--spacing) * 12)
+  );
+}
+
+#nd-sidebar > div:first-child > div.flex {
+  opacity: var(--nd-nav-hide-progress, 0);
+}
+
+#nd-sidebar > div:first-child > button[data-state] {
+  display: none;
+}

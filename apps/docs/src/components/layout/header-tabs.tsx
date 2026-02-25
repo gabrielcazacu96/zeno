@@ -1,0 +1,52 @@
+"use client"
+
+import { Tabs, TabsList, TabsTrigger } from "@zeno/ui/components/tabs"
+import { cn } from "@zeno/ui/lib/utils"
+import { Link, usePathname } from "fumadocs-core/framework"
+import { isTabActive } from "fumadocs-ui/components/sidebar/tabs/dropdown"
+import { getSidebarTabs } from "fumadocs-ui/components/sidebar/tabs/index"
+import { useMemo } from "react"
+import { source } from "@/lib/source"
+
+export function DocsLayoutHeaderTabs() {
+  const tabs = useMemo(() => {
+    return getSidebarTabs(source.getPageTree())
+  }, [])
+  const pathname = usePathname()
+  const selected = useMemo(() => {
+    return tabs.findLast((tab) => isTabActive(tab, pathname))
+  }, [tabs, pathname])
+
+  return (
+    <div
+      className="fixed inset-x-0 top-20 hidden border-b bg-fd-background *:mx-auto *:max-w-(--fd-layout-width) md:top-[46px] md:block lg:top-[49px] xl:top-[51px]"
+      id="nd-header-tabs"
+    >
+      <div className="px-4 py-1.5">
+        <Tabs>
+          <TabsList>
+            {tabs.map((option, i) => (
+              <TabsTrigger
+                asChild
+                className={cn(
+                  "text-fd-muted-foreground [&_svg]:size-4!",
+                  option.unlisted && selected !== option && "hidden",
+                  selected === option && "border-fd-primary text-fd-primary",
+                  selected !== option && "hover:text-fd-accent-foreground"
+                )}
+                // biome-ignore lint/suspicious/noArrayIndexKey: can't do better
+                key={i}
+                value={option.url}
+              >
+                <Link href={option.url}>
+                  {option.icon}
+                  {option.title}
+                </Link>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
+    </div>
+  )
+}
