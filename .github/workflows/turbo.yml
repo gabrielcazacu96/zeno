@@ -35,6 +35,8 @@ jobs:
         cache: 'pnpm'
     - name: Install dependencies
       run: pnpm install
+    - name: Install Playwright Browsers
+      run: pnpm dlx playwright install chromium
     - name: Run turbo ci command
       run: pnpm run ci
     - name: Upload Playwright report
