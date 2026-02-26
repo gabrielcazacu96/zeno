@@ -11,92 +11,50 @@ Zeno includes a comprehensive CI pipeline that runs on every push and pull reque
 
 The CI pipeline runs these steps in order:
 
-```bash
-pnpm ci
-```
-
-Which executes:
-
 1. **Lint** — Code quality checks with Ultracite
 2. **Type Check** — TypeScript validation
 3. **Build** — Build all packages
 4. **Unit Tests** — Run Vitest tests
 5. **E2E Tests** — Run Playwright tests
 
-## Turborepo Tasks
+It can be run locally with:
 
-The pipeline is defined in `turbo.json`:
+```bash
+pnpm ci
+```
 
-```json
+Or force a rebuild without caches with:
+
+```bash
+pnpm ci:force
+```
+
+Or generate a dependency graph in `turbo-graph.html` with:
+
+```bash
+pnpm ci:graph
+```
+
+It is defined in `package.json`:
+
+```json title="package.json"
 {
-  "tasks": {
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
-    },
-    "types:check": {
-      "dependsOn": ["^types:check"]
-    },
-    "test": {
-      "dependsOn": ["build", "lint"]
-    },
-    "e2e": {
-      "dependsOn": ["^build"],
-      "outputs": ["./packages/e2e/playwright-report/**"]
-    },
-    "lint": {
-      "dependsOn": ["^lint"]
-    }
+  "scripts": {
+    "ci": "pnpm run lint && turbo run types:check build test e2e",
+    "ci:force": "turbo run types:check build test e2e --force",
+    "ci:graph": "turbo run types:check build test e2e --graph=turbo-graph.html",
   }
 }
 ```
 
-## Running Locally
+## Turborepo Tasks
 
-Test the full CI pipeline locally:
+The pipeline order and dependencies are defined in `turbo.json`. 
 
-```bash
-# Standard run (uses cache)
-pnpm ci
-
-# Force rebuild (no cache)
-pnpm ci:force
-
-# Generate dependency graph
-pnpm ci:graph
-```
 
 ## GitHub Actions
 
-Example workflow for GitHub Actions:
-
-```yaml
-name: CI
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  ci:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: pnpm
-
-      - run: pnpm install
-      - run: pnpm ci
-```
+Zeno includes a GitHub Actions workflow for CI/CD. It can be found in `.github/workflows/turbo.yml`.
 
 ## Caching
 
@@ -105,11 +63,20 @@ Turborepo caches task outputs for faster builds:
 - Local cache in `.turbo/`
 - Remote cache available with Vercel
 
-Enable remote caching:
+Enable remote caching locally with:
 
 ```bash
 npx turbo login
 npx turbo link
+```
+
+Enable remote caching within Github Actions by editing and uncommenting the following lines in `.github/workflows/turbo.yml`:
+
+```yaml title=".github/workflows/turbo.yml"
+  env:
+    TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+    TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    TURBO_CACHE: remote:rw
 ```
 
 ## E2E in CI
@@ -118,13 +85,14 @@ Playwright tests in CI have special settings:
 
 - HTML reporter for artifacts
 - 3 retries on failure
-- 30-second timeout
-- Trace collection for debugging
+- 30-second timeout (120s locally)
+- Trace collection on first retry for debugging
 
-```typescript
+```typescript title="packages/e2e/playwright.config.ts"
 {
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 3 : 0,
   reporter: process.env.CI ? "html" : "list",
+  timeout: process.env.CI ? 30_000 : 120_000,
 }
 ```
