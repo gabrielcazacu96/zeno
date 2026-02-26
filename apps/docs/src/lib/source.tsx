@@ -1,13 +1,13 @@
 import { docs } from "fumadocs-mdx:collections/server"
-import { Badge } from "@zeno/ui/components/badge"
+import { cn } from "@zeno/ui/lib/utils"
 import { type InferPageType, loader } from "fumadocs-core/source"
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons"
 
-const badgeLabelMap = {
-  "in progress": "In Progress",
-  new: "New",
-  todo: "Todo",
-} as const
+// const badgeLabelMap = {
+//   "in progress": "In Progress",
+//   new: "New",
+//   todo: "Todo",
+// } as const
 
 // See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
@@ -29,9 +29,17 @@ export const source = loader({
             node.name = (
               <>
                 {node.name}
-                <Badge className="absolute top-2 right-0" variant="outline">
-                  {badgeLabelMap[file.data.status]}
-                </Badge>
+                <span
+                  className={cn(
+                    "absolute top-3.5 right-2 size-2 rounded-full",
+                    {
+                      "bg-blue-500": file.data.status === "to check",
+                      "bg-green-500": file.data.status === "new",
+                      "bg-red-500": file.data.status === "todo",
+                      "bg-yellow-500": file.data.status === "in progress",
+                    }
+                  )}
+                />
               </>
             )
           }

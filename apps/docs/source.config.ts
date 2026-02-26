@@ -11,7 +11,7 @@ export const docs = defineDocs({
       includeProcessedMarkdown: true,
     },
     schema: pageSchema.extend({
-      status: z.enum(["new", "in progress", "todo"]).optional(),
+      status: z.enum(["new", "in progress", "todo", "to check"]).optional(),
     }),
   },
 })
