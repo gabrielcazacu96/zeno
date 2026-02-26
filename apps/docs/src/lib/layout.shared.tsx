@@ -32,6 +32,7 @@ function getDocsMenuItems(): SubMenuLinkProps[] {
 
 export function baseOptions(): BaseLayoutProps {
   return {
+    githubUrl: "https://github.com/zeno-lib/zeno",
     nav: {
       title: "Zeno",
       transparentMode: "none",
