@@ -1,63 +1,45 @@
 ---
 title: IDE Setup
-description: Configuring VSCode and Cursor for Zeno development
+description: Configuring Cursor for Zeno development
 icon: Code
-status: in progress
+status: to check
 ---
 
-Zeno is optimized for [VSCode](https://code.visualstudio.com) and [Cursor](https://cursor.sh).
+Zeno requires [Cursor](https://cursor.com), an AI-powered code editor built on [VSCode](https://code.visualstudio.com). The project relies on Cursor-specific features like AI rules and hooks that are not available in plain VSCode.
+
+Everything is preconfigured — extensions, editor settings, formatter, and AI rules are all committed to the repo. Just open the project in Cursor and you're ready to go.
 
 ## Recommended Extensions
 
-Install these extensions for the best experience:
+The repo includes a `.vscode/extensions.json` file that prompts you to install the recommended extensions when you open the project. You can also install them manually:
 
 | Extension | Purpose |
 |-----------|---------|
 | [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) | Linting & formatting |
 | [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) | Tailwind autocomplete |
+| [Tailwind Fold](https://marketplace.visualstudio.com/items?itemName=stivo.tailwind-fold) | Collapse long Tailwind class lists |
+| [MDX](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) | MDX language support |
 | [Pretty TypeScript Errors](https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors) | Readable TS errors |
-| [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens) | Inline error display |
+| [Vitest](https://marketplace.visualstudio.com/items?itemName=vitest.explorer) | Test runner integration |
+| [Playwright Test](https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright) | E2E test runner |
 
 ## Settings
 
-Add to your `.vscode/settings.json`:
+The repo ships a `.vscode/settings.json` with preconfigured settings. Key highlights:
 
-```json
-{
-  "editor.defaultFormatter": "biomejs.biome",
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "quickfix.biome": "explicit",
-    "source.organizeImports.biome": "explicit"
-  },
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
-}
-```
+- **Biome** is the default formatter for all supported file types (TypeScript, JavaScript, JSON, HTML, CSS, MDX, etc.)
+- **Format on save** and **format on paste** are enabled
+- **Code actions on save** automatically fix lint issues and organize imports
+- **CSS files** are associated with `tailwindcss` for IntelliSense support
+- **TypeScript SDK** points to the workspace `node_modules` version
 
-## Cursor AI
+These settings are committed to the repo, so you get them automatically when you clone.
 
-For Cursor users, the project includes AI rules in `.cursor/rules/` that provide context-aware assistance:
+## Cursor Configuration
 
-- **Ultracite rules** — Code standards and best practices
-- **AGENTS.md** — Project structure and conventions
+The `.cursor/` directory contains project-specific AI configuration:
 
-These help Cursor understand the codebase and generate compliant code.
+- **Rules** — AI-specific coding standards loaded automatically for matching files
+- **Hooks** — Auto-format and lint after every AI-generated file edit
 
-## TypeScript
-
-Zeno uses strict TypeScript configurations from `@zeno/typescript`:
-
-- `base.json` — Core settings
-- `strict.json` — Strict mode enabled
-- `strictest.json` — Maximum strictness
-- `react.json` — React/JSX support
-- `nextjs.json` — Next.js specific
-
-Example `tsconfig.json`:
-
-```json
-{
-  "extends": "@zeno/typescript/nextjs"
-}
-```
+See [AI Setup](/docs/foundation/getting-started/ai-setup) for details.

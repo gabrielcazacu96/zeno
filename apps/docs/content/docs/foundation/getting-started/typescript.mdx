@@ -1,0 +1,100 @@
+---
+title: TypeScript
+description: Shared TypeScript configurations with @zeno/typescript
+icon: FileCode
+status: to check
+---
+
+Zeno uses the `@zeno/typescript` package to share strict TypeScript configurations across all packages and apps.
+
+You never have to manually configure `tsconfig.json` options like `moduleResolution`, `jsx`, `lib`, `strict`, Next.js `include` globs, or the Next.js plugin — just extend one config and everything is set up correctly.
+
+## Available Configs
+
+The configs form an inheritance chain — each level extends the previous one:
+
+| Config | Extends | Purpose |
+|--------|---------|---------|
+| `base.json` | — | Core settings (module resolution, ESNext, bundler mode, JSON imports) |
+| `strict.json` | `base` | Enables `strict: true` |
+| `strictest.json` | `strict` | Maximum strictness (no unused locals/params, no fallthrough, no unchecked indexed access) |
+| `react.json` | `strictest` | Adds JSX support and DOM lib |
+| `nextjs.json` | `react` | Adds Next.js plugin, `next-env.d.ts`, and `.next/types` includes |
+
+## Usage
+
+Extend the appropriate config in your package's `tsconfig.json`:
+
+```json title="tsconfig.json"
+{
+  "extends": "@zeno/typescript/nextjs.json"
+}
+```
+
+That's it. No need to configure `compilerOptions`, `include`, or `exclude` — the config handles module resolution, strict checks, JSX, DOM libs, and Next.js-specific includes for you.
+
+### Which Config to Use
+
+| Package type | Config |
+|-------------|--------|
+| Next.js app | `@zeno/typescript/nextjs.json` |
+| React library | `@zeno/typescript/react.json` |
+| Non-React package | `@zeno/typescript/strictest.json` |
+| Loose / legacy | `@zeno/typescript/strict.json` |
+
+### Examples in the Repo
+
+| Package | Config |
+|---------|--------|
+| `apps/docs` | `@zeno/typescript/nextjs.json` |
+| `packages/ui` | `@zeno/typescript/react.json` |
+| `packages/supabase` | `@zeno/typescript/strictest.json` |
+| `packages/e2e` | `@zeno/typescript/strictest.json` |
+
+## What's Included
+
+### Base Config
+
+Every config inherits these sensible defaults:
+
+- **Bundler module resolution** — Works with modern bundlers (Vite, Turbopack, webpack)
+- **ESNext modules** with `verbatimModuleSyntax` — Clean import/export handling
+- **JSON imports** — `resolveJsonModule` enabled
+- **Incremental builds** — Faster recompilation
+- **Isolated modules** — Compatible with SWC and esbuild
+- **No emit** — Bundlers handle output, TypeScript only type-checks
+
+### Strictest Config
+
+Enables all strict checks beyond `strict: true`:
+
+- `noFallthroughCasesInSwitch` — Prevent fallthrough in switch statements
+- `noImplicitOverride` — Require `override` keyword
+- `noImplicitReturns` — All code paths must return
+- `noUnusedLocals` — No unused local variables
+- `noUnusedParameters` — No unused function parameters
+- `noUncheckedIndexedAccess` — Indexed access returns `T | undefined`
+- `allowUnreachableCode: false` — Error on unreachable code
+- `allowUnusedLabels: false` — Error on unused labels
+
+### Next.js Config
+
+On top of React support, the Next.js config automatically:
+
+- Registers the `next` TypeScript plugin for App Router type safety
+- Includes `next-env.d.ts` and `.next/types/**/*.ts` for generated types
+- Includes all `*.ts` and `*.tsx` files in the project root
+
+## Type Checking
+
+Run type checking across all packages:
+
+```bash
+pnpm types:check
+```
+
+Or for a specific package:
+
+```bash
+pnpm turbo run types:check --filter @zeno/ui
+```

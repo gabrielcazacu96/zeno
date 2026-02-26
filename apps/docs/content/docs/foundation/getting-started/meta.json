@@ -1,4 +1,11 @@
 {
   "title": "Getting Started",
-  "pages": ["installation", "monorepo", "ide", "linting-formatting", "ai-setup"]
+  "pages": [
+    "installation",
+    "monorepo",
+    "ide",
+    "typescript",
+    "linting-formatting",
+    "ai-setup"
+  ]
 }

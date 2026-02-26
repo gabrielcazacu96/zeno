@@ -2,10 +2,12 @@
 title: Linting & Formatting
 description: Code quality with Ultracite and Biome
 icon: ListCheck
-status: in progress
+status: to check
 ---
 
 Zeno uses [Ultracite](https://ultracite.ai), a zero-config preset built on [Biome](https://biomejs.dev) for lightning-fast linting and formatting.
+
+You never have to configure linting or formatting rules from scratch. Ultracite provides production-ready presets for TypeScript, React, and Next.js — just extend and start coding. Biome runs orders of magnitude faster than ESLint + Prettier, so linting the entire monorepo takes milliseconds.
 
 ## Commands
 
@@ -19,9 +21,9 @@ pnpm lint:fix
 
 ## Configuration
 
-The `biome.jsonc` at the root extends Ultracite presets:
+The root `biome.jsonc` extends Ultracite presets:
 
-```json
+```json title="biome.jsonc"
 {
   "extends": [
     "ultracite/biome/core",
@@ -31,37 +33,20 @@ The `biome.jsonc` at the root extends Ultracite presets:
 }
 ```
 
-## Key Rules
+## Formatting
 
-### Code Style
-- Double quotes for strings
-- No semicolons (ASI)
-- Sorted Tailwind classes
+Biome handles all formatting with these settings:
 
-### TypeScript
-- Prefer `unknown` over `any`
-- Use `const` by default
-- Explicit return types when helpful
-
-### React
-- Function components only
-- Hooks at top level
-- Semantic HTML and ARIA
-
-### Performance
-- No spread in accumulators
-- Top-level regex
-- Specific imports over namespace
-
-## Editor Integration
-
-Biome integrates with VSCode/Cursor for real-time feedback. See [IDE Setup](/docs/foundation/getting-started/ide).
+- **Double quotes** for strings
+- **Semicolons** as needed (ASI)
+- **Sorted Tailwind classes** via the `useSortedClasses` rule (also sorts `clsx` calls)
+- **Sorted object keys** via the `useSortedKeys` assist action
 
 ## Overrides
 
-Add package-specific overrides in `biome.jsonc`:
+The repo includes overrides for specific packages. For example, `packages/ui` has relaxed rules for Shadcn UI components:
 
-```json
+```json title="biome.jsonc"
 {
   "overrides": [
     {
@@ -77,3 +62,9 @@ Add package-specific overrides in `biome.jsonc`:
   ]
 }
 ```
+
+Add package-specific overrides in the root `biome.jsonc` as needed.
+
+## Editor Integration
+
+Biome integrates with Cursor/VSCode for real-time feedback. See [IDE Setup](/docs/foundation/getting-started/ide) for extension and settings configuration.
