@@ -52,9 +52,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
             // this allows you to link to other pages with relative file paths
             a: createRelativeLink(source, page),
             // biome-ignore lint/correctness/noNestedComponentDefinitions: STFU
-            DocsCategory: ({ url }) => {
-              return <DocsCategory url={url ?? page.url} />
-            },
+            DocsCategory: ({ url }) => <DocsCategory url={url ?? page.url} />,
           })}
         />
       </DocsBody>

@@ -13,7 +13,7 @@ The foundation configuration with modern ESM features and sensible defaults.
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     // Enable top-level await, and other modern ESM features.
-    "target": "ES5",
+    "target": "ES6",
     "module": "ESNext",    
     // Enable module resolution without file extensions on relative paths, for things like npm package imports.
     "moduleResolution": "Bundler",    
