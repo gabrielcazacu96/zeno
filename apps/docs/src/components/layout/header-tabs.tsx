@@ -3,8 +3,8 @@
 import { Tabs, TabsList, TabsTrigger } from "@zeno/ui/components/tabs"
 import { cn } from "@zeno/ui/lib/utils"
 import { Link, usePathname } from "fumadocs-core/framework"
+import { getSidebarTabs } from "fumadocs-ui/components/sidebar/tabs"
 import { isTabActive } from "fumadocs-ui/components/sidebar/tabs/dropdown"
-import { getSidebarTabs } from "fumadocs-ui/components/sidebar/tabs/index"
 import { useMemo } from "react"
 import { source } from "@/lib/source"
 
