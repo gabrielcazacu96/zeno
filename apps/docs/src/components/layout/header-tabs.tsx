@@ -9,13 +9,12 @@ import { useMemo } from "react"
 import { source } from "@/lib/source"
 
 export function DocsLayoutHeaderTabs() {
-  const tabs = useMemo(() => {
-    return getSidebarTabs(source.getPageTree())
-  }, [])
+  const tabs = useMemo(() => getSidebarTabs(source.getPageTree()), [])
   const pathname = usePathname()
-  const selected = useMemo(() => {
-    return tabs.findLast((tab) => isTabActive(tab, pathname))
-  }, [tabs, pathname])
+  const selected = useMemo(
+    () => tabs.findLast((tab) => isTabActive(tab, pathname)),
+    [tabs, pathname]
+  )
 
   return (
     <div
