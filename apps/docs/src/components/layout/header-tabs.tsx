@@ -26,7 +26,6 @@ export function DocsLayoutHeaderTabs() {
           <TabsList>
             {tabs.map((option, i) => (
               <TabsTrigger
-                asChild
                 className={cn(
                   "text-fd-muted-foreground [&_svg]:size-4!",
                   option.unlisted && selected !== option && "hidden",
