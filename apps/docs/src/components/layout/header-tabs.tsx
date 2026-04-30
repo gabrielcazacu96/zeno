@@ -26,7 +26,6 @@ export function DocsLayoutHeaderTabs() {
           <TabsList>
             {tabs.map((option, i) => (
               <TabsTrigger
-                asChild
                 className={cn(
                   "text-fd-muted-foreground [&_svg]:size-4!",
                   option.unlisted && selected !== option && "hidden",
@@ -35,12 +34,12 @@ export function DocsLayoutHeaderTabs() {
                 )}
                 // biome-ignore lint/suspicious/noArrayIndexKey: can't do better
                 key={i}
+                nativeButton={false}
+                render={<Link href={option.url} />}
                 value={option.url}
               >
-                <Link href={option.url}>
-                  {option.icon}
-                  {option.title}
-                </Link>
+                {option.icon}
+                {option.title}
               </TabsTrigger>
             ))}
           </TabsList>
