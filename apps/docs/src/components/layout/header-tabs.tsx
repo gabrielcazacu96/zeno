@@ -34,12 +34,12 @@ export function DocsLayoutHeaderTabs() {
                 )}
                 // biome-ignore lint/suspicious/noArrayIndexKey: can't do better
                 key={i}
+                nativeButton={false}
+                render={<Link href={option.url} />}
                 value={option.url}
               >
-                <Link href={option.url}>
-                  {option.icon}
-                  {option.title}
-                </Link>
+                {option.icon}
+                {option.title}
               </TabsTrigger>
             ))}
           </TabsList>
