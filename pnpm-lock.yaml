@@ -161,6 +161,9 @@ importers:
       '@tanstack/react-form-nextjs':
         specifier: 1.29.1
         version: 1.29.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@zeno/ui':
+        specifier: workspace:*
+        version: link:../ui
       next:
         specifier: '>=16'
         version: 16.2.4(@playwright/test@1.59.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
