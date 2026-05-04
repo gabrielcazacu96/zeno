@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./components/*": "./src/components/*.tsx",
+    "./*": "./src/components/*.tsx",
     "./hooks/*": [
       "./src/hooks/*.ts",
       "./src/hooks/*.tsx"
