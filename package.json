@@ -16,7 +16,7 @@
     "test:watch": "NODE_ENV=test && turbo run dev test:watch"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.13",
+    "@biomejs/biome": "2.4.14",
     "turbo": "2.9.7",
     "typescript": "6.0.3",
     "ultracite": "7.6.2"
