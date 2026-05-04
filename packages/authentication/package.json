@@ -1,0 +1,26 @@
+{
+  "name": "@zeno/authentication",
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "exports": {
+    "./*": "./src/*.tsx",
+    "./confirm/*": "./src/confirm/*.ts"
+  },
+  "peerDependencies": {
+    "next": ">=16",
+    "react": ">=19",
+    "react-dom": ">=19",
+    "react-hook-form": ">=7"
+  },
+  "dependencies": {
+    "@zeno/supabase": "workspace:*",
+    "@zeno/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@zeno/typescript": "workspace:*",
+    "@types/node": "24.12.2",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3"
+  }
+}
