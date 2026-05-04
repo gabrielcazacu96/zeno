@@ -1,6 +1,9 @@
 {
   "name": "@zeno/supabase",
   "scripts": {},
+  "exports": {
+    "./*": "./src/*.ts"
+  },
   "peerDependencies": {
     "@supabase/ssr": ">=0",
     "@supabase/supabase-js": ">=2",
