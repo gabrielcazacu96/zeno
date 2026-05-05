@@ -11,6 +11,7 @@
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
+    "@zeno/forms": "workspace:*",
     "@zeno/ui": "workspace:*",
     "fumadocs-core": "16.8.5",
     "fumadocs-mdx": "14.3.2",
