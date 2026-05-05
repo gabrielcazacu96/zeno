@@ -6,7 +6,7 @@ Zeno is a Turborepo monorepo containing shared packages and applications for bui
 
 ## Workspace
 
-This file is the **root of an Intent Layer** — a hierarchy of small `AGENTS.md` files placed at semantic boundaries so agents load high-signal local context (purpose, contracts, anti-patterns, sharp edges) before touching code. This file holds workspace-wide conventions and inherits *down* into every package; per-package nodes hold their own invariants and inherit conventions *up* from here. Don't duplicate facts across nodes — put them at the shallowest node that covers all relevant paths.
+This file is the **root of an [Intent Layer](https://intent-systems.com/blog/intent-layer)** — a hierarchy of small `AGENTS.md` files placed at semantic boundaries so agents load high-signal local context (purpose, contracts, anti-patterns, sharp edges) before touching code. This file holds workspace-wide conventions and inherits *down* into every package; per-package nodes hold their own invariants and inherit conventions *up* from here. Don't duplicate facts across nodes — put them at the shallowest node that covers all relevant paths.
 
 Linked entries below have a leaf node — open it before working in that area. Each leaf uses the same six sections (Purpose & Scope, Entry Points & Contracts, Usage Patterns, Anti-patterns, Dependencies & Edges, Pitfalls) so you can pattern-match across the workspace; copy that template when adding a new package with non-trivial invariants. Config-only packages (`typescript/`, `tailwind/`, `vitest/`) deliberately have no node — their config files are self-documenting and a node would only repeat them.
 
@@ -20,6 +20,18 @@ Linked entries below have a leaf node — open it before working in that area. E
   - `typescript/` — shared `tsconfig` presets
   - `tailwind/` — shared Tailwind globals
   - `vitest/` — shared Vitest config
+
+### Keeping the Intent Layer current
+
+Update the relevant `AGENTS.md` in the same change as the code when you:
+
+- add, remove, or rename a public export, route, env var, or workspace dep that the node documents
+- change an invariant, contract, or anti-pattern (e.g. relax a guard, alter a redirect path, change a hook's behaviour)
+- discover a pitfall the node doesn't yet capture
+- add a package with non-trivial invariants → create a new leaf using the six-section template and add a downlink to the tree above
+- delete or merge a package → remove its node and its downlink
+
+Don't update the node for mechanical refactors, formatting, or implementation details that don't affect contracts. If you're unsure whether a change crosses the line, err on the side of updating — stale nodes are worse than verbose ones. A node entry that names a specific file path, export, or flag is a *claim* that it exists; if you broke that claim, fix the node.
 
 ## Commands
 
