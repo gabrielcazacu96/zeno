@@ -1,7 +1,12 @@
 @import "@zeno/tailwind/globals.css";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 @import "./theme.css";
 
-@plugin "tailwindcss-animate";
+@source "../components/**/*.{ts,tsx}";
+@source "../hooks/**/*.{ts,tsx}";
+
+@custom-variant dark (&:is(.dark *));
 
 @layer base {
   * {
