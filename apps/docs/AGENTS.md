@@ -51,7 +51,7 @@ import { Button } from "@zeno/ui/button"
 <Button>Try it</Button>
 ```
 
-`mdx-components.tsx` is the central place to override default MDX renderers.
+`mdx-components.tsx` is the central place to override default MDX renderers. The `Preview` wrapper (`src/components/preview.tsx`) is registered globally and used in the UI primitive pages to host live component examples — drop a `<Preview>...</Preview>` block in any MDX page.
 
 ## Anti-patterns
 
