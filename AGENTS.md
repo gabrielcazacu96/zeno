@@ -10,9 +10,26 @@ Zeno is a Turborepo monorepo containing shared packages and applications for bui
   - `docs/`: Documentation site (Next.js + Fumadocs) running at http://localhost:5002
 - `packages/`: Shared libraries
   - `ui/`: React component library (Shadcn UI)
-  - `typescript/`: Shared TypeScript configurations
+  - `authentication/`: Pre-built Supabase auth UI flows
   - `supabase/`: Supabase integration utilities for Next.js
+  - `e2e/`: Playwright end-to-end test suite
+  - `typescript/`: Shared TypeScript configurations
   - `tailwind/`: Shared Tailwind CSS configuration
+  - `vitest/`: Shared Vitest configuration
+
+## Intent Layer
+
+This file is the **root** of an Intent Layer — a hierarchy of small `AGENTS.md` files placed at semantic boundaries so agents load high-signal local context (purpose, contracts, anti-patterns, sharp edges) before touching code. This file holds workspace-wide conventions and inherits *down* into every package; per-package nodes hold their own invariants and inherit conventions *up* from here. Don't duplicate facts across nodes — put them at the shallowest node that covers all relevant paths.
+
+Per-package nodes:
+
+- [`apps/docs/AGENTS.md`](apps/docs/AGENTS.md) — Fumadocs documentation site
+- [`packages/ui/AGENTS.md`](packages/ui/AGENTS.md) — `@zeno/ui` component primitives
+- [`packages/authentication/AGENTS.md`](packages/authentication/AGENTS.md) — `@zeno/authentication` auth flow UI (read this before touching `verify/` or `email-sent/`)
+- [`packages/supabase/AGENTS.md`](packages/supabase/AGENTS.md) — `@zeno/supabase` SSR client/middleware
+- [`packages/e2e/AGENTS.md`](packages/e2e/AGENTS.md) — `@resolve/e2e` Playwright suite
+
+Each leaf node uses the same six sections — Purpose & Scope, Entry Points & Contracts, Usage Patterns, Anti-patterns, Dependencies & Edges, Pitfalls — so you can pattern-match across the workspace. When adding a new package with non-trivial invariants, copy that template. Config-only packages (`typescript/`, `tailwind/`, `vitest/`) deliberately do not have nodes — their config files are self-documenting and a node would only repeat what's already there.
 
 ## Development Commands
 
