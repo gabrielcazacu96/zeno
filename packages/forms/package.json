@@ -4,7 +4,7 @@
   "private": true,
   "exports": {
     ".": "./src/form.tsx",
-    "./react-form": "./src/react-form.ts",
+    "./fields": "./src/fields/index.ts"
   },
   "scripts": {
     "types:check": "tsc --noEmit"

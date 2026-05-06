@@ -1,0 +1,79 @@
+"use client"
+
+import { Form, useFieldContext, useZenoForm } from "@zeno/forms"
+import { SubmitButton } from "@zeno/forms/fields"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@zeno/ui/card"
+import { Field, FieldDescription, FieldError, FieldLabel } from "@zeno/ui/field"
+import { Slider } from "@zeno/ui/slider"
+import { useState } from "react"
+import { z } from "zod"
+
+function VolumeField({ label }: { label: string }) {
+  const field = useFieldContext<number>()
+  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+  const value = field.state.value ?? 0
+  return (
+    <Field data-invalid={isInvalid}>
+      <FieldLabel htmlFor={field.name}>
+        {label}: {value}
+      </FieldLabel>
+      <Slider
+        id={field.name}
+        max={100}
+        min={0}
+        onValueChange={(next) =>
+          field.handleChange(Array.isArray(next) ? (next[0] ?? 0) : next)
+        }
+        step={1}
+        value={[value]}
+      />
+      <FieldDescription>Drag to set the master volume.</FieldDescription>
+      {isInvalid ? <FieldError errors={field.state.meta.errors} /> : null}
+    </Field>
+  )
+}
+
+const audioSchema = z.object({
+  volume: z.number().min(0).max(100),
+})
+
+export function CustomFieldPreview() {
+  const [applied, setApplied] = useState<number | null>(null)
+  const form = useZenoForm({
+    defaultValues: { volume: 35 },
+    onSubmit: ({ value }) => {
+      setApplied(value.volume)
+    },
+    validators: { onChange: audioSchema },
+  })
+
+  return (
+    <Card className="w-full max-w-sm">
+      <CardHeader>
+        <CardTitle>Audio settings</CardTitle>
+        <CardDescription>
+          Custom slider field built on top of `useFieldContext`.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form form={form}>
+          <form.AppField name="volume">
+            {() => <VolumeField label="Volume" />}
+          </form.AppField>
+          <SubmitButton>Apply</SubmitButton>
+          {applied !== null && (
+            <p className="text-muted-foreground text-sm">
+              Applied volume: <span className="font-medium">{applied}</span>
+            </p>
+          )}
+        </Form>
+      </CardContent>
+    </Card>
+  )
+}
