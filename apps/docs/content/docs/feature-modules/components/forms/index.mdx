@@ -1,0 +1,144 @@
+---
+title: Forms
+description: TanStack Form, Zod, and shared field primitives via @zeno/forms
+icon: Form
+status: in progress
+---
+
+import { NewsletterPreview } from "@/components/forms/newsletter-preview"
+
+`@zeno/forms` is a thin layer on top of [TanStack Form](https://tanstack.com/form)
+and [Zod](https://zod.dev) that ships pre-wired field components built on
+`@zeno/ui` primitives.
+
+It gives you:
+
+- `useZenoForm` — typed form hook returning a form with field components
+  (`form.EmailField`, `form.InputField`, …) attached. `name` is autocompleted
+  and type-checked against `defaultValues`; field state is typed without casts.
+- A `<Form>` wrapper that handles `onSubmit`, lays out children with sensible
+  spacing, and publishes the form via React context.
+- A pre-bound `SubmitButton` that disables itself while submitting or invalid.
+- An escape hatch (`form.AppField` + `useFieldContext`) for building your own
+  typed fields.
+
+## Imports
+
+```tsx
+import { Form, useZenoForm } from "@zeno/forms"
+import { SubmitButton } from "@zeno/forms/fields"
+import { z } from "zod"
+```
+
+## Quick start
+
+A newsletter form, validated with Zod:
+
+<Preview>
+  <NewsletterPreview />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, useZenoForm } from "@zeno/forms"
+import { SubmitButton } from "@zeno/forms/fields"
+import { z } from "zod"
+
+const newsletterSchema = z.object({
+  email: z.email("Enter a valid email"),
+})
+
+export function Newsletter() {
+  const form = useZenoForm({
+    defaultValues: { email: "" },
+    onSubmit: async ({ value }) => {
+      await subscribe(value.email)
+    },
+    validators: { onChange: newsletterSchema },
+  })
+
+  return (
+    <Form form={form}>
+      <form.EmailField placeholder="you@zeno.dev" />
+      <SubmitButton>Subscribe</SubmitButton>
+    </Form>
+  )
+}
+```
+
+</Preview>
+
+What `<Form>` does for you:
+
+- Calls `event.preventDefault()` and forwards to `form.handleSubmit()`.
+- Publishes the form instance via React context, so `<SubmitButton>` and any
+  custom form-level component can read it without explicit wiring.
+- Wraps children in `<FieldGroup>` for consistent vertical spacing — pass
+  `className` to override.
+
+## Why `useZenoForm`?
+
+`useZenoForm` knows the shape of your `defaultValues` and attaches typed
+field components onto the returned form, so:
+
+- `name="email"` is autocompleted and type-checked against the form's data —
+  typos and schema renames surface at compile time.
+- Field state is typed to the field's actual type — no `as string` casts.
+- Call sites stay terse: `<form.EmailField name="email" />`, no separate `f`
+  binding or render-prop ladder.
+
+If you want the underlying primitives, `useAppForm` (typed form) and
+`useAppFields(form)` (typed field wrappers) are also exported. The
+`form.AppField` render-prop is the escape hatch for custom fields — see
+[Custom fields](/docs/feature-modules/components/forms/fields#custom-fields).
+
+## Style: `form.X` vs. destructuring
+
+Both patterns work. The components are stable refs, so destructuring is
+safe — it won't cause remounting:
+
+```tsx
+// Dot notation (recommended)
+<form.EmailField />
+<form.PasswordField />
+
+// Destructured
+const { EmailField, PasswordField } = form
+<EmailField />
+<PasswordField />
+```
+
+Default to **`form.X`** in new code. It mirrors TanStack's existing
+`form.AppField` / `form.Subscribe` / `form.Field` namespacing, makes the
+form-binding visible at the call site (vs. looking like a regular imported
+component), and avoids maintaining a destructure list as the form evolves.
+
+Reach for destructuring only when a single form has many fields and the
+repeated `form.` prefix is genuinely getting in the way.
+
+## Validation with Zod
+
+`useZenoForm` accepts standard schema validators. Pass a [Zod](https://zod.dev/)
+schema to any of `onChange`, `onBlur`, `onSubmit`, or their async variants —
+see the [Zod docs](https://zod.dev/) for the full API:
+
+```tsx lineNumbers
+import { z } from "zod"
+
+const schema = z.object({
+  email: z.email(),
+  password: z.string().min(8, "At least 8 characters"),
+})
+
+const form = useZenoForm({
+  defaultValues: { email: "", password: "" },
+  validators: { onChange: schema },
+  onSubmit: async ({ value }) => {
+    /* `value` is fully typed from the schema */
+  },
+})
+```
+
+Errors appear under the field once it has been touched (`field.state.meta.isTouched`).
+The shipped fields read `field.state.meta.errors` and render them through
+`<FieldError>` from `@zeno/ui/field`.
