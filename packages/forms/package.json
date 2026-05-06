@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./fields/*": "./src/fields/*.tsx",
+    ".": "./src/form.tsx",
     "./react-form": "./src/react-form.ts",
   },
   "scripts": {
