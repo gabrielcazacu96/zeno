@@ -39,7 +39,7 @@ function shouldRunFormChange(form: AnyFormApi): boolean {
 // TanStack Form's `defaultValidationLogic` for the field path.
 function fieldLevelLogic(props: Parameters<ValidationLogicFn>[0]) {
   const { event, validators, form } = props
-  const run = props.runValidation as unknown as RunValidation
+  const run = props.runValidation as RunValidation
 
   if (!validators) {
     return run({ form, validators: [] })
@@ -147,7 +147,7 @@ function blurThenChangeLogicImpl(props: Parameters<ValidationLogicFn>[0]) {
   }
 
   const { event, validators, form } = props
-  const run = props.runValidation as unknown as RunValidation
+  const run = props.runValidation as RunValidation
 
   if (!validators) {
     return run({ form, validators: [] })
@@ -187,7 +187,6 @@ function blurThenChangeLogicImpl(props: Parameters<ValidationLogicFn>[0]) {
   return run({ form, validators: [] })
 }
 
-const blurThenChangeLogic =
-  blurThenChangeLogicImpl as unknown as ValidationLogicFn
+const blurThenChangeLogic = blurThenChangeLogicImpl as ValidationLogicFn
 
 export { blurThenChangeLogic }

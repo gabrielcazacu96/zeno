@@ -60,9 +60,7 @@ type FormProviderProps = {
 
 function FormProvider({ children, form }: FormProviderProps) {
   return (
-    <RawFormProvider value={form as unknown as AnyFormApi}>
-      {children}
-    </RawFormProvider>
+    <RawFormProvider value={form as AnyFormApi}>{children}</RawFormProvider>
   )
 }
 
