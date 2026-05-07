@@ -83,7 +83,7 @@ export function Preview({
         ref={codeContainerRef}
       >
         {code}
-        {shouldCollapse ? (
+        {shouldCollapse && (
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-muted/80 via-muted/40 to-transparent">
             <Button
               onClick={() => setExpanded(true)}
@@ -93,7 +93,7 @@ export function Preview({
               View Code
             </Button>
           </div>
-        ) : null}
+        )}
       </div>
     </div>
   )

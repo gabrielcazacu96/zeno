@@ -224,7 +224,7 @@ function VolumeField({ label }: { label: string }) {
         }
         value={[value]}
       />
-      {isInvalid ? <FieldError errors={field.state.meta.errors} /> : null}
+      {isInvalid && <FieldError errors={field.state.meta.errors} />}
     </Field>
   )
 }

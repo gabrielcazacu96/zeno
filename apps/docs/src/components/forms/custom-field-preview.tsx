@@ -46,7 +46,7 @@ function VolumeField({ label }: { label: string }) {
         value={[value]}
       />
       <FieldDescription>Drag to set the master volume.</FieldDescription>
-      {isInvalid ? <FieldError errors={field.state.meta.errors} /> : null}
+      {isInvalid && <FieldError errors={field.state.meta.errors} />}
     </Field>
   )
 }

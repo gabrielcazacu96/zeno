@@ -20,7 +20,7 @@ function SubmitButton({ children, disabled, ...props }: SubmitButtonProps) {
           type="submit"
           {...props}
         >
-          {isSubmitting ? <Spinner /> : null}
+          {isSubmitting && <Spinner />}
           {children}
         </Button>
       )}
