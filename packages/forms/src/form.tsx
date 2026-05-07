@@ -27,6 +27,7 @@ import {
 } from "./lib/contexts"
 
 export * from "@tanstack/react-form"
+export * from "./addons"
 export { RadioGroupFieldItem } from "./fields/radio-group-field"
 export { useFieldContext, useFormContext } from "./lib/contexts"
 export { useHideFieldErrors, useIsInvalid } from "./lib/use-is-invalid"

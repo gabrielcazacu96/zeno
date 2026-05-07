@@ -5,6 +5,12 @@ icon: ListChecks
 status: in progress
 ---
 
+import {
+  AddonBlockToolbarPreview,
+  AddonInlineIconPreview,
+  AddonInlineTextPreview,
+  AddonValidationSpinnerPreview,
+} from "@/components/forms/addon-previews"
 import { CustomFieldPreview } from "@/components/forms/custom-field-preview"
 import {
   CheckboxFieldPreview,
@@ -123,6 +129,123 @@ a `number` (or `undefined` when empty).
 ```
 
 </Preview>
+
+## Composing addons (input groups)
+
+Input-style fields — `InputField`, `EmailField`, `PasswordField`, `NumberField`,
+and `TextAreaField` — accept children that flow through to an internal
+[`<InputGroup>`](https://ui.shadcn.com/docs/components/base/input-group). Drop
+shadcn's `<InputGroupAddon>`, `<InputGroupButton>`, or `<InputGroupText>` in as
+children to add prefix icons, suffix actions, or block-level toolbars without
+falling back to the low-level `<AppField>` render-prop. When no children are
+passed the field renders a bare `<Input>` / `<Textarea>` — no extra DOM cost.
+
+`<InputGroupAddon align>` accepts `inline-start`, `inline-end`, `block-start`,
+and `block-end`. Visual ordering is driven by CSS, so the JSX child order
+doesn't matter.
+
+### Inline addons — prefix icon
+
+<Preview>
+  <AddonInlineIconPreview />
+
+```tsx
+import { InputGroupAddon } from "@zeno/ui/input-group"
+import { MailIcon } from "lucide-react"
+
+<EmailField placeholder="you@zeno.dev">
+  <InputGroupAddon align="inline-start">
+    <MailIcon />
+  </InputGroupAddon>
+</EmailField>
+```
+
+</Preview>
+
+### Inline addons — prefix and suffix text
+
+<Preview>
+  <AddonInlineTextPreview />
+
+```tsx
+import { InputGroupAddon, InputGroupText } from "@zeno/ui/input-group"
+
+<InputField label="Handle" name="handle" placeholder="acme">
+  <InputGroupAddon align="inline-start">
+    <InputGroupText>https://</InputGroupText>
+  </InputGroupAddon>
+  <InputGroupAddon align="inline-end">
+    <InputGroupText>.zeno.dev</InputGroupText>
+  </InputGroupAddon>
+</InputField>
+```
+
+</Preview>
+
+### Block addons — textarea toolbar
+
+`block-start` and `block-end` render above and below the input inside the same
+focus ring — useful for textarea toolbars, helper rows, or character counters.
+
+<Preview>
+  <AddonBlockToolbarPreview />
+
+```tsx
+import { InputGroupAddon, InputGroupButton } from "@zeno/ui/input-group"
+import { BoldIcon, ItalicIcon } from "lucide-react"
+
+<TextAreaField label="Bio" name="bio" placeholder="I build things on the web.">
+  <InputGroupAddon align="block-start">
+    <InputGroupButton type="button">
+      <BoldIcon />
+    </InputGroupButton>
+    <InputGroupButton type="button">
+      <ItalicIcon />
+    </InputGroupButton>
+  </InputGroupAddon>
+</TextAreaField>
+```
+
+</Preview>
+
+### Async-validation indicator
+
+For state-dependent addons, write a small component that calls
+`useFieldContext()` and returns the addon (or `null`). The field's children
+render inside the field context, so subscribing composes naturally.
+`@zeno/forms` ships `ValidationSpinner` for the common async-validation case
+(see the [Async submission example](/docs/feature-modules/components/forms/examples#async-submission)):
+
+<Preview>
+  <AddonValidationSpinnerPreview />
+
+```tsx
+import { ValidationSpinner } from "@zeno/forms"
+
+<EmailField
+  placeholder="Try taken@example.com"
+  validators={{
+    onChangeAsync: async ({ value }: { value: string }) => {
+      const taken = await checkEmailAvailable(value)
+      return taken ? "Email already in use" : undefined
+    },
+    onChangeAsyncDebounceMs: 500,
+  }}
+>
+  <ValidationSpinner />
+</EmailField>
+```
+
+</Preview>
+
+A spinner appears `inline-end` while the validator is in flight and disappears
+once it resolves. Pass `align="inline-start"` to flip it.
+
+> **Caveat.** Don't toggle the children themselves — `<EmailField>{cond &&
+> <Addon />}</EmailField>` swaps the field between `<Input>` and `<InputGroup>`
+> wrappers, which remounts the input and loses focus. Wrap state-dependent
+> rendering inside a child component (the way `ValidationSpinner` does) so the
+> child element is always present and conditionally returns `null`.
 
 ## Select Field
 

@@ -4,6 +4,7 @@
   "private": true,
   "exports": {
     ".": "./src/form.tsx",
+    "./addons": "./src/addons/index.ts",
     "./fields": "./src/fields/index.ts"
   },
   "scripts": {

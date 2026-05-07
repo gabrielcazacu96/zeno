@@ -229,10 +229,18 @@ submitting or while any async field validator is running — no extra code neede
 For submission, the key requirement is that `onSubmit` returns a `Promise`;
 `isSubmitting` stays `true` until it settles.
 
-For async field validation, set `asyncDebounceMs` and `validators.onChangeAsync`
-on any field. While the check is in flight, `canSubmit` is `false`, so
-`SubmitButton` stays disabled automatically. `ResetButton` is not subscribed to
-form state — wrap it in `form.Subscribe` to disable it during the save round-trip.
+For async field validation, set `validators.onChangeAsync` (with
+`onChangeAsyncDebounceMs` to throttle) on any field. While the check is in
+flight, `canSubmit` is `false`, so `SubmitButton` stays disabled automatically.
+`ResetButton` is not subscribed to form state — wrap it in `form.Subscribe` to
+disable it during the save round-trip.
+
+Drop a `<ValidationSpinner />` inside any input-style field (`InputField`,
+`EmailField`, `PasswordField`, `NumberField`) to render a spinner inside the
+input while the async validator is running. Children passed to these fields
+flow through to an internal `InputGroup`, so you can use any `InputGroupAddon`
+/ `InputGroupButton` / `InputGroupText` for prefixes, suffixes, or block-level
+toolbars without dropping to the low-level `<Field>` render-prop.
 
 <Preview>
   <SubmittingExample />
@@ -240,14 +248,8 @@ form state — wrap it in `form.Subscribe` to disable it during the save round-t
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
-import { Field, FieldError, FieldGroup, FieldLabel } from "@zeno/ui/field"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@zeno/ui/input-group"
-import { Spinner } from "@zeno/ui/spinner"
+import { Form, FormProvider, useZenoForm, ValidationSpinner } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
 const schema = z.object({
@@ -263,50 +265,26 @@ export function AccountSettings() {
     },
     schema,
   })
-  const { Field: FormField, InputField, ResetButton, Subscribe, SubmitButton } = form
+  const { EmailField, InputField, ResetButton, Subscribe, SubmitButton } = form
 
   return (
     <FormProvider form={form}>
       <Form>
         <FieldGroup>
           <InputField label="Name" name="name" placeholder="Ada Lovelace" />
-          <FormField
-            asyncDebounceMs={500}
+          <EmailField
             name="email"
+            placeholder="you@zeno.dev"
             validators={{
               onChangeAsync: async ({ value }) => {
                 const exists = await checkEmailExists(value)
                 return exists ? "Email already in use" : undefined
               },
+              onChangeAsyncDebounceMs: 500,
             }}
           >
-            {(field) => {
-              const hasErrors = field.state.meta.errors.length > 0
-              return (
-                <Field>
-                  <FieldLabel htmlFor="email">Email</FieldLabel>
-                  <InputGroup>
-                    <InputGroupInput
-                      aria-invalid={hasErrors || undefined}
-                      id="email"
-                      name="email"
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="you@zeno.dev"
-                      type="email"
-                      value={field.state.value}
-                    />
-                    {field.state.meta.isValidating && (
-                      <InputGroupAddon align="inline-end">
-                        <Spinner />
-                      </InputGroupAddon>
-                    )}
-                  </InputGroup>
-                  {hasErrors && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              )
-            }}
-          </FormField>
+            <ValidationSpinner />
+          </EmailField>
         </FieldGroup>
         <Subscribe selector={(state) => state.isSubmitting}>
           {(isSubmitting) => <ResetButton disabled={isSubmitting} />}

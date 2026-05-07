@@ -24,6 +24,10 @@ It gives you:
   `<CardFooter>`.
 - Pre-bound `SubmitButton` (disables itself while submitting or invalid) and
   `ResetButton` (calls `form.reset()` on click).
+- Input-style fields (`InputField`, `EmailField`, `PasswordField`, `NumberField`)
+  accept `InputGroupAddon` / `InputGroupButton` / `InputGroupText` children for
+  prefixes, suffixes, and toolbars; a built-in `<ValidationSpinner />` helper
+  drops a spinner inline while an async validator is running.
 - An escape hatch (`AppField` + `useFieldContext`) for building your own
   typed fields.
 

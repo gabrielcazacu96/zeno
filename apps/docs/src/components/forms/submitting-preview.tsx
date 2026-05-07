@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useZenoForm, ValidationSpinner } from "@zeno/forms"
 import {
   Card,
   CardContent,
@@ -9,13 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@zeno/ui/card"
-import { Field as UIField, FieldError, FieldGroup, FieldLabel } from "@zeno/ui/field"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@zeno/ui/input-group"
-import { Spinner } from "@zeno/ui/spinner"
+import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
 import { toastSubmitted, wrapperClass } from "./preview-utils"
@@ -41,7 +35,7 @@ export function SubmittingExample() {
     onSubmit: ({ value }) => fakeSave(value),
     schema,
   })
-  const { Field, InputField, ResetButton, Subscribe, SubmitButton } = form
+  const { EmailField, InputField, ResetButton, Subscribe, SubmitButton } = form
 
   return (
     <FormProvider form={form}>
@@ -57,45 +51,19 @@ export function SubmittingExample() {
           <Form id="account-form">
             <FieldGroup>
               <InputField label="Name" name="name" placeholder="Ada Lovelace" />
-              <Field
-                asyncDebounceMs={500}
+              <EmailField
                 name="email"
+                placeholder="you@zeno.dev"
                 validators={{
-                  onChangeAsync: async ({ value }) => {
+                  onChangeAsync: async ({ value }: { value: string }) => {
                     const taken = await fakeCheckEmail(value)
                     return taken ? "Email already in use" : undefined
                   },
+                  onChangeAsyncDebounceMs: 500,
                 }}
               >
-                {(field) => {
-                  const hasErrors = field.state.meta.errors.length > 0
-                  return (
-                    <UIField>
-                      <FieldLabel htmlFor="email">Email</FieldLabel>
-                      <InputGroup>
-                        <InputGroupInput
-                          aria-invalid={hasErrors || undefined}
-                          id="email"
-                          name="email"
-                          onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          placeholder="you@zeno.dev"
-                          type="email"
-                          value={field.state.value}
-                        />
-                        {field.state.meta.isValidating && (
-                          <InputGroupAddon align="inline-end">
-                            <Spinner />
-                          </InputGroupAddon>
-                        )}
-                      </InputGroup>
-                      {hasErrors && (
-                        <FieldError errors={field.state.meta.errors} />
-                      )}
-                    </UIField>
-                  )
-                }}
-              </Field>
+                <ValidationSpinner />
+              </EmailField>
             </FieldGroup>
           </Form>
         </CardContent>
