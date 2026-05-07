@@ -7,6 +7,7 @@ import type {
 } from "@tanstack/react-form"
 import { useMemo } from "react"
 
+import { SubmitButton } from "./fields/submit-button"
 import { useAppForm } from "./form"
 import { useAppFields } from "./use-app-fields"
 
@@ -60,7 +61,10 @@ function useZenoForm<
     TSubmitMeta
   >(options)
   const fields = useAppFields(form)
-  return useMemo(() => Object.assign(form, fields), [form, fields])
+  return useMemo(
+    () => Object.assign(form, fields, { SubmitButton }),
+    [form, fields]
+  )
 }
 
 export { useZenoForm }

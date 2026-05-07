@@ -18,7 +18,7 @@ It gives you:
   and type-checked against `defaultValues`; field state is typed without casts.
 - A `<Form>` wrapper that handles `onSubmit`, lays out children with sensible
   spacing, and publishes the form via React context.
-- A pre-bound `SubmitButton` that disables itself while submitting or invalid.
+- A pre-bound `form.SubmitButton` that disables itself while submitting or invalid.
 - An escape hatch (`form.AppField` + `useFieldContext`) for building your own
   typed fields.
 
@@ -26,7 +26,6 @@ It gives you:
 
 ```tsx
 import { Form, useZenoForm } from "@zeno/forms"
-import { SubmitButton } from "@zeno/forms/fields"
 import { z } from "zod"
 ```
 
@@ -41,7 +40,6 @@ A newsletter form, validated with Zod:
 "use client"
 
 import { Form, useZenoForm } from "@zeno/forms"
-import { SubmitButton } from "@zeno/forms/fields"
 import { z } from "zod"
 
 const newsletterSchema = z.object({
@@ -60,7 +58,7 @@ export function Newsletter() {
   return (
     <Form form={form}>
       <form.EmailField placeholder="you@zeno.dev" />
-      <SubmitButton>Subscribe</SubmitButton>
+      <form.SubmitButton>Subscribe</form.SubmitButton>
     </Form>
   )
 }
@@ -71,8 +69,8 @@ export function Newsletter() {
 What `<Form>` does for you:
 
 - Calls `event.preventDefault()` and forwards to `form.handleSubmit()`.
-- Publishes the form instance via React context, so `<SubmitButton>` and any
-  custom form-level component can read it without explicit wiring.
+- Publishes the form instance via React context, so `<form.SubmitButton>` and
+  any custom form-level component can read it without explicit wiring.
 - Wraps children in `<FieldGroup>` for consistent vertical spacing — pass
   `className` to override.
 

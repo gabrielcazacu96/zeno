@@ -1,7 +1,7 @@
 "use client"
 
 import { Form, useZenoForm } from "@zeno/forms"
-import { RadioGroupFieldItem, SubmitButton } from "@zeno/forms/fields"
+import { RadioGroupFieldItem } from "@zeno/forms/fields"
 import {
   Card,
   CardContent,
@@ -90,7 +90,7 @@ export function LargeExample() {
             label="Email me product updates"
             name="marketing"
           />
-          <SubmitButton>Save profile</SubmitButton>
+          <form.SubmitButton>Save profile</form.SubmitButton>
           <SubmittedValues value={submitted} />
         </Form>
       </CardContent>

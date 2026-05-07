@@ -1,7 +1,6 @@
 "use client"
 
 import { Form, useZenoForm } from "@zeno/forms"
-import { SubmitButton } from "@zeno/forms/fields"
 import { Button } from "@zeno/ui/button"
 import {
   Card,
@@ -85,7 +84,7 @@ export function ArrayExample() {
               </FieldSet>
             )}
           </form.Field>
-          <SubmitButton>Send invites</SubmitButton>
+          <form.SubmitButton>Send invites</form.SubmitButton>
           <SubmittedValues value={submitted} />
         </Form>
       </CardContent>

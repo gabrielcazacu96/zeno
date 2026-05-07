@@ -1,7 +1,6 @@
 "use client"
 
 import { Form, useZenoForm } from "@zeno/forms"
-import { SubmitButton } from "@zeno/forms/fields"
 import {
   Card,
   CardContent,
@@ -56,7 +55,7 @@ export function DynamicExample() {
               )
             }
           </form.Subscribe>
-          <SubmitButton>Save address</SubmitButton>
+          <form.SubmitButton>Save address</form.SubmitButton>
           <SubmittedValues value={submitted} />
         </Form>
       </CardContent>

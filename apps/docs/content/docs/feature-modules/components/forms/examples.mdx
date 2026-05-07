@@ -28,7 +28,6 @@ field components attached — `name` is autocompleted against `defaultValues`.
 "use client"
 
 import { Form, useZenoForm } from "@zeno/forms"
-import { SubmitButton } from "@zeno/forms/fields"
 import { z } from "zod"
 
 const schema = z.object({
@@ -47,7 +46,7 @@ export function Login() {
     <Form form={form}>
       <form.EmailField placeholder="you@zeno.dev" />
       <form.PasswordField />
-      <SubmitButton>Sign in</SubmitButton>
+      <form.SubmitButton>Sign in</form.SubmitButton>
     </Form>
   )
 }
@@ -68,7 +67,6 @@ fields. The error attaches to whichever field you point `path` at — here, the
 "use client"
 
 import { Form, useZenoForm } from "@zeno/forms"
-import { SubmitButton } from "@zeno/forms/fields"
 import { z } from "zod"
 
 const schema = z
@@ -98,7 +96,7 @@ export function Signup() {
         label="Confirm password"
         name="confirmPassword"
       />
-      <SubmitButton>Create account</SubmitButton>
+      <form.SubmitButton>Create account</form.SubmitButton>
     </Form>
   )
 }
@@ -119,7 +117,6 @@ with bracketed paths like `members[0].name` — typed against the schema.
 "use client"
 
 import { Form, useZenoForm } from "@zeno/forms"
-import { SubmitButton } from "@zeno/forms/fields"
 import { z } from "zod"
 import { Button } from "@zeno/ui/button"
 import { FieldLegend, FieldSet } from "@zeno/ui/field"
@@ -183,7 +180,7 @@ export function TeamInvites() {
           </FieldSet>
         )}
       </form.Field>
-      <SubmitButton>Send invites</SubmitButton>
+      <form.SubmitButton>Send invites</form.SubmitButton>
     </Form>
   )
 }
@@ -204,7 +201,6 @@ field between a `SelectField` and an `InputField`.
 "use client"
 
 import { Form, useZenoForm } from "@zeno/forms"
-import { SubmitButton } from "@zeno/forms/fields"
 import { SelectItem } from "@zeno/ui/select"
 
 export function Shipping() {
@@ -236,7 +232,7 @@ export function Shipping() {
           )
         }
       </form.Subscribe>
-      <SubmitButton>Save address</SubmitButton>
+      <form.SubmitButton>Save address</form.SubmitButton>
     </Form>
   )
 }
@@ -256,7 +252,7 @@ checkbox — driven by a single Zod schema.
 "use client"
 
 import { Form, useZenoForm } from "@zeno/forms"
-import { RadioGroupFieldItem, SubmitButton } from "@zeno/forms/fields"
+import { RadioGroupFieldItem } from "@zeno/forms/fields"
 import { z } from "zod"
 import { SelectItem } from "@zeno/ui/select"
 
@@ -302,7 +298,7 @@ export function Profile() {
       </form.RadioGroupField>
       <form.SwitchField label="Push notifications" name="pushNotifications" />
       <form.CheckboxField label="Email me product updates" name="marketing" />
-      <SubmitButton>Save profile</SubmitButton>
+      <form.SubmitButton>Save profile</form.SubmitButton>
     </Form>
   )
 }
@@ -322,7 +318,6 @@ once the work is done.
 "use client"
 
 import { Form, useZenoForm } from "@zeno/forms"
-import { SubmitButton } from "@zeno/forms/fields"
 import { z } from "zod"
 import { Button } from "@zeno/ui/button"
 import {
@@ -377,7 +372,7 @@ export function CreateProjectDialog() {
             <Button onClick={() => setOpen(false)} type="button" variant="ghost">
               Cancel
             </Button>
-            <SubmitButton>Create</SubmitButton>
+            <form.SubmitButton>Create</form.SubmitButton>
           </DialogFooter>
         </Form>
       </DialogContent>

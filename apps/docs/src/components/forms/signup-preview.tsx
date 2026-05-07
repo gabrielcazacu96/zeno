@@ -1,7 +1,6 @@
 "use client"
 
 import { Form, useZenoForm } from "@zeno/forms"
-import { SubmitButton } from "@zeno/forms/fields"
 import {
   Card,
   CardContent,
@@ -50,7 +49,7 @@ export function SignupExample() {
             label="Confirm password"
             name="confirmPassword"
           />
-          <SubmitButton>Create account</SubmitButton>
+          <form.SubmitButton>Create account</form.SubmitButton>
           <SubmittedValues value={submitted} />
         </Form>
       </CardContent>

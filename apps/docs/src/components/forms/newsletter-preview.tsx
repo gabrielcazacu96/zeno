@@ -1,7 +1,6 @@
 "use client"
 
 import { Form, useZenoForm } from "@zeno/forms"
-import { SubmitButton } from "@zeno/forms/fields"
 import {
   Card,
   CardContent,
@@ -37,7 +36,7 @@ export function NewsletterPreview() {
       <CardContent>
         <Form form={form}>
           <form.EmailField placeholder="you@zeno.dev" />
-          <SubmitButton>Subscribe</SubmitButton>
+          <form.SubmitButton>Subscribe</form.SubmitButton>
           {submitted && (
             <p className="text-muted-foreground text-sm">
               Subscribed: <span className="font-medium">{submitted}</span>

@@ -1,7 +1,6 @@
 "use client"
 
 import { Form, useFieldContext, useZenoForm } from "@zeno/forms"
-import { SubmitButton } from "@zeno/forms/fields"
 import {
   Card,
   CardContent,
@@ -66,7 +65,7 @@ export function CustomFieldPreview() {
           <form.AppField name="volume">
             {() => <VolumeField label="Volume" />}
           </form.AppField>
-          <SubmitButton>Apply</SubmitButton>
+          <form.SubmitButton>Apply</form.SubmitButton>
           {applied !== null && (
             <p className="text-muted-foreground text-sm">
               Applied volume: <span className="font-medium">{applied}</span>
