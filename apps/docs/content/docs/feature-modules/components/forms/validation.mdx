@@ -1,0 +1,513 @@
+---
+title: Validation
+description: Pick a validation mode, drop in a schema — pristine fields stay calm, errors land on commit and update live
+icon: ShieldCheck
+status: in progress
+---
+
+import { ChangeModeExample } from "@/components/forms/change-mode-preview"
+import { ErrorSummaryExample } from "@/components/forms/error-summary-preview"
+import { LiveSearchExample } from "@/components/forms/live-preview"
+import { MixedValidationExample } from "@/components/forms/mixed-validation-preview"
+import { ReValidateExample } from "@/components/forms/revalidate-preview"
+
+`useZenoForm` accepts two validation props:
+
+- **`schema`** — any [Standard Schema](https://standardschema.dev/) (Zod,
+  Valibot, ArkType, …) describing the form data.
+- **`validation`** — when the schema runs and when errors are displayed.
+  One of `'blur-then-change'` *(default)*, `'change'`, `'blur'`, or
+  `'submit'`.
+
+```tsx
+const form = useZenoForm({
+  defaultValues: { email: "", password: "" },
+  schema, // your Zod / Valibot / ArkType schema
+  validation: "blur-then-change", // optional, this is the default
+  onSubmit: ({ value }) => signIn(value),
+})
+```
+
+The TanStack Form `validators` and `validationLogic` props still work and
+take precedence — reach for them when you need per-cause control or async
+slots. See [Escape hatches](#escape-hatches).
+
+## TL;DR
+
+- **Default `'blur-then-change'`** — pristine typing produces no errors,
+  errors appear on first blur, then update live as the user corrects.
+- **`'change'`** — errors as soon as the user types. Use for forms where
+  the values *are* the output (search, computed previews) and the errors
+  guard the side-effect.
+- **`'blur'`** — errors on blur, no live re-validation. Calmer but a user
+  who fixed their typo has to leave the field again to clear the error.
+- **`'submit'`** — only on submit. Use for forms where every field is
+  cheap and independent, e.g. a long settings page.
+- **Per-field validators** layer extra checks (server uniqueness, soft
+  warnings) on top of the form-level schema.
+
+| Mode | Schema runs on | Error UI shows when |
+|---|---|---|
+| `'blur-then-change'` | blur, change *if blurred*, submit | field has been blurred OR submit was attempted |
+| `'change'` | every keystroke, submit | field is dirty OR submit was attempted |
+| `'blur'` | blur, submit | field has been blurred OR submit was attempted |
+| `'submit'` | submit only | submit was attempted |
+
+## The recommended default: `blur-then-change`
+
+What the shipped fields are tuned for and what most CRUD forms want.
+
+```tsx
+const form = useZenoForm({
+  defaultValues: { email: "", password: "" },
+  schema,
+  onSubmit: ({ value }) => signIn(value),
+})
+```
+
+Two pieces conspire to give the right UX. **First**, a custom
+`validationLogic` decides *when* the schema runs:
+
+- on **blur** → always (so empty required fields error on first commit),
+- on **change** → only after the field has been blurred at least once, or
+  the whole form has been submitted (so pristine typing is silent),
+- on **submit** → always.
+
+**Second**, the shipped fields gate *display* via the `useIsInvalid` hook:
+
+```tsx
+import { useIsInvalid } from "@zeno/forms"
+
+const isInvalid = useIsInvalid(field)
+// In 'blur-then-change' mode:
+//   (field.state.meta.isBlurred || form.state.submissionAttempts > 0)
+//   && !field.state.meta.isValid
+```
+
+The hook reads the form's `validation` mode automatically, so custom
+fields built on `useFieldContext` get the same gating as the shipped
+ones — see [Custom fields](/docs/feature-modules/components/forms/fields#custom-fields).
+
+> Why not `field.state.meta.isTouched`? In TanStack Form, `isTouched` flips
+> `true` on the **first change**, not the first blur — so gating on it
+> makes errors appear the moment the user types a single character.
+> `isBlurred` only flips on real blur; `submissionAttempts` covers the
+> "user clicked submit without ever blurring" case.
+
+End-to-end behaviour:
+
+| Stage | Behaviour |
+|---|---|
+| Field is pristine, user is typing | Schema doesn't run, no error UI. |
+| User blurs the field | Schema runs; if invalid, the error appears. |
+| User edits to fix the error | Schema runs on every keystroke; UI clears the moment the value becomes valid. |
+| User edits a valid field into invalid | Schema runs, error reappears immediately. |
+| User submits without ever blurring a required field | Schema runs for every field; errors appear and re-validation goes live for all fields. |
+
+<Preview>
+  <ReValidateExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { z } from "zod"
+
+const schema = z.object({
+  email: z.email("Enter a valid email"),
+  password: z.string().min(8, "At least 8 characters"),
+})
+
+export function SignIn() {
+  const form = useZenoForm({
+    defaultValues: { email: "", password: "" },
+    onSubmit: ({ value }) => signIn(value),
+    schema,
+  })
+  const { EmailField, PasswordField, ResetButton, SubmitButton } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form id="sign-in-form">
+        <FieldGroup>
+          <EmailField placeholder="you@zeno.dev" />
+          <PasswordField />
+        </FieldGroup>
+      </Form>
+      <ResetButton />
+      <SubmitButton form="sign-in-form">Sign in</SubmitButton>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+## `validation: 'change'` for live feedback
+
+Use `validation: 'change'` when the user wants feedback on every keystroke
+— password strength meters, character counters, anything where waiting
+for a blur would feel sluggish. The schema runs on every change and
+`useIsInvalid` shows errors as soon as the field is dirty.
+
+<Preview>
+  <ChangeModeExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { z } from "zod"
+
+const schema = z.object({
+  password: z
+    .string()
+    .min(8, "At least 8 characters")
+    .regex(/[A-Z]/, "Include at least one uppercase letter")
+    .regex(/\d/, "Include at least one digit"),
+})
+
+export function ChangePassword() {
+  const form = useZenoForm({
+    defaultValues: { password: "" },
+    onSubmit: ({ value }) => savePassword(value.password),
+    schema,
+    validation: "change",
+  })
+  const { PasswordField, ResetButton, SubmitButton } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form id="change-password-form">
+        <FieldGroup>
+          <PasswordField autoComplete="new-password" label="New password" />
+        </FieldGroup>
+      </Form>
+      <ResetButton />
+      <SubmitButton form="change-password-form">Save</SubmitButton>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+### When the form values *are* the output
+
+Search bars, filter panels, computed previews — anything where there's no
+submit step and the values themselves drive a side-effect. Drop the
+schema entirely and validate manually inside `listeners.onChange`:
+
+<Preview>
+  <LiveSearchExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { z } from "zod"
+
+const schema = z.object({
+  query: z.string().min(2, "Type at least 2 characters"),
+})
+
+export function LiveSearch({
+  onQueryChange,
+}: { onQueryChange: (q: string) => void }) {
+  const form = useZenoForm({
+    defaultValues: { query: "" },
+    listeners: {
+      onChange: ({ formApi }) => {
+        const result = schema.safeParse(formApi.state.values)
+        if (result.success) {
+          onQueryChange(formApi.state.values.query)
+        }
+      },
+    },
+  })
+  const { InputField } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form>
+        <FieldGroup>
+          <InputField
+            label="Search"
+            name="query"
+            placeholder="Type to filter…"
+          />
+        </FieldGroup>
+      </Form>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+No `SubmitButton` / `ResetButton`. The `<Form>` element is still there
+for accessibility (Enter still submits a single-field form). The listener
+runs the schema directly and gates the side-effect on validity — a
+one-character query never triggers a search.
+
+## `validation: 'blur'` and `'submit'`
+
+`'blur'` validates only when a field loses focus, and *doesn't*
+re-validate on subsequent edits. Compared with the default this means a
+fixed value still shows the old error until the user blurs the field
+again. Use it sparingly — usually `'blur-then-change'` is the better pick.
+
+`'submit'` skips field-level validation entirely. The schema runs once on
+submit and errors appear for every invalid field at that point. Use it
+when every field is cheap, independent, and blur-validating each one
+would feel chatty (long settings pages).
+
+```tsx
+const form = useZenoForm({
+  defaultValues,
+  schema,
+  validation: "submit",
+})
+```
+
+## Per-field validators
+
+When a single field needs an extra check on top of the form-level schema —
+a server uniqueness lookup, a soft warning, an availability list — pass a
+schema (or async function) to its `validators` prop. The cause you pick
+(`onChange`, `onBlur`, `onChangeAsync`, …) is honoured directly: the
+form's `validation` mode does **not** gate per-field validators, because
+the user explicitly opted into that cause.
+
+In the example below, `validators={{ onChange: slugAvailability }}` runs
+the reserved-name check on every keystroke from the very first character,
+even though the form is in the default `'blur-then-change'` mode.
+
+<Preview>
+  <MixedValidationExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { z } from "zod"
+
+const slugRegex = /^[a-z0-9-]+$/
+const formSchema = z.object({
+  email: z.email("Enter a valid email"),
+  name: z.string().min(2, "At least 2 characters"),
+  slug: z
+    .string()
+    .min(3, "At least 3 characters")
+    .regex(slugRegex, "Lowercase letters, numbers, and dashes only"),
+})
+
+const RESERVED_SLUGS = new Set(["admin", "api", "app", "billing", "settings"])
+const slugAvailability = z
+  .string()
+  .refine((value) => !RESERVED_SLUGS.has(value), {
+    error: "That slug is reserved — pick another",
+  })
+
+export function CreateWorkspace() {
+  const form = useZenoForm({
+    defaultValues: { email: "", name: "", slug: "" },
+    onSubmit: ({ value }) => createWorkspace(value),
+    schema: formSchema,
+  })
+  const { EmailField, InputField, ResetButton, SubmitButton } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form id="workspace-form">
+        <FieldGroup>
+          <InputField
+            label="Workspace name"
+            name="name"
+            placeholder="Resolve"
+          />
+          <EmailField placeholder="you@zeno.dev" />
+          <InputField
+            description={`Try "admin" or "api" to see the per-field check.`}
+            label="Slug"
+            name="slug"
+            placeholder="resolve"
+            validators={{ onChange: slugAvailability }}
+          />
+        </FieldGroup>
+      </Form>
+      <ResetButton />
+      <SubmitButton form="workspace-form">Create workspace</SubmitButton>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+The form-level schema handles required-ness and format with the default
+`'blur-then-change'` timing — quiet until first blur, then live. The
+slug's per-field `onChange` validator runs on every keystroke
+independently. Both contribute to the field's error list and clear
+independently as they pass.
+
+For an async server-side check (e.g. uniqueness against the database),
+swap to `onChangeAsync` and use `onChangeAsyncDebounceMs` to throttle the
+request.
+
+## Where the error message lives
+
+By default the shipped fields render their own error inline, right under
+the input — the "per-field" placement you've seen in every other example.
+For longer forms, dense layouts, or accessibility-driven designs, you may
+want to **collect every error in one place** (typically right above or
+below the submit button) and leave the fields visually clean.
+
+Pass `hideFieldErrors: true` to `useZenoForm`. The shipped fields keep
+their `data-invalid` / `aria-invalid` styling but skip rendering the
+inline `<FieldError>`. Then subscribe to `state.fieldMeta` via
+`form.Subscribe` and render the summary yourself.
+
+<Preview>
+  <ErrorSummaryExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { z } from "zod"
+
+const schema = z.object({
+  email: z.email("Enter a valid email"),
+  password: z.string().min(8, "At least 8 characters"),
+})
+
+export function SignInWithSummary() {
+  const form = useZenoForm({
+    defaultValues: { email: "", password: "" },
+    hideFieldErrors: true,
+    onSubmit: ({ value }) => signIn(value),
+    schema,
+  })
+  const { EmailField, PasswordField, ResetButton, SubmitButton, Subscribe } =
+    form
+
+  return (
+    <FormProvider form={form}>
+      <Form id="sign-in-summary-form">
+        <FieldGroup>
+          <EmailField placeholder="you@zeno.dev" />
+          <PasswordField />
+        </FieldGroup>
+      </Form>
+
+      <Subscribe
+        selector={(state) =>
+          [state.fieldMeta, state.submissionAttempts > 0] as const
+        }
+      >
+        {([fieldMeta, wasSubmitted]) => {
+          const items = Object.entries(fieldMeta).flatMap(([name, meta]) =>
+            meta && (meta.isBlurred || wasSubmitted) && !meta.isValid
+              ? meta.errors.map((error: unknown) => ({
+                  field: name,
+                  message:
+                    typeof error === "string"
+                      ? error
+                      : (error as { message?: string })?.message ?? "Invalid",
+                }))
+              : []
+          )
+          if (items.length === 0) {
+            return null
+          }
+          return (
+            <ul
+              aria-live="polite"
+              className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm"
+              role="alert"
+            >
+              {items.map((item, i) => (
+                <li key={i}>
+                  <strong>{item.field}:</strong> {item.message}
+                </li>
+              ))}
+            </ul>
+          )
+        }}
+      </Subscribe>
+
+      <ResetButton />
+      <SubmitButton form="sign-in-summary-form">Sign in</SubmitButton>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+A few things worth knowing:
+
+- **`hideFieldErrors: true`** is read by every shipped field via
+  `useHideFieldErrors`. Custom fields built on `useFieldContext` can call
+  the same hook to opt in.
+- **`role="alert"` + `aria-live="polite"`** make the summary readable by
+  screen readers as it updates — most of the accessibility argument for
+  the bottom-collected pattern.
+- **`isBlurred || wasSubmitted` is the gate**, mirroring what
+  `useIsInvalid` does inside the shipped fields under
+  `'blur-then-change'`. Pristine fields never appear in the summary, so
+  the form starts quiet.
+- **Errors are TanStack Form errors**, not pre-formatted strings. They're
+  whatever shape your validator returned (Zod issues, plain strings,
+  objects with `.message`). Defensive `?.message` handles all the common
+  shapes.
+
+## Escape hatches
+
+`schema` + `validation` is a sugar layer over TanStack Form's
+`validators` + `validationLogic`. When you need finer control, drop down
+to either:
+
+- **`validators`** — the original per-cause object
+  (`{ onMount, onChange, onBlur, onSubmit, onChangeAsync, … }`). Useful
+  for split sync/async slots, debounce knobs, or per-field different
+  schemas per cause. If you pass `validators`, `schema` is ignored at the
+  form level (per-field validators still work).
+- **`validationLogic`** — the function that decides *which* validator
+  runs for each event. The `'blur-then-change'` mode wires up
+  `blurThenChangeLogic` (also exported); the other modes leave it unset
+  and TanStack's `defaultValidationLogic` handles them. Pass your own
+  function to take full control.
+
+```tsx
+import { blurThenChangeLogic } from "@zeno/forms"
+import { defaultValidationLogic } from "@tanstack/react-form"
+
+// Custom: async uniqueness on blur, sync schema on every keystroke.
+const form = useZenoForm({
+  defaultValues,
+  validators: {
+    onChange: schema,
+    onBlurAsync: async ({ value }) => checkUnique(value.slug),
+    onBlurAsyncDebounceMs: 300,
+  },
+  validationLogic: defaultValidationLogic,
+})
+```
+
+## Anti-patterns
+
+- **Don't mix `schema` + `validators` on the same form.** `validators`
+  takes precedence and `schema` is silently dropped. Pick one.
+- **Don't use `'change'` with an expensive sync schema.** Every keystroke
+  re-runs the whole thing. For network checks, switch to a per-field
+  `onChangeAsync` with `onChangeAsyncDebounceMs`.
+- **Don't validate on `onMount` to "show what's required."** Use
+  `<FieldDescription>` or placeholders. `onMount` is for cases where
+  pre-filled defaults legitimately violate the schema.

@@ -1,0 +1,58 @@
+"use client"
+
+import type { AnyFormApi } from "@tanstack/react-form"
+
+type ValidationMode = "change" | "blur" | "submit" | "blur-then-change"
+
+const DEFAULT_VALIDATION_MODE: ValidationMode = "blur-then-change"
+
+type ZenoFormState = {
+  validation: ValidationMode
+  hideFieldErrors: boolean
+}
+
+const DEFAULT_FORM_STATE: ZenoFormState = {
+  hideFieldErrors: false,
+  validation: DEFAULT_VALIDATION_MODE,
+}
+
+// Per-form Zeno-specific state. Keyed by `form.store` rather than the form
+// object: TanStack Form's `useForm` returns a spread `{ ...formApi, ... }`
+// whose identity differs from the underlying `formApi` that fields receive
+// via `field.form`. The `store` instance is set in the FormApi constructor
+// and survives the spread, so it's the only reference shared by both the
+// caller of `useZenoForm` and every child field.
+const formZenoState = new WeakMap<object, ZenoFormState>()
+
+function stateKey(form: AnyFormApi): object {
+  return (form as { store: object }).store
+}
+
+function setFormZenoState(
+  form: AnyFormApi,
+  state: Partial<ZenoFormState>
+): void {
+  const key = stateKey(form)
+  const current = formZenoState.get(key) ?? DEFAULT_FORM_STATE
+  formZenoState.set(key, { ...current, ...state })
+}
+
+function getFormZenoState(form: AnyFormApi): ZenoFormState {
+  return formZenoState.get(stateKey(form)) ?? DEFAULT_FORM_STATE
+}
+
+function getFormValidationMode(form: AnyFormApi): ValidationMode {
+  return getFormZenoState(form).validation
+}
+
+function getFormHideFieldErrors(form: AnyFormApi): boolean {
+  return getFormZenoState(form).hideFieldErrors
+}
+
+export {
+  DEFAULT_VALIDATION_MODE,
+  getFormHideFieldErrors,
+  getFormValidationMode,
+  setFormZenoState,
+  type ValidationMode,
+}

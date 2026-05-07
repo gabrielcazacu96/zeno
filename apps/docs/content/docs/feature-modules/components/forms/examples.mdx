@@ -1,0 +1,519 @@
+---
+title: Examples
+description: Composed @zeno/forms examples, from a simple login to dynamic and array fields
+icon: Sparkles
+status: in progress
+---
+
+import { ArrayExample } from "@/components/forms/array-preview"
+import { FormInCardExample } from "@/components/forms/card-preview"
+import { DialogExample } from "@/components/forms/dialog-preview"
+import { DynamicExample } from "@/components/forms/dynamic-preview"
+import { LargeExample } from "@/components/forms/large-preview"
+import { LoginExample } from "@/components/forms/login-preview"
+import { SignupExample } from "@/components/forms/signup-preview"
+
+A walk-through from layout patterns to per-feature recipes. Each example is
+fully working — fill it in and submit to see the returned values.
+
+The previews below render in a `<Card>` for nice presentation, but most code
+blocks focus on the form-specific bits (`<FormProvider>`, `<Form>`,
+`<FieldGroup>`, fields, buttons). For the explicit layout patterns see
+[Form in a Card](#form-in-a-card) and [Form in a Dialog](#form-in-a-dialog).
+
+For validation patterns — live forms without actions, per-field validation
+modes, async server checks — see
+[Validation modes](/docs/feature-modules/components/forms/validation).
+
+## Form in a Card
+
+Drop the form into a `<Card>`: header on top, fields in `<CardContent>`,
+actions in `<CardFooter>` paired by `<Field orientation="horizontal">`.
+`<FormProvider>` wraps the whole `<Card>` so the buttons in `<CardFooter>` —
+which sit outside the `<form>` HTML — still resolve `ResetButton` and
+`SubmitButton`. The `id` on `<Form>` plus `form="…"` on `<SubmitButton>`
+keeps native submission (Enter-to-submit) working.
+
+<Preview>
+  <FormInCardExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@zeno/ui/card"
+import { Field, FieldGroup } from "@zeno/ui/field"
+import { z } from "zod"
+
+const schema = z.object({
+  name: z.string().min(2, "At least 2 characters"),
+})
+
+export function DisplayNameCard() {
+  const form = useZenoForm({
+    defaultValues: { name: "" },
+    onSubmit: ({ value }) => saveName(value.name),
+    schema,
+  })
+  const { InputField, ResetButton, SubmitButton } = form
+  return (
+    <FormProvider form={form}>
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Display name</CardTitle>
+          <CardDescription>How we'll address you in the app.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form id="card-form">
+            <FieldGroup>
+              <InputField label="Name" name="name" placeholder="Ada Lovelace" />
+            </FieldGroup>
+          </Form>
+        </CardContent>
+        <CardFooter>
+          <Field orientation="horizontal">
+            <ResetButton />
+            <SubmitButton form="card-form">Save</SubmitButton>
+          </Field>
+        </CardFooter>
+      </Card>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+## Form in a Dialog
+
+Keep the form inside `<DialogContent>` and close the dialog from `onSubmit`
+once the work is done.
+
+<Preview>
+  <DialogExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Button } from "@zeno/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@zeno/ui/dialog"
+import { FieldGroup } from "@zeno/ui/field"
+import { useState } from "react"
+import { z } from "zod"
+
+const schema = z.object({
+  name: z.string().min(1, "Name is required"),
+  slug: z
+    .string()
+    .min(1, "Slug is required")
+    .regex(/^[a-z0-9-]+$/, "Lowercase letters, numbers, and dashes only"),
+})
+
+export function CreateProjectDialog() {
+  const [open, setOpen] = useState(false)
+  const form = useZenoForm({
+    defaultValues: { name: "", slug: "" },
+    onSubmit: ({ value }) => {
+      createProject(value)
+      setOpen(false)
+    },
+    schema,
+  })
+  const { InputField, ResetButton, SubmitButton } = form
+
+  return (
+    <Dialog onOpenChange={setOpen} open={open}>
+      <DialogTrigger render={<Button>Create project</Button>} />
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>New project</DialogTitle>
+          <DialogDescription>
+            Give your project a name and a slug to get started.
+          </DialogDescription>
+        </DialogHeader>
+        <FormProvider form={form}>
+          <Form id="project-form">
+            <FieldGroup>
+              <InputField label="Name" name="name" placeholder="Resolve admin" />
+              <InputField
+                description="Used in URLs."
+                label="Slug"
+                name="slug"
+                placeholder="resolve-admin"
+              />
+            </FieldGroup>
+          </Form>
+          <DialogFooter className="mt-4">
+            <Button onClick={() => setOpen(false)} type="button" variant="ghost">
+              Cancel
+            </Button>
+            <ResetButton />
+            <SubmitButton form="project-form">Create</SubmitButton>
+          </DialogFooter>
+        </FormProvider>
+      </DialogContent>
+    </Dialog>
+  )
+}
+```
+
+</Preview>
+
+## Simple login
+
+A two-field form with a Zod schema. `useZenoForm` returns a form with typed
+field components attached — `name` is autocompleted against `defaultValues`.
+
+<Preview>
+  <LoginExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { z } from "zod"
+
+const schema = z.object({
+  email: z.email("Enter a valid email"),
+  password: z.string().min(8, "At least 8 characters"),
+})
+
+export function Login() {
+  const form = useZenoForm({
+    defaultValues: { email: "", password: "" },
+    onSubmit: ({ value }) => signIn(value),
+    schema,
+  })
+  const { EmailField, PasswordField, ResetButton, SubmitButton } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form id="login-form">
+        <FieldGroup>
+          <EmailField placeholder="you@zeno.dev" />
+          <PasswordField />
+        </FieldGroup>
+      </Form>
+      <ResetButton />
+      <SubmitButton form="login-form">Sign in</SubmitButton>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+## Sign up with cross-field validation
+
+`z.refine` runs after the object schema and lets you compare values across
+fields. The error attaches to whichever field you point `path` at — here, the
+"Confirm password" field.
+
+<Preview>
+  <SignupExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { z } from "zod"
+
+const schema = z
+  .object({
+    confirmPassword: z.string(),
+    email: z.email("Enter a valid email"),
+    password: z.string().min(8, "At least 8 characters"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  })
+
+export function Signup() {
+  const form = useZenoForm({
+    defaultValues: { confirmPassword: "", email: "", password: "" },
+    onSubmit: ({ value }) => createAccount(value),
+    schema,
+  })
+  const { EmailField, PasswordField, ResetButton, SubmitButton } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form id="signup-form">
+        <FieldGroup>
+          <EmailField placeholder="you@zeno.dev" />
+          <PasswordField autoComplete="new-password" />
+          <PasswordField
+            autoComplete="new-password"
+            label="Confirm password"
+            name="confirmPassword"
+          />
+        </FieldGroup>
+      </Form>
+      <ResetButton />
+      <SubmitButton form="signup-form">Create account</SubmitButton>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+## Array fields
+
+Drop `mode="array"` on `form.Field` to manage a list. The render-prop receives
+the array field with `pushValue` and `removeValue`, and you address each row
+with bracketed paths like `members[0].name` — typed against the schema.
+
+<Preview>
+  <ArrayExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Button } from "@zeno/ui/button"
+import { FieldGroup, FieldLegend, FieldSet } from "@zeno/ui/field"
+import { TrashIcon } from "lucide-react"
+import { z } from "zod"
+
+const memberSchema = z.object({
+  email: z.email("Enter a valid email"),
+  name: z.string().min(1, "Name is required"),
+})
+const schema = z.object({
+  members: z.array(memberSchema).min(1, "Add at least one member"),
+})
+
+type Member = z.infer<typeof memberSchema>
+
+export function TeamInvites() {
+  const form = useZenoForm({
+    defaultValues: { members: [{ email: "", name: "" }] as Member[] },
+    onSubmit: ({ value }) => inviteMembers(value.members),
+    schema,
+  })
+  // `Field` is TanStack Form's render-prop component; rename to avoid clashing
+  // with `@zeno/ui/field`'s `Field`.
+  const {
+    EmailField,
+    Field: ArrayField,
+    InputField,
+    ResetButton,
+    SubmitButton,
+  } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form id="team-form">
+        <FieldGroup>
+          <ArrayField mode="array" name="members">
+            {(arrayField) => (
+              <FieldSet>
+                <FieldLegend>Members</FieldLegend>
+                {arrayField.state.value.map((_, index) => (
+                  <div className="flex items-end gap-2" key={index}>
+                    <div className="flex-1">
+                      <InputField
+                        label={index === 0 ? "Name" : undefined}
+                        name={`members[${index}].name`}
+                        placeholder="Ada Lovelace"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <EmailField
+                        label={index === 0 ? "Email" : undefined}
+                        name={`members[${index}].email`}
+                      />
+                    </div>
+                    <Button
+                      onClick={() => arrayField.removeValue(index)}
+                      type="button"
+                      variant="ghost"
+                    >
+                      <TrashIcon />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  onClick={() => arrayField.pushValue({ email: "", name: "" })}
+                  type="button"
+                  variant="outline"
+                >
+                  Add member
+                </Button>
+              </FieldSet>
+            )}
+          </ArrayField>
+        </FieldGroup>
+      </Form>
+      <ResetButton />
+      <SubmitButton form="team-form">Send invites</SubmitButton>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+## Dynamic fields
+
+`form.Subscribe` lets you read other field values reactively without
+re-rendering the entire form. Here, switching the country swaps the second
+field between a `SelectField` and an `InputField`.
+
+<Preview>
+  <DynamicExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { SelectItem } from "@zeno/ui/select"
+
+export function Shipping() {
+  const form = useZenoForm({
+    defaultValues: { country: "US", region: "", state: "" },
+    onSubmit: ({ value }) => saveAddress(value),
+  })
+  const {
+    InputField,
+    ResetButton,
+    SelectField,
+    SubmitButton,
+    Subscribe,
+  } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form id="shipping-form">
+        <FieldGroup>
+          <SelectField label="Country" name="country">
+            <SelectItem value="US">United States</SelectItem>
+            <SelectItem value="Other">Other</SelectItem>
+          </SelectField>
+          <Subscribe selector={(state) => state.values.country}>
+            {(country) =>
+              country === "US" ? (
+                <SelectField label="State" name="state" placeholder="Pick a state">
+                  <SelectItem value="CA">California</SelectItem>
+                  <SelectItem value="NY">New York</SelectItem>
+                  <SelectItem value="TX">Texas</SelectItem>
+                </SelectField>
+              ) : (
+                <InputField label="Region" name="region" placeholder="Region" />
+              )
+            }
+          </Subscribe>
+        </FieldGroup>
+      </Form>
+      <ResetButton />
+      <SubmitButton form="shipping-form">Save address</SubmitButton>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+## Large form
+
+Most field types together — text, number, textarea, select, radio, switch,
+checkbox — driven by a single Zod schema.
+
+<Preview>
+  <LargeExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { RadioGroupFieldItem } from "@zeno/forms/fields"
+import { FieldGroup } from "@zeno/ui/field"
+import { SelectItem } from "@zeno/ui/select"
+import { z } from "zod"
+
+const schema = z.object({
+  age: z.number({ error: "Enter your age" }).int().min(13, "Must be at least 13"),
+  bio: z.string().max(160, "Keep it under 160 characters"),
+  marketing: z.boolean(),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  plan: z.enum(["free", "pro", "team"]),
+  pushNotifications: z.boolean(),
+  role: z.enum(["engineer", "designer", "manager"]),
+})
+
+export function Profile() {
+  const form = useZenoForm({
+    defaultValues: {
+      age: 18,
+      bio: "",
+      marketing: false,
+      name: "",
+      plan: "free" as const,
+      pushNotifications: true,
+      role: "engineer" as const,
+    },
+    onSubmit: ({ value }) => saveProfile(value),
+    schema,
+  })
+  const {
+    CheckboxField,
+    InputField,
+    NumberField,
+    RadioGroupField,
+    ResetButton,
+    SelectField,
+    SubmitButton,
+    SwitchField,
+    TextAreaField,
+  } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form id="profile-form">
+        <FieldGroup>
+          <InputField label="Display name" name="name" placeholder="Ada Lovelace" />
+          <NumberField label="Age" min={13} name="age" />
+          <TextAreaField label="Bio" name="bio" placeholder="I build things on the web." />
+          <SelectField label="Role" name="role" placeholder="Pick a role">
+            <SelectItem value="engineer">Engineer</SelectItem>
+            <SelectItem value="designer">Designer</SelectItem>
+            <SelectItem value="manager">Manager</SelectItem>
+          </SelectField>
+          <RadioGroupField label="Plan" name="plan">
+            <RadioGroupFieldItem value="free">Free</RadioGroupFieldItem>
+            <RadioGroupFieldItem value="pro">Pro</RadioGroupFieldItem>
+            <RadioGroupFieldItem value="team">Team</RadioGroupFieldItem>
+          </RadioGroupField>
+          <SwitchField label="Push notifications" name="pushNotifications" />
+          <CheckboxField label="Email me product updates" name="marketing" />
+        </FieldGroup>
+      </Form>
+      <ResetButton />
+      <SubmitButton form="profile-form">Save profile</SubmitButton>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>

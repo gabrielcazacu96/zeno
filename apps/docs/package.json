@@ -11,6 +11,9 @@
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
+    "@tanstack/react-devtools": "^0.10.0",
+    "@tanstack/react-form-devtools": "^0.2.0",
+    "@zeno/forms": "workspace:*",
     "@zeno/ui": "workspace:*",
     "fumadocs-core": "16.8.5",
     "fumadocs-mdx": "14.3.2",

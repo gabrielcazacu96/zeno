@@ -1,0 +1,5 @@
+{
+  "title": "Forms",
+  "icon": "Form",
+  "pages": ["fields", "validation", "examples"]
+}

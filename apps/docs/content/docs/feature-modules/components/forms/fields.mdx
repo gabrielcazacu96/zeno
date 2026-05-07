@@ -1,0 +1,338 @@
+---
+title: Fields
+description: Live examples of every shipped @zeno/forms field
+icon: ListChecks
+status: in progress
+---
+
+import { CustomFieldPreview } from "@/components/forms/custom-field-preview"
+import {
+  CheckboxFieldPreview,
+  ComboboxFieldPreview,
+  DatePickerFieldPreview,
+  EmailFieldPreview,
+  InputFieldPreview,
+  NumberFieldPreview,
+  OtpFieldPreview,
+  PasswordFieldPreview,
+  RadioGroupFieldPreview,
+  SelectFieldPreview,
+  SliderFieldPreview,
+  SwitchFieldPreview,
+  TextAreaFieldPreview,
+} from "@/components/forms/field-previews"
+
+Every shipped field handles label, description, value, blur, `aria-invalid`,
+and field error rendering for you. Each is reached by destructuring the
+`form` returned by `useZenoForm` — `name` is autocompleted against your
+`defaultValues`. Touch the field, leave it empty, then try to submit to see
+the error UX.
+
+Each field accepts an optional `validators` prop that's forwarded straight
+to TanStack Form's `<Field>`, so you can override the form-level validation
+mode per field — see
+[Validation modes](/docs/feature-modules/components/forms/validation#mixing-onblur-and-onchange-per-field).
+
+```tsx
+const form = useZenoForm({ defaultValues: { /* ... */ } })
+const { InputField /* …, PasswordField, SubmitButton, … */ } = form
+
+// Wrap with <FormProvider form={form}> and put fields inside <Form>:
+<FormProvider form={form}>
+  <Form id="my-form">
+    <FieldGroup>
+      <InputField name="…" />
+    </FieldGroup>
+  </Form>
+</FormProvider>
+```
+
+## Input Field
+
+<Preview>
+  <InputFieldPreview />
+
+```tsx
+<InputField
+  description="Shown next to your avatar."
+  label="Display name"
+  name="name"
+  placeholder="Ada Lovelace"
+/>
+```
+
+</Preview>
+
+## Email Field
+
+A preset over `InputField` with `type="email"`, `inputMode="email"`, and
+`autoComplete="email"`. `label` defaults to `"Email"`. `name` defaults to
+`"email"` when your form has that key — pass `name` explicitly otherwise.
+
+<Preview>
+  <EmailFieldPreview />
+
+```tsx
+<EmailField placeholder="you@zeno.dev" />
+```
+
+</Preview>
+
+## Password Field
+
+A preset over `InputField` with `type="password"` and
+`autoComplete="current-password"` (override with `autoComplete="new-password"`
+on signup). `label` defaults to `"Password"`. `name` defaults to `"password"`
+when your form has that key — pass `name` explicitly otherwise.
+
+<Preview>
+  <PasswordFieldPreview />
+
+```tsx
+<PasswordField autoComplete="new-password" />
+```
+
+</Preview>
+
+## Text Area Field
+
+<Preview>
+  <TextAreaFieldPreview />
+
+```tsx
+<TextAreaField
+  description="160 characters max."
+  label="Bio"
+  name="bio"
+  placeholder="I build things on the web."
+/>
+```
+
+</Preview>
+
+## Number Field
+
+Sets `type="number"` and `inputMode="numeric"`, and coerces the input value to
+a `number` (or `undefined` when empty).
+
+<Preview>
+  <NumberFieldPreview />
+
+```tsx
+<NumberField label="Age" min={13} name="age" />
+```
+
+</Preview>
+
+## Select Field
+
+Wraps `@zeno/ui/select`. Pass `<SelectItem>` children for the options.
+
+<Preview>
+  <SelectFieldPreview />
+
+```tsx
+import { SelectItem } from "@zeno/ui/select"
+
+<SelectField label="Role" name="role" placeholder="Pick a role">
+  <SelectItem value="engineer">Engineer</SelectItem>
+  <SelectItem value="designer">Designer</SelectItem>
+  <SelectItem value="manager">Manager</SelectItem>
+</SelectField>
+```
+
+</Preview>
+
+## Checkbox Field
+
+<Preview>
+  <CheckboxFieldPreview />
+
+```tsx
+<CheckboxField
+  description="You can revoke this at any time."
+  label="I accept the terms of service"
+  name="terms"
+/>
+```
+
+</Preview>
+
+## Switch Field
+
+<Preview>
+  <SwitchFieldPreview />
+
+```tsx
+<SwitchField
+  description="Get notified when something needs your attention."
+  label="Push notifications"
+  name="pushNotifications"
+/>
+```
+
+</Preview>
+
+## Radio Group Field
+
+Wraps `@zeno/ui/radio-group`. Use `<RadioGroupFieldItem value="...">` to add
+options — it pairs each radio with its own label and `htmlFor` so you don't
+have to wire IDs by hand.
+
+<Preview>
+  <RadioGroupFieldPreview />
+
+```tsx
+import { RadioGroupFieldItem } from "@zeno/forms/fields"
+
+<RadioGroupField label="Plan" name="plan">
+  <RadioGroupFieldItem value="free">Free</RadioGroupFieldItem>
+  <RadioGroupFieldItem value="pro">Pro</RadioGroupFieldItem>
+  <RadioGroupFieldItem value="team">Team</RadioGroupFieldItem>
+</RadioGroupField>
+```
+
+</Preview>
+
+## Slider Field
+
+Wraps `@zeno/ui/slider`. Form value is `number` for a single thumb or
+`number[]` for a range — pick by typing your `defaultValues`. Pass
+`formatValue` to render a live readout next to the label (units, currency,
+range delimiters).
+
+<Preview>
+  <SliderFieldPreview />
+
+```tsx
+<SliderField
+  description="Used for notification chimes."
+  formatValue={(v) => `${Array.isArray(v) ? v[0] : v}%`}
+  label="Volume"
+  max={100}
+  min={0}
+  name="volume"
+  step={1}
+/>
+```
+
+</Preview>
+
+## OTP Field
+
+Wraps `@zeno/ui/input-otp`. Defaults to a single 6-slot group; pass
+`maxLength` to change the digit count and `pattern` (a string regex) to
+restrict accepted characters. Use `children` to insert a separator between
+groups.
+
+<Preview>
+  <OtpFieldPreview />
+
+```tsx
+<OtpField
+  description="We sent a code to your email."
+  label="Verification code"
+  name="code"
+  pattern="^[0-9]+$"
+/>
+```
+
+</Preview>
+
+## Date Picker Field
+
+Composition of `@zeno/ui/popover` and `@zeno/ui/calendar`. Form value is
+`Date | undefined`. The trigger button shows the selected date via
+`toLocaleDateString` by default — pass `formatValue` for a custom format,
+or `calendarProps` to forward props (e.g. `disabled`, `locale`) to the
+underlying `<Calendar>`.
+
+<Preview>
+  <DatePickerFieldPreview />
+
+```tsx
+<DatePickerField
+  description="Used for age-restricted features."
+  label="Birthday"
+  name="birthday"
+/>
+```
+
+</Preview>
+
+## Combobox Field
+
+Wraps `@zeno/ui/combobox`. Single-select over a `string[]` items list with
+built-in filtering as the user types. Pass `renderItem` for custom row
+markup, `emptyMessage` for the no-results state, and `showClear={false}`
+to hide the clear button on required fields.
+
+<Preview>
+  <ComboboxFieldPreview />
+
+```tsx
+const FRAMEWORKS = ["Next.js", "Remix", "SvelteKit", "Nuxt.js", "Astro"]
+
+<ComboboxField
+  description="Filter as you type."
+  emptyMessage="No framework matches."
+  items={FRAMEWORKS}
+  label="Favourite framework"
+  name="framework"
+  placeholder="Search frameworks…"
+/>
+```
+
+</Preview>
+
+## Custom fields
+
+Need something that's not in the gallery? Build it on top of
+`useFieldContext<T>()` and drop it inside `<AppField>` (also destructured from
+`form`) — same typed field state and accessibility plumbing the built-ins use:
+
+<Preview>
+  <CustomFieldPreview />
+
+```tsx lineNumbers
+"use client"
+
+import { useFieldContext, useIsInvalid } from "@zeno/forms"
+import { Field, FieldError, FieldLabel } from "@zeno/ui/field"
+import { Slider } from "@zeno/ui/slider"
+
+function VolumeField({ label }: { label: string }) {
+  const field = useFieldContext<number>()
+  const isInvalid = useIsInvalid(field)
+  const value = field.state.value ?? 0
+  return (
+    <Field data-invalid={isInvalid}>
+      <FieldLabel htmlFor={field.name}>
+        {label}: {value}
+      </FieldLabel>
+      <Slider
+        id={field.name}
+        max={100}
+        min={0}
+        onValueChange={(next) =>
+          field.handleChange(Array.isArray(next) ? (next[0] ?? 0) : next)
+        }
+        value={[value]}
+      />
+      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+    </Field>
+  )
+}
+
+// In a form:
+const { AppField } = form
+
+<AppField name="volume">
+  {() => <VolumeField label="Volume" />}
+</AppField>
+```
+
+</Preview>
+
+`AppField` is also the escape hatch when you want direct access to the field
+instance for any of the shipped fields.
