@@ -1,13 +1,15 @@
 "use client"
 
-import { Form, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@zeno/ui/card"
+import { Field, FieldGroup } from "@zeno/ui/field"
 import { useState } from "react"
 import { z } from "zod"
 
@@ -33,26 +35,37 @@ export function SignupExample() {
     validators: { onChange: signupSchema },
   })
   return (
-    <Card className={wrapperClass}>
-      <CardHeader>
-        <CardTitle>Create your account</CardTitle>
-        <CardDescription>
-          Pick an email and password — confirmation must match.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form form={form}>
-          <form.EmailField placeholder="you@zeno.dev" />
-          <form.PasswordField autoComplete="new-password" />
-          <form.PasswordField
-            autoComplete="new-password"
-            label="Confirm password"
-            name="confirmPassword"
-          />
-          <form.SubmitButton>Create account</form.SubmitButton>
-          <SubmittedValues value={submitted} />
-        </Form>
-      </CardContent>
-    </Card>
+    <FormProvider form={form}>
+      <Card className={wrapperClass}>
+        <CardHeader>
+          <CardTitle>Create your account</CardTitle>
+          <CardDescription>
+            Pick an email and password — confirmation must match.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form id="signup-form">
+            <FieldGroup>
+              <form.EmailField placeholder="you@zeno.dev" />
+              <form.PasswordField autoComplete="new-password" />
+              <form.PasswordField
+                autoComplete="new-password"
+                label="Confirm password"
+                name="confirmPassword"
+              />
+            </FieldGroup>
+          </Form>
+        </CardContent>
+        <CardFooter>
+          <Field orientation="horizontal">
+            <form.ResetButton />
+            <form.SubmitButton form="signup-form">
+              Create account
+            </form.SubmitButton>
+          </Field>
+        </CardFooter>
+      </Card>
+      <SubmittedValues value={submitted} />
+    </FormProvider>
   )
 }

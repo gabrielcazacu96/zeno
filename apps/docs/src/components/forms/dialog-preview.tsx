@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
 import { Button } from "@zeno/ui/button"
 import {
   Card,
@@ -18,6 +18,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@zeno/ui/dialog"
+import { FieldGroup } from "@zeno/ui/field"
 import { useState } from "react"
 import { z } from "zod"
 
@@ -64,19 +65,23 @@ export function DialogExample() {
                 Give your project a name and a slug to get started.
               </DialogDescription>
             </DialogHeader>
-            <Form form={form}>
-              <form.InputField
-                label="Name"
-                name="name"
-                placeholder="Resolve admin"
-              />
-              <form.InputField
-                description="Used in URLs."
-                label="Slug"
-                name="slug"
-                placeholder="resolve-admin"
-              />
-              <DialogFooter>
+            <FormProvider form={form}>
+              <Form id="project-form">
+                <FieldGroup>
+                  <form.InputField
+                    label="Name"
+                    name="name"
+                    placeholder="Resolve admin"
+                  />
+                  <form.InputField
+                    description="Used in URLs."
+                    label="Slug"
+                    name="slug"
+                    placeholder="resolve-admin"
+                  />
+                </FieldGroup>
+              </Form>
+              <DialogFooter className="mt-4">
                 <Button
                   onClick={() => setOpen(false)}
                   type="button"
@@ -84,9 +89,12 @@ export function DialogExample() {
                 >
                   Cancel
                 </Button>
-                <form.SubmitButton>Create</form.SubmitButton>
+                <form.ResetButton />
+                <form.SubmitButton form="project-form">
+                  Create
+                </form.SubmitButton>
               </DialogFooter>
-            </Form>
+            </FormProvider>
           </DialogContent>
         </Dialog>
         {created && (

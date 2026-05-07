@@ -1,15 +1,16 @@
 "use client"
 
-import { Form, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
 import { Button } from "@zeno/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@zeno/ui/card"
-import { FieldLegend, FieldSet } from "@zeno/ui/field"
+import { Field, FieldGroup, FieldLegend, FieldSet } from "@zeno/ui/field"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
 import { z } from "zod"
@@ -34,60 +35,71 @@ export function ArrayExample() {
     validators: { onChange: teamSchema },
   })
   return (
-    <Card className="w-full max-w-xl">
-      <CardHeader>
-        <CardTitle>Invite team members</CardTitle>
-        <CardDescription>
-          Add as many teammates as you need — each row is its own array entry.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form form={form}>
-          <form.Field mode="array" name="members">
-            {(arrayField) => (
-              <FieldSet>
-                <FieldLegend>Members</FieldLegend>
-                {arrayField.state.value.map((_, index) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: tanstack form rows are keyed by index
-                  <div className="flex items-end gap-2" key={index}>
-                    <div className="flex-1">
-                      <form.InputField
-                        label={index === 0 ? "Name" : undefined}
-                        name={`members[${index}].name`}
-                        placeholder="Ada Lovelace"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <form.EmailField
-                        label={index === 0 ? "Email" : undefined}
-                        name={`members[${index}].email`}
-                      />
-                    </div>
+    <FormProvider form={form}>
+      <Card className="w-full max-w-xl">
+        <CardHeader>
+          <CardTitle>Invite team members</CardTitle>
+          <CardDescription>
+            Add as many teammates as you need — each row is its own array entry.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form id="team-form">
+            <FieldGroup>
+              <form.Field mode="array" name="members">
+                {(arrayField) => (
+                  <FieldSet>
+                    <FieldLegend>Members</FieldLegend>
+                    {arrayField.state.value.map((_, index) => (
+                      // biome-ignore lint/suspicious/noArrayIndexKey: tanstack form rows are keyed by index
+                      <div className="flex items-end gap-2" key={index}>
+                        <div className="flex-1">
+                          <form.InputField
+                            label={index === 0 ? "Name" : undefined}
+                            name={`members[${index}].name`}
+                            placeholder="Ada Lovelace"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <form.EmailField
+                            label={index === 0 ? "Email" : undefined}
+                            name={`members[${index}].email`}
+                          />
+                        </div>
+                        <Button
+                          aria-label={`Remove member ${index + 1}`}
+                          onClick={() => arrayField.removeValue(index)}
+                          size="icon"
+                          type="button"
+                          variant="ghost"
+                        >
+                          <TrashIcon />
+                        </Button>
+                      </div>
+                    ))}
                     <Button
-                      aria-label={`Remove member ${index + 1}`}
-                      onClick={() => arrayField.removeValue(index)}
-                      size="icon"
+                      onClick={() =>
+                        arrayField.pushValue({ email: "", name: "" })
+                      }
                       type="button"
-                      variant="ghost"
+                      variant="outline"
                     >
-                      <TrashIcon />
+                      Add member
                     </Button>
-                  </div>
-                ))}
-                <Button
-                  onClick={() => arrayField.pushValue({ email: "", name: "" })}
-                  type="button"
-                  variant="outline"
-                >
-                  Add member
-                </Button>
-              </FieldSet>
-            )}
-          </form.Field>
-          <form.SubmitButton>Send invites</form.SubmitButton>
-          <SubmittedValues value={submitted} />
-        </Form>
-      </CardContent>
-    </Card>
+                  </FieldSet>
+                )}
+              </form.Field>
+            </FieldGroup>
+          </Form>
+        </CardContent>
+        <CardFooter>
+          <Field orientation="horizontal">
+            <form.ResetButton />
+            <form.SubmitButton form="team-form">Send invites</form.SubmitButton>
+          </Field>
+        </CardFooter>
+      </Card>
+      <SubmittedValues value={submitted} />
+    </FormProvider>
   )
 }

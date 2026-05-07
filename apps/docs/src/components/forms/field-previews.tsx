@@ -1,7 +1,8 @@
 "use client"
 
-import { Form, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
 import { RadioGroupFieldItem } from "@zeno/forms/fields"
+import { FieldGroup } from "@zeno/ui/field"
 import { SelectItem } from "@zeno/ui/select"
 import { z } from "zod"
 
@@ -15,14 +16,18 @@ export function InputFieldPreview() {
     },
   })
   return (
-    <Form className={wrapperClass} form={form}>
-      <form.InputField
-        description="Shown next to your avatar."
-        label="Display name"
-        name="name"
-        placeholder="Ada Lovelace"
-      />
-    </Form>
+    <FormProvider form={form}>
+      <Form className={wrapperClass}>
+        <FieldGroup>
+          <form.InputField
+            description="Shown next to your avatar."
+            label="Display name"
+            name="name"
+            placeholder="Ada Lovelace"
+          />
+        </FieldGroup>
+      </Form>
+    </FormProvider>
   )
 }
 
@@ -34,9 +39,13 @@ export function EmailFieldPreview() {
     },
   })
   return (
-    <Form className={wrapperClass} form={form}>
-      <form.EmailField placeholder="you@zeno.dev" />
-    </Form>
+    <FormProvider form={form}>
+      <Form className={wrapperClass}>
+        <FieldGroup>
+          <form.EmailField placeholder="you@zeno.dev" />
+        </FieldGroup>
+      </Form>
+    </FormProvider>
   )
 }
 
@@ -50,9 +59,13 @@ export function PasswordFieldPreview() {
     },
   })
   return (
-    <Form className={wrapperClass} form={form}>
-      <form.PasswordField autoComplete="new-password" />
-    </Form>
+    <FormProvider form={form}>
+      <Form className={wrapperClass}>
+        <FieldGroup>
+          <form.PasswordField autoComplete="new-password" />
+        </FieldGroup>
+      </Form>
+    </FormProvider>
   )
 }
 
@@ -66,14 +79,18 @@ export function TextAreaFieldPreview() {
     },
   })
   return (
-    <Form className={wrapperClass} form={form}>
-      <form.TextAreaField
-        description="160 characters max."
-        label="Bio"
-        name="bio"
-        placeholder="I build things on the web."
-      />
-    </Form>
+    <FormProvider form={form}>
+      <Form className={wrapperClass}>
+        <FieldGroup>
+          <form.TextAreaField
+            description="160 characters max."
+            label="Bio"
+            name="bio"
+            placeholder="I build things on the web."
+          />
+        </FieldGroup>
+      </Form>
+    </FormProvider>
   )
 }
 
@@ -90,9 +107,13 @@ export function NumberFieldPreview() {
     },
   })
   return (
-    <Form className={wrapperClass} form={form}>
-      <form.NumberField label="Age" min={13} name="age" />
-    </Form>
+    <FormProvider form={form}>
+      <Form className={wrapperClass}>
+        <FieldGroup>
+          <form.NumberField label="Age" min={13} name="age" />
+        </FieldGroup>
+      </Form>
+    </FormProvider>
   )
 }
 
@@ -108,13 +129,17 @@ export function SelectFieldPreview() {
     },
   })
   return (
-    <Form className={wrapperClass} form={form}>
-      <form.SelectField label="Role" name="role" placeholder="Pick a role">
-        <SelectItem value="engineer">Engineer</SelectItem>
-        <SelectItem value="designer">Designer</SelectItem>
-        <SelectItem value="manager">Manager</SelectItem>
-      </form.SelectField>
-    </Form>
+    <FormProvider form={form}>
+      <Form className={wrapperClass}>
+        <FieldGroup>
+          <form.SelectField label="Role" name="role" placeholder="Pick a role">
+            <SelectItem value="engineer">Engineer</SelectItem>
+            <SelectItem value="designer">Designer</SelectItem>
+            <SelectItem value="manager">Manager</SelectItem>
+          </form.SelectField>
+        </FieldGroup>
+      </Form>
+    </FormProvider>
   )
 }
 
@@ -128,13 +153,17 @@ export function CheckboxFieldPreview() {
     },
   })
   return (
-    <Form className={wrapperClass} form={form}>
-      <form.CheckboxField
-        description="You can revoke this at any time."
-        label="I accept the terms of service"
-        name="terms"
-      />
-    </Form>
+    <FormProvider form={form}>
+      <Form className={wrapperClass}>
+        <FieldGroup>
+          <form.CheckboxField
+            description="You can revoke this at any time."
+            label="I accept the terms of service"
+            name="terms"
+          />
+        </FieldGroup>
+      </Form>
+    </FormProvider>
   )
 }
 
@@ -143,13 +172,17 @@ export function SwitchFieldPreview() {
     defaultValues: { pushNotifications: true },
   })
   return (
-    <Form className={wrapperClass} form={form}>
-      <form.SwitchField
-        description="Get notified when something needs your attention."
-        label="Push notifications"
-        name="pushNotifications"
-      />
-    </Form>
+    <FormProvider form={form}>
+      <Form className={wrapperClass}>
+        <FieldGroup>
+          <form.SwitchField
+            description="Get notified when something needs your attention."
+            label="Push notifications"
+            name="pushNotifications"
+          />
+        </FieldGroup>
+      </Form>
+    </FormProvider>
   )
 }
 
@@ -158,12 +191,16 @@ export function RadioGroupFieldPreview() {
     defaultValues: { plan: "free" },
   })
   return (
-    <Form className={wrapperClass} form={form}>
-      <form.RadioGroupField label="Plan" name="plan">
-        <RadioGroupFieldItem value="free">Free</RadioGroupFieldItem>
-        <RadioGroupFieldItem value="pro">Pro</RadioGroupFieldItem>
-        <RadioGroupFieldItem value="team">Team</RadioGroupFieldItem>
-      </form.RadioGroupField>
-    </Form>
+    <FormProvider form={form}>
+      <Form className={wrapperClass}>
+        <FieldGroup>
+          <form.RadioGroupField label="Plan" name="plan">
+            <RadioGroupFieldItem value="free">Free</RadioGroupFieldItem>
+            <RadioGroupFieldItem value="pro">Pro</RadioGroupFieldItem>
+            <RadioGroupFieldItem value="team">Team</RadioGroupFieldItem>
+          </form.RadioGroupField>
+        </FieldGroup>
+      </Form>
+    </FormProvider>
   )
 }

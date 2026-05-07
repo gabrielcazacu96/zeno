@@ -6,6 +6,7 @@ status: in progress
 ---
 
 import { ArrayExample } from "@/components/forms/array-preview"
+import { FormInCardExample } from "@/components/forms/card-preview"
 import { DialogExample } from "@/components/forms/dialog-preview"
 import { DynamicExample } from "@/components/forms/dynamic-preview"
 import { LargeExample } from "@/components/forms/large-preview"
@@ -15,6 +16,12 @@ import { SignupExample } from "@/components/forms/signup-preview"
 A walk-through from the simplest form to the patterns you'll reach for on real
 screens. Each example is fully working — fill it in and submit to see the
 returned values.
+
+The previews below render in a `<Card>` for nice presentation, but the code
+blocks focus on the form-specific bits (`<FormProvider>`, `<Form>`,
+`<FieldGroup>`, fields, buttons). For the full Card layout pattern see
+[Form in a Card](#form-in-a-card); for a Dialog see
+[Form in a Dialog](#form-in-a-dialog).
 
 ## Simple login
 
@@ -27,7 +34,8 @@ field components attached — `name` is autocompleted against `defaultValues`.
 ```tsx lineNumbers
 "use client"
 
-import { Form, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
 const schema = z.object({
@@ -43,11 +51,16 @@ export function Login() {
   })
 
   return (
-    <Form form={form}>
-      <form.EmailField placeholder="you@zeno.dev" />
-      <form.PasswordField />
-      <form.SubmitButton>Sign in</form.SubmitButton>
-    </Form>
+    <FormProvider form={form}>
+      <Form id="login-form">
+        <FieldGroup>
+          <form.EmailField placeholder="you@zeno.dev" />
+          <form.PasswordField />
+        </FieldGroup>
+      </Form>
+      <form.ResetButton />
+      <form.SubmitButton form="login-form">Sign in</form.SubmitButton>
+    </FormProvider>
   )
 }
 ```
@@ -66,7 +79,8 @@ fields. The error attaches to whichever field you point `path` at — here, the
 ```tsx lineNumbers
 "use client"
 
-import { Form, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
 const schema = z
@@ -88,16 +102,21 @@ export function Signup() {
   })
 
   return (
-    <Form form={form}>
-      <form.EmailField placeholder="you@zeno.dev" />
-      <form.PasswordField autoComplete="new-password" />
-      <form.PasswordField
-        autoComplete="new-password"
-        label="Confirm password"
-        name="confirmPassword"
-      />
-      <form.SubmitButton>Create account</form.SubmitButton>
-    </Form>
+    <FormProvider form={form}>
+      <Form id="signup-form">
+        <FieldGroup>
+          <form.EmailField placeholder="you@zeno.dev" />
+          <form.PasswordField autoComplete="new-password" />
+          <form.PasswordField
+            autoComplete="new-password"
+            label="Confirm password"
+            name="confirmPassword"
+          />
+        </FieldGroup>
+      </Form>
+      <form.ResetButton />
+      <form.SubmitButton form="signup-form">Create account</form.SubmitButton>
+    </FormProvider>
   )
 }
 ```
@@ -116,11 +135,11 @@ with bracketed paths like `members[0].name` — typed against the schema.
 ```tsx lineNumbers
 "use client"
 
-import { Form, useZenoForm } from "@zeno/forms"
-import { z } from "zod"
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
 import { Button } from "@zeno/ui/button"
-import { FieldLegend, FieldSet } from "@zeno/ui/field"
+import { FieldGroup, FieldLegend, FieldSet } from "@zeno/ui/field"
 import { TrashIcon } from "lucide-react"
+import { z } from "zod"
 
 const memberSchema = z.object({
   email: z.email("Enter a valid email"),
@@ -139,49 +158,52 @@ export function TeamInvites() {
     validators: { onChange: schema },
   })
   return (
-    <Form form={form}>
-      <form.Field mode="array" name="members">
-        {(arrayField) => (
-          <FieldSet>
-            <FieldLegend>Members</FieldLegend>
-            {arrayField.state.value.map((_, index) => (
-              <div className="flex items-end gap-2" key={index}>
-                <div className="flex-1">
-                  <form.InputField
-                    label={index === 0 ? "Name" : undefined}
-                    name={`members[${index}].name`}
-                    placeholder="Ada Lovelace"
-                  />
-                </div>
-                <div className="flex-1">
-                  <form.EmailField
-                    label={index === 0 ? "Email" : undefined}
-                    name={`members[${index}].email`}
-                  />
-                </div>
+    <FormProvider form={form}>
+      <Form id="team-form">
+        <FieldGroup>
+          <form.Field mode="array" name="members">
+            {(arrayField) => (
+              <FieldSet>
+                <FieldLegend>Members</FieldLegend>
+                {arrayField.state.value.map((_, index) => (
+                  <div className="flex items-end gap-2" key={index}>
+                    <div className="flex-1">
+                      <form.InputField
+                        label={index === 0 ? "Name" : undefined}
+                        name={`members[${index}].name`}
+                        placeholder="Ada Lovelace"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <form.EmailField
+                        label={index === 0 ? "Email" : undefined}
+                        name={`members[${index}].email`}
+                      />
+                    </div>
+                    <Button
+                      onClick={() => arrayField.removeValue(index)}
+                      type="button"
+                      variant="ghost"
+                    >
+                      <TrashIcon />
+                    </Button>
+                  </div>
+                ))}
                 <Button
-                  aria-label={`Remove member ${index + 1}`}
-                  onClick={() => arrayField.removeValue(index)}
-                  size="icon"
+                  onClick={() => arrayField.pushValue({ email: "", name: "" })}
                   type="button"
-                  variant="ghost"
+                  variant="outline"
                 >
-                  <TrashIcon />
+                  Add member
                 </Button>
-              </div>
-            ))}
-            <Button
-              onClick={() => arrayField.pushValue({ email: "", name: "" })}
-              type="button"
-              variant="outline"
-            >
-              Add member
-            </Button>
-          </FieldSet>
-        )}
-      </form.Field>
-      <form.SubmitButton>Send invites</form.SubmitButton>
-    </Form>
+              </FieldSet>
+            )}
+          </form.Field>
+        </FieldGroup>
+      </Form>
+      <form.ResetButton />
+      <form.SubmitButton form="team-form">Send invites</form.SubmitButton>
+    </FormProvider>
   )
 }
 ```
@@ -200,7 +222,8 @@ field between a `SelectField` and an `InputField`.
 ```tsx lineNumbers
 "use client"
 
-import { Form, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
 import { SelectItem } from "@zeno/ui/select"
 
 export function Shipping() {
@@ -209,31 +232,31 @@ export function Shipping() {
     onSubmit: ({ value }) => saveAddress(value),
   })
   return (
-    <Form form={form}>
-      <form.SelectField label="Country" name="country">
-        <SelectItem value="US">United States</SelectItem>
-        <SelectItem value="Other">Other</SelectItem>
-      </form.SelectField>
-      <form.Subscribe selector={(state) => state.values.country}>
-        {(country) =>
-          country === "US" ? (
-            <form.SelectField label="State" name="state" placeholder="Pick a state">
-              <SelectItem value="CA">California</SelectItem>
-              <SelectItem value="NY">New York</SelectItem>
-              <SelectItem value="TX">Texas</SelectItem>
-            </form.SelectField>
-          ) : (
-            <form.InputField
-              description="State, province, or region."
-              label="Region"
-              name="region"
-              placeholder="Region"
-            />
-          )
-        }
-      </form.Subscribe>
-      <form.SubmitButton>Save address</form.SubmitButton>
-    </Form>
+    <FormProvider form={form}>
+      <Form id="shipping-form">
+        <FieldGroup>
+          <form.SelectField label="Country" name="country">
+            <SelectItem value="US">United States</SelectItem>
+            <SelectItem value="Other">Other</SelectItem>
+          </form.SelectField>
+          <form.Subscribe selector={(state) => state.values.country}>
+            {(country) =>
+              country === "US" ? (
+                <form.SelectField label="State" name="state" placeholder="Pick a state">
+                  <SelectItem value="CA">California</SelectItem>
+                  <SelectItem value="NY">New York</SelectItem>
+                  <SelectItem value="TX">Texas</SelectItem>
+                </form.SelectField>
+              ) : (
+                <form.InputField label="Region" name="region" placeholder="Region" />
+              )
+            }
+          </form.Subscribe>
+        </FieldGroup>
+      </Form>
+      <form.ResetButton />
+      <form.SubmitButton form="shipping-form">Save address</form.SubmitButton>
+    </FormProvider>
   )
 }
 ```
@@ -251,10 +274,11 @@ checkbox — driven by a single Zod schema.
 ```tsx lineNumbers
 "use client"
 
-import { Form, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
 import { RadioGroupFieldItem } from "@zeno/forms/fields"
-import { z } from "zod"
+import { FieldGroup } from "@zeno/ui/field"
 import { SelectItem } from "@zeno/ui/select"
+import { z } from "zod"
 
 const schema = z.object({
   age: z.number({ error: "Enter your age" }).int().min(13, "Must be at least 13"),
@@ -282,24 +306,94 @@ export function Profile() {
   })
 
   return (
-    <Form form={form}>
-      <form.InputField label="Display name" name="name" placeholder="Ada Lovelace" />
-      <form.NumberField label="Age" min={13} name="age" />
-      <form.TextAreaField label="Bio" name="bio" placeholder="I build things on the web." />
-      <form.SelectField label="Role" name="role" placeholder="Pick a role">
-        <SelectItem value="engineer">Engineer</SelectItem>
-        <SelectItem value="designer">Designer</SelectItem>
-        <SelectItem value="manager">Manager</SelectItem>
-      </form.SelectField>
-      <form.RadioGroupField label="Plan" name="plan">
-        <RadioGroupFieldItem value="free">Free</RadioGroupFieldItem>
-        <RadioGroupFieldItem value="pro">Pro</RadioGroupFieldItem>
-        <RadioGroupFieldItem value="team">Team</RadioGroupFieldItem>
-      </form.RadioGroupField>
-      <form.SwitchField label="Push notifications" name="pushNotifications" />
-      <form.CheckboxField label="Email me product updates" name="marketing" />
-      <form.SubmitButton>Save profile</form.SubmitButton>
-    </Form>
+    <FormProvider form={form}>
+      <Form id="profile-form">
+        <FieldGroup>
+          <form.InputField label="Display name" name="name" placeholder="Ada Lovelace" />
+          <form.NumberField label="Age" min={13} name="age" />
+          <form.TextAreaField label="Bio" name="bio" placeholder="I build things on the web." />
+          <form.SelectField label="Role" name="role" placeholder="Pick a role">
+            <SelectItem value="engineer">Engineer</SelectItem>
+            <SelectItem value="designer">Designer</SelectItem>
+            <SelectItem value="manager">Manager</SelectItem>
+          </form.SelectField>
+          <form.RadioGroupField label="Plan" name="plan">
+            <RadioGroupFieldItem value="free">Free</RadioGroupFieldItem>
+            <RadioGroupFieldItem value="pro">Pro</RadioGroupFieldItem>
+            <RadioGroupFieldItem value="team">Team</RadioGroupFieldItem>
+          </form.RadioGroupField>
+          <form.SwitchField label="Push notifications" name="pushNotifications" />
+          <form.CheckboxField label="Email me product updates" name="marketing" />
+        </FieldGroup>
+      </Form>
+      <form.ResetButton />
+      <form.SubmitButton form="profile-form">Save profile</form.SubmitButton>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+## Form in a Card
+
+Drop the form into a `<Card>`: header on top, fields in `<CardContent>`,
+actions in `<CardFooter>` paired by `<Field orientation="horizontal">`.
+`<FormProvider>` wraps the whole `<Card>` so the buttons in `<CardFooter>` —
+which sit outside the `<form>` HTML — still resolve `form.ResetButton` and
+`form.SubmitButton`. The `id` on `<Form>` plus `form="…"` on
+`<form.SubmitButton>` keeps native submission (Enter-to-submit) working.
+
+<Preview>
+  <FormInCardExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@zeno/ui/card"
+import { Field, FieldGroup } from "@zeno/ui/field"
+import { z } from "zod"
+
+const schema = z.object({
+  name: z.string().min(2, "At least 2 characters"),
+})
+
+export function DisplayNameCard() {
+  const form = useZenoForm({
+    defaultValues: { name: "" },
+    onSubmit: ({ value }) => saveName(value.name),
+    validators: { onChange: schema },
+  })
+  return (
+    <FormProvider form={form}>
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Display name</CardTitle>
+          <CardDescription>How we'll address you in the app.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form id="card-form">
+            <FieldGroup>
+              <form.InputField label="Name" name="name" placeholder="Ada Lovelace" />
+            </FieldGroup>
+          </Form>
+        </CardContent>
+        <CardFooter>
+          <Field orientation="horizontal">
+            <form.ResetButton />
+            <form.SubmitButton form="card-form">Save</form.SubmitButton>
+          </Field>
+        </CardFooter>
+      </Card>
+    </FormProvider>
   )
 }
 ```
@@ -317,8 +411,7 @@ once the work is done.
 ```tsx lineNumbers
 "use client"
 
-import { Form, useZenoForm } from "@zeno/forms"
-import { z } from "zod"
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
 import { Button } from "@zeno/ui/button"
 import {
   Dialog,
@@ -329,7 +422,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@zeno/ui/dialog"
+import { FieldGroup } from "@zeno/ui/field"
 import { useState } from "react"
+import { z } from "zod"
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -360,21 +455,26 @@ export function CreateProjectDialog() {
             Give your project a name and a slug to get started.
           </DialogDescription>
         </DialogHeader>
-        <Form form={form}>
-          <form.InputField label="Name" name="name" placeholder="Resolve admin" />
-          <form.InputField
-            description="Used in URLs."
-            label="Slug"
-            name="slug"
-            placeholder="resolve-admin"
-          />
-          <DialogFooter>
+        <FormProvider form={form}>
+          <Form id="project-form">
+            <FieldGroup>
+              <form.InputField label="Name" name="name" placeholder="Resolve admin" />
+              <form.InputField
+                description="Used in URLs."
+                label="Slug"
+                name="slug"
+                placeholder="resolve-admin"
+              />
+            </FieldGroup>
+          </Form>
+          <DialogFooter className="mt-4">
             <Button onClick={() => setOpen(false)} type="button" variant="ghost">
               Cancel
             </Button>
-            <form.SubmitButton>Create</form.SubmitButton>
+            <form.ResetButton />
+            <form.SubmitButton form="project-form">Create</form.SubmitButton>
           </DialogFooter>
-        </Form>
+        </FormProvider>
       </DialogContent>
     </Dialog>
   )

@@ -1,14 +1,21 @@
 "use client"
 
-import { Form, useFieldContext, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useFieldContext, useZenoForm } from "@zeno/forms"
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@zeno/ui/card"
-import { Field, FieldDescription, FieldError, FieldLabel } from "@zeno/ui/field"
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@zeno/ui/field"
 import { Slider } from "@zeno/ui/slider"
 import { useState } from "react"
 import { z } from "zod"
@@ -53,26 +60,35 @@ export function CustomFieldPreview() {
   })
 
   return (
-    <Card className="w-full max-w-sm">
-      <CardHeader>
-        <CardTitle>Audio settings</CardTitle>
-        <CardDescription>
-          Custom slider field built on top of `useFieldContext`.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form form={form}>
-          <form.AppField name="volume">
-            {() => <VolumeField label="Volume" />}
-          </form.AppField>
-          <form.SubmitButton>Apply</form.SubmitButton>
-          {applied !== null && (
-            <p className="text-muted-foreground text-sm">
-              Applied volume: <span className="font-medium">{applied}</span>
-            </p>
-          )}
-        </Form>
-      </CardContent>
-    </Card>
+    <FormProvider form={form}>
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Audio settings</CardTitle>
+          <CardDescription>
+            Custom slider field built on top of `useFieldContext`.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form id="audio-form">
+            <FieldGroup>
+              <form.AppField name="volume">
+                {() => <VolumeField label="Volume" />}
+              </form.AppField>
+            </FieldGroup>
+          </Form>
+        </CardContent>
+        <CardFooter>
+          <Field orientation="horizontal">
+            <form.ResetButton />
+            <form.SubmitButton form="audio-form">Apply</form.SubmitButton>
+          </Field>
+        </CardFooter>
+      </Card>
+      {applied !== null && (
+        <p className="text-muted-foreground text-sm">
+          Applied volume: <span className="font-medium">{applied}</span>
+        </p>
+      )}
+    </FormProvider>
   )
 }

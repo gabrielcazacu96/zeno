@@ -16,16 +16,24 @@ It gives you:
 - `useZenoForm` — typed form hook returning a form with field components
   (`form.EmailField`, `form.InputField`, …) attached. `name` is autocompleted
   and type-checked against `defaultValues`; field state is typed without casts.
-- A `<Form>` wrapper that handles `onSubmit`, lays out children with sensible
-  spacing, and publishes the form via React context.
-- A pre-bound `form.SubmitButton` that disables itself while submitting or invalid.
+- `<FormProvider form={form}>` and `<Form>` — `FormProvider` publishes the
+  form via React context (so `<form.SubmitButton>`, `<form.ResetButton>`, etc.
+  work anywhere inside it); `<Form>` renders the `<form>` HTML element and
+  handles `onSubmit`. Compose layout with shadcn-style `<Card>`, `<FieldGroup>`,
+  and `<CardFooter>`.
+- Pre-bound `form.SubmitButton` (disables itself while submitting or invalid)
+  and `form.ResetButton` (calls `form.reset()` on click).
 - An escape hatch (`form.AppField` + `useFieldContext`) for building your own
   typed fields.
 
 ## Imports
 
 ```tsx
-import { Form, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import {
+  Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,
+} from "@zeno/ui/card"
+import { Field, FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 ```
 
@@ -39,7 +47,11 @@ A newsletter form, validated with Zod:
 ```tsx lineNumbers
 "use client"
 
-import { Form, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import {
+  Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,
+} from "@zeno/ui/card"
+import { Field, FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
 const newsletterSchema = z.object({
@@ -56,23 +68,45 @@ export function Newsletter() {
   })
 
   return (
-    <Form form={form}>
-      <form.EmailField placeholder="you@zeno.dev" />
-      <form.SubmitButton>Subscribe</form.SubmitButton>
-    </Form>
+    <FormProvider form={form}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Subscribe</CardTitle>
+          <CardDescription>Monthly digest, no spam.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form id="newsletter-form">
+            <FieldGroup>
+              <form.EmailField placeholder="you@zeno.dev" />
+            </FieldGroup>
+          </Form>
+        </CardContent>
+        <CardFooter>
+          <Field orientation="horizontal">
+            <form.ResetButton />
+            <form.SubmitButton form="newsletter-form">Subscribe</form.SubmitButton>
+          </Field>
+        </CardFooter>
+      </Card>
+    </FormProvider>
   )
 }
 ```
 
 </Preview>
 
-What `<Form>` does for you:
+What each piece does:
 
-- Calls `event.preventDefault()` and forwards to `form.handleSubmit()`.
-- Publishes the form instance via React context, so `<form.SubmitButton>` and
-  any custom form-level component can read it without explicit wiring.
-- Wraps children in `<FieldGroup>` for consistent vertical spacing — pass
-  `className` to override.
+- **`<FormProvider form={form}>`** wraps your card (or whatever container) and
+  publishes the form via React context. Anything inside it — including buttons
+  in `<CardFooter>` outside the `<form>` HTML — can resolve `form.X`.
+- **`<Form id="…">`** sits inside `<CardContent>` and renders the `<form>` HTML
+  element. Pass an `id` so `<form.SubmitButton form="…">` can associate with it
+  for native submission (Enter-to-submit, accessibility).
+- **`<FieldGroup>`** inside `<CardContent>` stacks fields with consistent
+  vertical spacing.
+- **`<Field orientation="horizontal">`** in `<CardFooter>` pairs Reset and
+  Submit side by side.
 
 ## Why `useZenoForm`?
 

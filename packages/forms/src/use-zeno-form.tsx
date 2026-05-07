@@ -7,6 +7,7 @@ import type {
 } from "@tanstack/react-form"
 import { useMemo } from "react"
 
+import { ResetButton } from "./fields/reset-button"
 import { SubmitButton } from "./fields/submit-button"
 import { useAppForm } from "./form"
 import { useAppFields } from "./use-app-fields"
@@ -62,7 +63,7 @@ function useZenoForm<
   >(options)
   const fields = useAppFields(form)
   return useMemo(
-    () => Object.assign(form, fields, { SubmitButton }),
+    () => Object.assign(form, fields, { ResetButton, SubmitButton }),
     [form, fields]
   )
 }

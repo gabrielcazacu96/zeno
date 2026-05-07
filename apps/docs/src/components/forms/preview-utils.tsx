@@ -1,6 +1,6 @@
 "use client"
 
-export const wrapperClass = "w-full max-w-md"
+export const wrapperClass = "w-full max-w-sm"
 
 export function SubmittedValues({ value }: { value: unknown }) {
   if (!value) {

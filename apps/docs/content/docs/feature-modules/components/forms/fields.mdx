@@ -25,6 +25,15 @@ the field, leave it empty, then try to submit to see the error UX.
 
 ```tsx
 const form = useZenoForm({ defaultValues: { /* ... */ } })
+
+// Wrap with <FormProvider form={form}> and put fields inside <Form>:
+<FormProvider form={form}>
+  <Form id="my-form">
+    <FieldGroup>
+      <form.InputField name="…" />
+    </FieldGroup>
+  </Form>
+</FormProvider>
 ```
 
 ## Input Field

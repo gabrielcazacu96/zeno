@@ -2,9 +2,7 @@
 "use client"
 
 import { type AnyFormApi, createFormHook } from "@tanstack/react-form"
-import { FieldGroup } from "@zeno/ui/field"
-import { cn } from "@zeno/ui/lib/utils"
-import type { ComponentProps, FormEvent } from "react"
+import type { ComponentProps, FormEvent, ReactNode } from "react"
 
 import { CheckboxField } from "./fields/checkbox-field"
 import { EmailField } from "./fields/email-field"
@@ -12,11 +10,17 @@ import { InputField } from "./fields/input-field"
 import { NumberField } from "./fields/number-field"
 import { PasswordField } from "./fields/password-field"
 import { RadioGroupField } from "./fields/radio-group-field"
+import { ResetButton } from "./fields/reset-button"
 import { SelectField } from "./fields/select-field"
 import { SubmitButton } from "./fields/submit-button"
 import { SwitchField } from "./fields/switch-field"
 import { TextAreaField } from "./fields/textarea-field"
-import { FormProvider, fieldContext, formContext } from "./lib/contexts"
+import {
+  fieldContext,
+  formContext,
+  FormProvider as RawFormProvider,
+  useFormContext,
+} from "./lib/contexts"
 
 export * from "@tanstack/react-form"
 export { RadioGroupFieldItem } from "./fields/radio-group-field"
@@ -38,6 +42,7 @@ const { useAppForm, withFieldGroup, withForm } = createFormHook({
   },
   fieldContext,
   formComponents: {
+    ResetButton,
     SubmitButton,
   },
   formContext,
@@ -45,27 +50,37 @@ const { useAppForm, withFieldGroup, withForm } = createFormHook({
 
 export { useAppForm, withFieldGroup, withForm }
 
-type FormProps = Omit<ComponentProps<"form">, "onSubmit"> & {
+type FormProviderProps = {
+  children: ReactNode
   form: { handleSubmit: () => unknown }
 }
 
-function Form({ children, className, form, ...props }: FormProps) {
+function FormProvider({ children, form }: FormProviderProps) {
   return (
-    <FormProvider value={form as AnyFormApi}>
-      <form
-        className={cn("flex flex-col gap-6", className)}
-        noValidate
-        onSubmit={(event: FormEvent<HTMLFormElement>) => {
-          event.preventDefault()
-          event.stopPropagation()
-          Promise.resolve(form.handleSubmit()).catch(() => undefined)
-        }}
-        {...props}
-      >
-        <FieldGroup>{children}</FieldGroup>
-      </form>
-    </FormProvider>
+    <RawFormProvider value={form as unknown as AnyFormApi}>
+      {children}
+    </RawFormProvider>
   )
 }
 
-export { Form }
+type FormProps = Omit<ComponentProps<"form">, "onSubmit">
+
+function Form({ children, className, ...props }: FormProps) {
+  const form = useFormContext()
+  return (
+    <form
+      className={className}
+      noValidate
+      onSubmit={(event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        event.stopPropagation()
+        Promise.resolve(form.handleSubmit()).catch(() => undefined)
+      }}
+      {...props}
+    >
+      {children}
+    </form>
+  )
+}
+
+export { Form, FormProvider }

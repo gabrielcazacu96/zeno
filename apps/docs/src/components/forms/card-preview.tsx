@@ -15,39 +15,39 @@ import { z } from "zod"
 
 import { SubmittedValues, wrapperClass } from "./preview-utils"
 
-const loginSchema = z.object({
-  email: z.email("Enter a valid email"),
-  password: z.string().min(8, "At least 8 characters"),
+const profileSchema = z.object({
+  name: z.string().min(2, "At least 2 characters"),
 })
 
-export function LoginExample() {
+export function FormInCardExample() {
   const [submitted, setSubmitted] = useState<unknown>(null)
   const form = useZenoForm({
-    defaultValues: { email: "", password: "" },
+    defaultValues: { name: "" },
     onSubmit: ({ value }) => setSubmitted(value),
-    validators: { onChange: loginSchema },
+    validators: { onChange: profileSchema },
   })
   return (
     <FormProvider form={form}>
       <Card className={wrapperClass}>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
-          <CardDescription>
-            Enter your email and password to sign in.
-          </CardDescription>
+          <CardTitle>Display name</CardTitle>
+          <CardDescription>How we'll address you in the app.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form id="login-form">
+          <Form id="card-form">
             <FieldGroup>
-              <form.EmailField placeholder="you@zeno.dev" />
-              <form.PasswordField />
+              <form.InputField
+                label="Name"
+                name="name"
+                placeholder="Ada Lovelace"
+              />
             </FieldGroup>
           </Form>
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
             <form.ResetButton />
-            <form.SubmitButton form="login-form">Sign in</form.SubmitButton>
+            <form.SubmitButton form="card-form">Save</form.SubmitButton>
           </Field>
         </CardFooter>
       </Card>
