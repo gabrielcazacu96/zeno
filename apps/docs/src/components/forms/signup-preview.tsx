@@ -34,6 +34,7 @@ export function SignupExample() {
       setSubmitted({ email: value.email, password: "•••" }),
     validators: { onChange: signupSchema },
   })
+  const { EmailField, PasswordField, ResetButton, SubmitButton } = form
   return (
     <FormProvider form={form}>
       <Card className={wrapperClass}>
@@ -46,9 +47,9 @@ export function SignupExample() {
         <CardContent>
           <Form id="signup-form">
             <FieldGroup>
-              <form.EmailField placeholder="you@zeno.dev" />
-              <form.PasswordField autoComplete="new-password" />
-              <form.PasswordField
+              <EmailField placeholder="you@zeno.dev" />
+              <PasswordField autoComplete="new-password" />
+              <PasswordField
                 autoComplete="new-password"
                 label="Confirm password"
                 name="confirmPassword"
@@ -58,10 +59,8 @@ export function SignupExample() {
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
-            <form.ResetButton />
-            <form.SubmitButton form="signup-form">
-              Create account
-            </form.SubmitButton>
+            <ResetButton />
+            <SubmitButton form="signup-form">Create account</SubmitButton>
           </Field>
         </CardFooter>
       </Card>

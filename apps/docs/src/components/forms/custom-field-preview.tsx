@@ -58,6 +58,7 @@ export function CustomFieldPreview() {
     },
     validators: { onChange: audioSchema },
   })
+  const { AppField, ResetButton, SubmitButton } = form
 
   return (
     <FormProvider form={form}>
@@ -71,16 +72,16 @@ export function CustomFieldPreview() {
         <CardContent>
           <Form id="audio-form">
             <FieldGroup>
-              <form.AppField name="volume">
+              <AppField name="volume">
                 {() => <VolumeField label="Volume" />}
-              </form.AppField>
+              </AppField>
             </FieldGroup>
           </Form>
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
-            <form.ResetButton />
-            <form.SubmitButton form="audio-form">Apply</form.SubmitButton>
+            <ResetButton />
+            <SubmitButton form="audio-form">Apply</SubmitButton>
           </Field>
         </CardFooter>
       </Card>

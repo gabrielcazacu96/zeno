@@ -46,6 +46,7 @@ export function DialogExample() {
     },
     validators: { onChange: projectSchema },
   })
+  const { InputField, ResetButton, SubmitButton } = form
 
   return (
     <Card className={wrapperClass}>
@@ -68,12 +69,12 @@ export function DialogExample() {
             <FormProvider form={form}>
               <Form id="project-form">
                 <FieldGroup>
-                  <form.InputField
+                  <InputField
                     label="Name"
                     name="name"
                     placeholder="Resolve admin"
                   />
-                  <form.InputField
+                  <InputField
                     description="Used in URLs."
                     label="Slug"
                     name="slug"
@@ -89,10 +90,8 @@ export function DialogExample() {
                 >
                   Cancel
                 </Button>
-                <form.ResetButton />
-                <form.SubmitButton form="project-form">
-                  Create
-                </form.SubmitButton>
+                <ResetButton />
+                <SubmitButton form="project-form">Create</SubmitButton>
               </DialogFooter>
             </FormProvider>
           </DialogContent>

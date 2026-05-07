@@ -14,16 +14,17 @@ and [Zod](https://zod.dev) that ships pre-wired field components built on
 It gives you:
 
 - `useZenoForm` — typed form hook returning a form with field components
-  (`form.EmailField`, `form.InputField`, …) attached. `name` is autocompleted
-  and type-checked against `defaultValues`; field state is typed without casts.
+  (`EmailField`, `InputField`, …) attached. Destructure what you need; `name`
+  is autocompleted and type-checked against `defaultValues`; field state is
+  typed without casts.
 - `<FormProvider form={form}>` and `<Form>` — `FormProvider` publishes the
-  form via React context (so `<form.SubmitButton>`, `<form.ResetButton>`, etc.
-  work anywhere inside it); `<Form>` renders the `<form>` HTML element and
-  handles `onSubmit`. Compose layout with shadcn-style `<Card>`, `<FieldGroup>`,
-  and `<CardFooter>`.
-- Pre-bound `form.SubmitButton` (disables itself while submitting or invalid)
-  and `form.ResetButton` (calls `form.reset()` on click).
-- An escape hatch (`form.AppField` + `useFieldContext`) for building your own
+  form via React context (so `SubmitButton`, `ResetButton`, etc. resolve from
+  anywhere inside it); `<Form>` renders the `<form>` HTML element and handles
+  `onSubmit`. Compose layout with shadcn-style `<Card>`, `<FieldGroup>`, and
+  `<CardFooter>`.
+- Pre-bound `SubmitButton` (disables itself while submitting or invalid) and
+  `ResetButton` (calls `form.reset()` on click).
+- An escape hatch (`AppField` + `useFieldContext`) for building your own
   typed fields.
 
 ## Imports
@@ -66,6 +67,7 @@ export function Newsletter() {
     },
     validators: { onChange: newsletterSchema },
   })
+  const { EmailField, ResetButton, SubmitButton } = form
 
   return (
     <FormProvider form={form}>
@@ -77,14 +79,14 @@ export function Newsletter() {
         <CardContent>
           <Form id="newsletter-form">
             <FieldGroup>
-              <form.EmailField placeholder="you@zeno.dev" />
+              <EmailField placeholder="you@zeno.dev" />
             </FieldGroup>
           </Form>
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
-            <form.ResetButton />
-            <form.SubmitButton form="newsletter-form">Subscribe</form.SubmitButton>
+            <ResetButton />
+            <SubmitButton form="newsletter-form">Subscribe</SubmitButton>
           </Field>
         </CardFooter>
       </Card>
@@ -99,10 +101,11 @@ What each piece does:
 
 - **`<FormProvider form={form}>`** wraps your card (or whatever container) and
   publishes the form via React context. Anything inside it — including buttons
-  in `<CardFooter>` outside the `<form>` HTML — can resolve `form.X`.
+  in `<CardFooter>` outside the `<form>` HTML — can resolve the destructured
+  components.
 - **`<Form id="…">`** sits inside `<CardContent>` and renders the `<form>` HTML
-  element. Pass an `id` so `<form.SubmitButton form="…">` can associate with it
-  for native submission (Enter-to-submit, accessibility).
+  element. Pass an `id` so `<SubmitButton form="…">` can associate with it for
+  native submission (Enter-to-submit, accessibility).
 - **`<FieldGroup>`** inside `<CardContent>` stacks fields with consistent
   vertical spacing.
 - **`<Field orientation="horizontal">`** in `<CardFooter>` pairs Reset and
@@ -116,37 +119,50 @@ field components onto the returned form, so:
 - `name="email"` is autocompleted and type-checked against the form's data —
   typos and schema renames surface at compile time.
 - Field state is typed to the field's actual type — no `as string` casts.
-- Call sites stay terse: `<form.EmailField name="email" />`, no separate `f`
-  binding or render-prop ladder.
+- Call sites stay terse: `<EmailField name="email" />` after a one-line
+  destructure, no `form.` prefix on every JSX node.
 
 If you want the underlying primitives, `useAppForm` (typed form) and
 `useAppFields(form)` (typed field wrappers) are also exported. The
-`form.AppField` render-prop is the escape hatch for custom fields — see
+`AppField` render-prop is the escape hatch for custom fields — see
 [Custom fields](/docs/feature-modules/components/forms/fields#custom-fields).
 
-## Style: `form.X` vs. destructuring
+## Style: destructure the components
 
-Both patterns work. The components are stable refs, so destructuring is
-safe — it won't cause remounting:
+The components on `form` are stable refs (memoized inside `useZenoForm`), so
+destructuring them at the top of your component is safe and won't cause
+remounting:
 
 ```tsx
-// Dot notation (recommended)
-<form.EmailField />
-<form.PasswordField />
+// Recommended
+const form = useZenoForm({ /* … */ })
+const { EmailField, PasswordField, ResetButton, SubmitButton } = form
 
-// Destructured
-const { EmailField, PasswordField } = form
-<EmailField />
-<PasswordField />
+return (
+  <FormProvider form={form}>
+    <Form id="…">
+      <FieldGroup>
+        <EmailField />
+        <PasswordField />
+      </FieldGroup>
+    </Form>
+    <SubmitButton form="…">Sign in</SubmitButton>
+  </FormProvider>
+)
 ```
 
-Default to **`form.X`** in new code. It mirrors TanStack's existing
-`form.AppField` / `form.Subscribe` / `form.Field` namespacing, makes the
-form-binding visible at the call site (vs. looking like a regular imported
-component), and avoids maintaining a destructure list as the form evolves.
+Why destructure (vs. leaving `form.EmailField` everywhere):
 
-Reach for destructuring only when a single form has many fields and the
-repeated `form.` prefix is genuinely getting in the way.
+- **Cleaner JSX** — the `form.` prefix repeats on every node and adds visual
+  noise, especially in larger forms.
+- **One-line decision** — the destructure list at the top tells a reader
+  exactly which form-bound components this component uses, like a `import`
+  block.
+- **Identical safety** — `form.X` reads the same closure-bound function every
+  render; destructuring just gives that function a local name.
+
+This differs from TanStack Form's docs (which favor `form.X`); the convention
+here is the destructured form.
 
 ## Validation with Zod
 

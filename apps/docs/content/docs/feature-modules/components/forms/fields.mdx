@@ -19,18 +19,20 @@ import {
 } from "@/components/forms/field-previews"
 
 Every shipped field handles label, description, value, blur, `aria-invalid`,
-and field error rendering for you. Each is reached through the `form` returned
-by `useZenoForm` — `name` is autocompleted against your `defaultValues`. Touch
-the field, leave it empty, then try to submit to see the error UX.
+and field error rendering for you. Each is reached by destructuring the
+`form` returned by `useZenoForm` — `name` is autocompleted against your
+`defaultValues`. Touch the field, leave it empty, then try to submit to see
+the error UX.
 
 ```tsx
 const form = useZenoForm({ defaultValues: { /* ... */ } })
+const { InputField /* …, PasswordField, SubmitButton, … */ } = form
 
 // Wrap with <FormProvider form={form}> and put fields inside <Form>:
 <FormProvider form={form}>
   <Form id="my-form">
     <FieldGroup>
-      <form.InputField name="…" />
+      <InputField name="…" />
     </FieldGroup>
   </Form>
 </FormProvider>
@@ -42,7 +44,7 @@ const form = useZenoForm({ defaultValues: { /* ... */ } })
   <InputFieldPreview />
 
 ```tsx
-<form.InputField
+<InputField
   description="Shown next to your avatar."
   label="Display name"
   name="name"
@@ -62,7 +64,7 @@ A preset over `InputField` with `type="email"`, `inputMode="email"`, and
   <EmailFieldPreview />
 
 ```tsx
-<form.EmailField placeholder="you@zeno.dev" />
+<EmailField placeholder="you@zeno.dev" />
 ```
 
 </Preview>
@@ -78,7 +80,7 @@ when your form has that key — pass `name` explicitly otherwise.
   <PasswordFieldPreview />
 
 ```tsx
-<form.PasswordField autoComplete="new-password" />
+<PasswordField autoComplete="new-password" />
 ```
 
 </Preview>
@@ -89,7 +91,7 @@ when your form has that key — pass `name` explicitly otherwise.
   <TextAreaFieldPreview />
 
 ```tsx
-<form.TextAreaField
+<TextAreaField
   description="160 characters max."
   label="Bio"
   name="bio"
@@ -108,7 +110,7 @@ a `number` (or `undefined` when empty).
   <NumberFieldPreview />
 
 ```tsx
-<form.NumberField label="Age" min={13} name="age" />
+<NumberField label="Age" min={13} name="age" />
 ```
 
 </Preview>
@@ -123,11 +125,11 @@ Wraps `@zeno/ui/select`. Pass `<SelectItem>` children for the options.
 ```tsx
 import { SelectItem } from "@zeno/ui/select"
 
-<form.SelectField label="Role" name="role" placeholder="Pick a role">
+<SelectField label="Role" name="role" placeholder="Pick a role">
   <SelectItem value="engineer">Engineer</SelectItem>
   <SelectItem value="designer">Designer</SelectItem>
   <SelectItem value="manager">Manager</SelectItem>
-</form.SelectField>
+</SelectField>
 ```
 
 </Preview>
@@ -138,7 +140,7 @@ import { SelectItem } from "@zeno/ui/select"
   <CheckboxFieldPreview />
 
 ```tsx
-<form.CheckboxField
+<CheckboxField
   description="You can revoke this at any time."
   label="I accept the terms of service"
   name="terms"
@@ -153,7 +155,7 @@ import { SelectItem } from "@zeno/ui/select"
   <SwitchFieldPreview />
 
 ```tsx
-<form.SwitchField
+<SwitchField
   description="Get notified when something needs your attention."
   label="Push notifications"
   name="pushNotifications"
@@ -174,11 +176,11 @@ have to wire IDs by hand.
 ```tsx
 import { RadioGroupFieldItem } from "@zeno/forms/fields"
 
-<form.RadioGroupField label="Plan" name="plan">
+<RadioGroupField label="Plan" name="plan">
   <RadioGroupFieldItem value="free">Free</RadioGroupFieldItem>
   <RadioGroupFieldItem value="pro">Pro</RadioGroupFieldItem>
   <RadioGroupFieldItem value="team">Team</RadioGroupFieldItem>
-</form.RadioGroupField>
+</RadioGroupField>
 ```
 
 </Preview>
@@ -186,8 +188,8 @@ import { RadioGroupFieldItem } from "@zeno/forms/fields"
 ## Custom fields
 
 Need something that's not in the gallery? Build it on top of
-`useFieldContext<T>()` and drop it inside `<form.AppField>` — same typed
-field state and accessibility plumbing the built-ins use:
+`useFieldContext<T>()` and drop it inside `<AppField>` (also destructured from
+`form`) — same typed field state and accessibility plumbing the built-ins use:
 
 <Preview>
   <CustomFieldPreview />
@@ -223,12 +225,14 @@ function VolumeField({ label }: { label: string }) {
 }
 
 // In a form:
-<form.AppField name="volume">
+const { AppField } = form
+
+<AppField name="volume">
   {() => <VolumeField label="Volume" />}
-</form.AppField>
+</AppField>
 ```
 
 </Preview>
 
-`<form.AppField>` is also the escape hatch when you want direct access to
-the field instance for any of the shipped fields.
+`AppField` is also the escape hatch when you want direct access to the field
+instance for any of the shipped fields.

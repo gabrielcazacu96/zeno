@@ -15,11 +15,12 @@ export function InputFieldPreview() {
       onChange: z.object({ name: z.string().min(2, "At least 2 characters") }),
     },
   })
+  const { InputField } = form
   return (
     <FormProvider form={form}>
       <Form className={wrapperClass}>
         <FieldGroup>
-          <form.InputField
+          <InputField
             description="Shown next to your avatar."
             label="Display name"
             name="name"
@@ -38,11 +39,12 @@ export function EmailFieldPreview() {
       onChange: z.object({ email: z.email("Enter a valid email") }),
     },
   })
+  const { EmailField } = form
   return (
     <FormProvider form={form}>
       <Form className={wrapperClass}>
         <FieldGroup>
-          <form.EmailField placeholder="you@zeno.dev" />
+          <EmailField placeholder="you@zeno.dev" />
         </FieldGroup>
       </Form>
     </FormProvider>
@@ -58,11 +60,12 @@ export function PasswordFieldPreview() {
       }),
     },
   })
+  const { PasswordField } = form
   return (
     <FormProvider form={form}>
       <Form className={wrapperClass}>
         <FieldGroup>
-          <form.PasswordField autoComplete="new-password" />
+          <PasswordField autoComplete="new-password" />
         </FieldGroup>
       </Form>
     </FormProvider>
@@ -78,11 +81,12 @@ export function TextAreaFieldPreview() {
       }),
     },
   })
+  const { TextAreaField } = form
   return (
     <FormProvider form={form}>
       <Form className={wrapperClass}>
         <FieldGroup>
-          <form.TextAreaField
+          <TextAreaField
             description="160 characters max."
             label="Bio"
             name="bio"
@@ -106,11 +110,12 @@ export function NumberFieldPreview() {
       }),
     },
   })
+  const { NumberField } = form
   return (
     <FormProvider form={form}>
       <Form className={wrapperClass}>
         <FieldGroup>
-          <form.NumberField label="Age" min={13} name="age" />
+          <NumberField label="Age" min={13} name="age" />
         </FieldGroup>
       </Form>
     </FormProvider>
@@ -128,15 +133,16 @@ export function SelectFieldPreview() {
       }),
     },
   })
+  const { SelectField } = form
   return (
     <FormProvider form={form}>
       <Form className={wrapperClass}>
         <FieldGroup>
-          <form.SelectField label="Role" name="role" placeholder="Pick a role">
+          <SelectField label="Role" name="role" placeholder="Pick a role">
             <SelectItem value="engineer">Engineer</SelectItem>
             <SelectItem value="designer">Designer</SelectItem>
             <SelectItem value="manager">Manager</SelectItem>
-          </form.SelectField>
+          </SelectField>
         </FieldGroup>
       </Form>
     </FormProvider>
@@ -152,11 +158,12 @@ export function CheckboxFieldPreview() {
       }),
     },
   })
+  const { CheckboxField } = form
   return (
     <FormProvider form={form}>
       <Form className={wrapperClass}>
         <FieldGroup>
-          <form.CheckboxField
+          <CheckboxField
             description="You can revoke this at any time."
             label="I accept the terms of service"
             name="terms"
@@ -171,11 +178,12 @@ export function SwitchFieldPreview() {
   const form = useZenoForm({
     defaultValues: { pushNotifications: true },
   })
+  const { SwitchField } = form
   return (
     <FormProvider form={form}>
       <Form className={wrapperClass}>
         <FieldGroup>
-          <form.SwitchField
+          <SwitchField
             description="Get notified when something needs your attention."
             label="Push notifications"
             name="pushNotifications"
@@ -190,15 +198,16 @@ export function RadioGroupFieldPreview() {
   const form = useZenoForm({
     defaultValues: { plan: "free" },
   })
+  const { RadioGroupField } = form
   return (
     <FormProvider form={form}>
       <Form className={wrapperClass}>
         <FieldGroup>
-          <form.RadioGroupField label="Plan" name="plan">
+          <RadioGroupField label="Plan" name="plan">
             <RadioGroupFieldItem value="free">Free</RadioGroupFieldItem>
             <RadioGroupFieldItem value="pro">Pro</RadioGroupFieldItem>
             <RadioGroupFieldItem value="team">Team</RadioGroupFieldItem>
-          </form.RadioGroupField>
+          </RadioGroupField>
         </FieldGroup>
       </Form>
     </FormProvider>

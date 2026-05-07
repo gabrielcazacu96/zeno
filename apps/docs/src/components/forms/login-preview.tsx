@@ -27,6 +27,7 @@ export function LoginExample() {
     onSubmit: ({ value }) => setSubmitted(value),
     validators: { onChange: loginSchema },
   })
+  const { EmailField, PasswordField, ResetButton, SubmitButton } = form
   return (
     <FormProvider form={form}>
       <Card className={wrapperClass}>
@@ -39,15 +40,15 @@ export function LoginExample() {
         <CardContent>
           <Form id="login-form">
             <FieldGroup>
-              <form.EmailField placeholder="you@zeno.dev" />
-              <form.PasswordField />
+              <EmailField placeholder="you@zeno.dev" />
+              <PasswordField />
             </FieldGroup>
           </Form>
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
-            <form.ResetButton />
-            <form.SubmitButton form="login-form">Sign in</form.SubmitButton>
+            <ResetButton />
+            <SubmitButton form="login-form">Sign in</SubmitButton>
           </Field>
         </CardFooter>
       </Card>

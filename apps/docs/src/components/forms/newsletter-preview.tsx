@@ -28,6 +28,7 @@ export function NewsletterPreview() {
     },
     validators: { onChange: newsletterSchema },
   })
+  const { EmailField, ResetButton, SubmitButton } = form
 
   return (
     <FormProvider form={form}>
@@ -41,16 +42,14 @@ export function NewsletterPreview() {
         <CardContent>
           <Form id="newsletter-form">
             <FieldGroup>
-              <form.EmailField placeholder="you@zeno.dev" />
+              <EmailField placeholder="you@zeno.dev" />
             </FieldGroup>
           </Form>
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
-            <form.ResetButton />
-            <form.SubmitButton form="newsletter-form">
-              Subscribe
-            </form.SubmitButton>
+            <ResetButton />
+            <SubmitButton form="newsletter-form">Subscribe</SubmitButton>
           </Field>
         </CardFooter>
       </Card>

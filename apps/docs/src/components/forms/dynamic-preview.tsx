@@ -21,6 +21,7 @@ export function DynamicExample() {
     defaultValues: { country: "US", region: "", state: "" },
     onSubmit: ({ value }) => setSubmitted(value),
   })
+  const { InputField, ResetButton, SelectField, SubmitButton, Subscribe } = form
   return (
     <FormProvider form={form}>
       <Card className={wrapperClass}>
@@ -33,14 +34,14 @@ export function DynamicExample() {
         <CardContent>
           <Form id="shipping-form">
             <FieldGroup>
-              <form.SelectField label="Country" name="country">
+              <SelectField label="Country" name="country">
                 <SelectItem value="US">United States</SelectItem>
                 <SelectItem value="Other">Other</SelectItem>
-              </form.SelectField>
-              <form.Subscribe selector={(state) => state.values.country}>
+              </SelectField>
+              <Subscribe selector={(state) => state.values.country}>
                 {(country) =>
                   country === "US" ? (
-                    <form.SelectField
+                    <SelectField
                       label="State"
                       name="state"
                       placeholder="Pick a state"
@@ -48,9 +49,9 @@ export function DynamicExample() {
                       <SelectItem value="CA">California</SelectItem>
                       <SelectItem value="NY">New York</SelectItem>
                       <SelectItem value="TX">Texas</SelectItem>
-                    </form.SelectField>
+                    </SelectField>
                   ) : (
-                    <form.InputField
+                    <InputField
                       description="State, province, or region."
                       label="Region"
                       name="region"
@@ -58,16 +59,14 @@ export function DynamicExample() {
                     />
                   )
                 }
-              </form.Subscribe>
+              </Subscribe>
             </FieldGroup>
           </Form>
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
-            <form.ResetButton />
-            <form.SubmitButton form="shipping-form">
-              Save address
-            </form.SubmitButton>
+            <ResetButton />
+            <SubmitButton form="shipping-form">Save address</SubmitButton>
           </Field>
         </CardFooter>
       </Card>

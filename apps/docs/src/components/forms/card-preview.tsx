@@ -26,6 +26,7 @@ export function FormInCardExample() {
     onSubmit: ({ value }) => setSubmitted(value),
     validators: { onChange: profileSchema },
   })
+  const { InputField, ResetButton, SubmitButton } = form
   return (
     <FormProvider form={form}>
       <Card className={wrapperClass}>
@@ -36,18 +37,14 @@ export function FormInCardExample() {
         <CardContent>
           <Form id="card-form">
             <FieldGroup>
-              <form.InputField
-                label="Name"
-                name="name"
-                placeholder="Ada Lovelace"
-              />
+              <InputField label="Name" name="name" placeholder="Ada Lovelace" />
             </FieldGroup>
           </Form>
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
-            <form.ResetButton />
-            <form.SubmitButton form="card-form">Save</form.SubmitButton>
+            <ResetButton />
+            <SubmitButton form="card-form">Save</SubmitButton>
           </Field>
         </CardFooter>
       </Card>

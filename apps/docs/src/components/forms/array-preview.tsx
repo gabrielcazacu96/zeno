@@ -34,6 +34,13 @@ export function ArrayExample() {
     onSubmit: ({ value }) => setSubmitted(value),
     validators: { onChange: teamSchema },
   })
+  const {
+    EmailField,
+    Field: ArrayField,
+    InputField,
+    ResetButton,
+    SubmitButton,
+  } = form
   return (
     <FormProvider form={form}>
       <Card className="w-full max-w-xl">
@@ -46,7 +53,7 @@ export function ArrayExample() {
         <CardContent>
           <Form id="team-form">
             <FieldGroup>
-              <form.Field mode="array" name="members">
+              <ArrayField mode="array" name="members">
                 {(arrayField) => (
                   <FieldSet>
                     <FieldLegend>Members</FieldLegend>
@@ -54,14 +61,14 @@ export function ArrayExample() {
                       // biome-ignore lint/suspicious/noArrayIndexKey: tanstack form rows are keyed by index
                       <div className="flex items-end gap-2" key={index}>
                         <div className="flex-1">
-                          <form.InputField
+                          <InputField
                             label={index === 0 ? "Name" : undefined}
                             name={`members[${index}].name`}
                             placeholder="Ada Lovelace"
                           />
                         </div>
                         <div className="flex-1">
-                          <form.EmailField
+                          <EmailField
                             label={index === 0 ? "Email" : undefined}
                             name={`members[${index}].email`}
                           />
@@ -88,14 +95,14 @@ export function ArrayExample() {
                     </Button>
                   </FieldSet>
                 )}
-              </form.Field>
+              </ArrayField>
             </FieldGroup>
           </Form>
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
-            <form.ResetButton />
-            <form.SubmitButton form="team-form">Send invites</form.SubmitButton>
+            <ResetButton />
+            <SubmitButton form="team-form">Send invites</SubmitButton>
           </Field>
         </CardFooter>
       </Card>

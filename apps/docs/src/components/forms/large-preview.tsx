@@ -49,6 +49,17 @@ export function LargeExample() {
     onSubmit: ({ value }) => setSubmitted(value),
     validators: { onChange: profileSchema },
   })
+  const {
+    CheckboxField,
+    InputField,
+    NumberField,
+    RadioGroupField,
+    ResetButton,
+    SelectField,
+    SubmitButton,
+    SwitchField,
+    TextAreaField,
+  } = form
   return (
     <FormProvider form={form}>
       <Card className={wrapperClass}>
@@ -61,39 +72,35 @@ export function LargeExample() {
         <CardContent>
           <Form id="profile-form">
             <FieldGroup>
-              <form.InputField
+              <InputField
                 description="How we'll address you in the app."
                 label="Display name"
                 name="name"
                 placeholder="Ada Lovelace"
               />
-              <form.NumberField label="Age" min={13} name="age" />
-              <form.TextAreaField
+              <NumberField label="Age" min={13} name="age" />
+              <TextAreaField
                 description="A short blurb about yourself."
                 label="Bio"
                 name="bio"
                 placeholder="I build things on the web."
               />
-              <form.SelectField
-                label="Role"
-                name="role"
-                placeholder="Pick a role"
-              >
+              <SelectField label="Role" name="role" placeholder="Pick a role">
                 <SelectItem value="engineer">Engineer</SelectItem>
                 <SelectItem value="designer">Designer</SelectItem>
                 <SelectItem value="manager">Manager</SelectItem>
-              </form.SelectField>
-              <form.RadioGroupField label="Plan" name="plan">
+              </SelectField>
+              <RadioGroupField label="Plan" name="plan">
                 <RadioGroupFieldItem value="free">Free</RadioGroupFieldItem>
                 <RadioGroupFieldItem value="pro">Pro</RadioGroupFieldItem>
                 <RadioGroupFieldItem value="team">Team</RadioGroupFieldItem>
-              </form.RadioGroupField>
-              <form.SwitchField
+              </RadioGroupField>
+              <SwitchField
                 description="Get notified when something needs your attention."
                 label="Push notifications"
                 name="pushNotifications"
               />
-              <form.CheckboxField
+              <CheckboxField
                 description="Occasional product news. No spam."
                 label="Email me product updates"
                 name="marketing"
@@ -103,10 +110,8 @@ export function LargeExample() {
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
-            <form.ResetButton />
-            <form.SubmitButton form="profile-form">
-              Save profile
-            </form.SubmitButton>
+            <ResetButton />
+            <SubmitButton form="profile-form">Save profile</SubmitButton>
           </Field>
         </CardFooter>
       </Card>
