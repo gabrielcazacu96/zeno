@@ -199,3 +199,110 @@ export function RadioGroupFieldPreview() {
     </FormProvider>
   )
 }
+
+export function SliderFieldPreview() {
+  const form = useZenoForm({
+    defaultValues: { volume: 50 },
+  })
+  const { SliderField } = form
+  return (
+    <FormProvider form={form}>
+      <Form className={wrapperClass}>
+        <FieldGroup>
+          <SliderField
+            description="Used for notification chimes."
+            formatValue={(v) => `${Array.isArray(v) ? v[0] : v}%`}
+            label="Volume"
+            max={100}
+            min={0}
+            name="volume"
+            step={1}
+          />
+        </FieldGroup>
+      </Form>
+    </FormProvider>
+  )
+}
+
+export function OtpFieldPreview() {
+  const form = useZenoForm({
+    defaultValues: { code: "" },
+    schema: z.object({
+      code: z.string().length(6, "Enter the 6-digit code"),
+    }),
+  })
+  const { OtpField } = form
+  return (
+    <FormProvider form={form}>
+      <Form className={wrapperClass}>
+        <FieldGroup>
+          <OtpField
+            description="We sent a code to your email."
+            label="Verification code"
+            name="code"
+            pattern="^[0-9]+$"
+          />
+        </FieldGroup>
+      </Form>
+    </FormProvider>
+  )
+}
+
+export function DatePickerFieldPreview() {
+  const form = useZenoForm({
+    defaultValues: { birthday: undefined as Date | undefined },
+    schema: z.object({
+      birthday: z.date({ error: "Pick a date" }),
+    }),
+  })
+  const { DatePickerField } = form
+  return (
+    <FormProvider form={form}>
+      <Form className={wrapperClass}>
+        <FieldGroup>
+          <DatePickerField
+            description="Used for age-restricted features."
+            label="Birthday"
+            name="birthday"
+          />
+        </FieldGroup>
+      </Form>
+    </FormProvider>
+  )
+}
+
+const FRAMEWORKS = [
+  "Next.js",
+  "Remix",
+  "SvelteKit",
+  "Nuxt.js",
+  "Astro",
+  "SolidStart",
+  "Qwik",
+]
+
+export function ComboboxFieldPreview() {
+  const form = useZenoForm({
+    defaultValues: { framework: "" },
+    schema: z.object({
+      framework: z.string().min(1, "Pick a framework"),
+    }),
+  })
+  const { ComboboxField } = form
+  return (
+    <FormProvider form={form}>
+      <Form className={wrapperClass}>
+        <FieldGroup>
+          <ComboboxField
+            description="Filter as you type."
+            emptyMessage="No framework matches."
+            items={FRAMEWORKS}
+            label="Favourite framework"
+            name="framework"
+            placeholder="Search frameworks…"
+          />
+        </FieldGroup>
+      </Form>
+    </FormProvider>
+  )
+}

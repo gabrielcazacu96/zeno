@@ -5,13 +5,17 @@ import { type AnyFormApi, createFormHook } from "@tanstack/react-form"
 import type { ComponentProps, FormEvent, ReactNode } from "react"
 
 import { CheckboxField } from "./fields/checkbox-field"
+import { ComboboxField } from "./fields/combobox-field"
+import { DatePickerField } from "./fields/date-picker-field"
 import { EmailField } from "./fields/email-field"
 import { InputField } from "./fields/input-field"
 import { NumberField } from "./fields/number-field"
+import { OtpField } from "./fields/otp-field"
 import { PasswordField } from "./fields/password-field"
 import { RadioGroupField } from "./fields/radio-group-field"
 import { ResetButton } from "./fields/reset-button"
 import { SelectField } from "./fields/select-field"
+import { SliderField } from "./fields/slider-field"
 import { SubmitButton } from "./fields/submit-button"
 import { SwitchField } from "./fields/switch-field"
 import { TextAreaField } from "./fields/textarea-field"
@@ -34,12 +38,16 @@ export { useZenoForm } from "./use-zeno-form"
 const { useAppForm, withFieldGroup, withForm } = createFormHook({
   fieldComponents: {
     CheckboxField,
+    ComboboxField,
+    DatePickerField,
     EmailField,
     InputField,
     NumberField,
+    OtpField,
     PasswordField,
     RadioGroupField,
     SelectField,
+    SliderField,
     SwitchField,
     TextAreaField,
   },

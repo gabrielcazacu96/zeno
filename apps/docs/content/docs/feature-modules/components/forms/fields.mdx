@@ -8,12 +8,16 @@ status: in progress
 import { CustomFieldPreview } from "@/components/forms/custom-field-preview"
 import {
   CheckboxFieldPreview,
+  ComboboxFieldPreview,
+  DatePickerFieldPreview,
   EmailFieldPreview,
   InputFieldPreview,
   NumberFieldPreview,
+  OtpFieldPreview,
   PasswordFieldPreview,
   RadioGroupFieldPreview,
   SelectFieldPreview,
+  SliderFieldPreview,
   SwitchFieldPreview,
   TextAreaFieldPreview,
 } from "@/components/forms/field-previews"
@@ -186,6 +190,97 @@ import { RadioGroupFieldItem } from "@zeno/forms/fields"
   <RadioGroupFieldItem value="pro">Pro</RadioGroupFieldItem>
   <RadioGroupFieldItem value="team">Team</RadioGroupFieldItem>
 </RadioGroupField>
+```
+
+</Preview>
+
+## Slider Field
+
+Wraps `@zeno/ui/slider`. Form value is `number` for a single thumb or
+`number[]` for a range — pick by typing your `defaultValues`. Pass
+`formatValue` to render a live readout next to the label (units, currency,
+range delimiters).
+
+<Preview>
+  <SliderFieldPreview />
+
+```tsx
+<SliderField
+  description="Used for notification chimes."
+  formatValue={(v) => `${Array.isArray(v) ? v[0] : v}%`}
+  label="Volume"
+  max={100}
+  min={0}
+  name="volume"
+  step={1}
+/>
+```
+
+</Preview>
+
+## OTP Field
+
+Wraps `@zeno/ui/input-otp`. Defaults to a single 6-slot group; pass
+`maxLength` to change the digit count and `pattern` (a string regex) to
+restrict accepted characters. Use `children` to insert a separator between
+groups.
+
+<Preview>
+  <OtpFieldPreview />
+
+```tsx
+<OtpField
+  description="We sent a code to your email."
+  label="Verification code"
+  name="code"
+  pattern="^[0-9]+$"
+/>
+```
+
+</Preview>
+
+## Date Picker Field
+
+Composition of `@zeno/ui/popover` and `@zeno/ui/calendar`. Form value is
+`Date | undefined`. The trigger button shows the selected date via
+`toLocaleDateString` by default — pass `formatValue` for a custom format,
+or `calendarProps` to forward props (e.g. `disabled`, `locale`) to the
+underlying `<Calendar>`.
+
+<Preview>
+  <DatePickerFieldPreview />
+
+```tsx
+<DatePickerField
+  description="Used for age-restricted features."
+  label="Birthday"
+  name="birthday"
+/>
+```
+
+</Preview>
+
+## Combobox Field
+
+Wraps `@zeno/ui/combobox`. Single-select over a `string[]` items list with
+built-in filtering as the user types. Pass `renderItem` for custom row
+markup, `emptyMessage` for the no-results state, and `showClear={false}`
+to hide the clear button on required fields.
+
+<Preview>
+  <ComboboxFieldPreview />
+
+```tsx
+const FRAMEWORKS = ["Next.js", "Remix", "SvelteKit", "Nuxt.js", "Astro"]
+
+<ComboboxField
+  description="Filter as you type."
+  emptyMessage="No framework matches."
+  items={FRAMEWORKS}
+  label="Favourite framework"
+  name="framework"
+  placeholder="Search frameworks…"
+/>
 ```
 
 </Preview>
