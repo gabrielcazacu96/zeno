@@ -11,7 +11,9 @@ import { DialogExample } from "@/components/forms/dialog-preview"
 import { DynamicExample } from "@/components/forms/dynamic-preview"
 import { LargeExample } from "@/components/forms/large-preview"
 import { LoginExample } from "@/components/forms/login-preview"
+import { OutsideFormExample } from "@/components/forms/outside-form-preview"
 import { SignupExample } from "@/components/forms/signup-preview"
+import { SubmittingExample } from "@/components/forms/submitting-preview"
 
 A walk-through from layout patterns to per-feature recipes. Each example is
 fully working — fill it in and submit to see the returned values.
@@ -205,14 +207,112 @@ export function Login() {
 
   return (
     <FormProvider form={form}>
-      <Form id="login-form">
+      <Form>
         <FieldGroup>
           <EmailField placeholder="you@zeno.dev" />
           <PasswordField />
         </FieldGroup>
+        <ResetButton />
+        <SubmitButton>Sign in</SubmitButton>
       </Form>
-      <ResetButton />
-      <SubmitButton form="login-form">Sign in</SubmitButton>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+## Async submission
+
+`SubmitButton` is automatically disabled and shows a spinner while the form is
+submitting or while any async field validator is running — no extra code needed.
+For submission, the key requirement is that `onSubmit` returns a `Promise`;
+`isSubmitting` stays `true` until it settles.
+
+For async field validation, set `asyncDebounceMs` and `validators.onChangeAsync`
+on any field. While the check is in flight, `canSubmit` is `false`, so
+`SubmitButton` stays disabled automatically. `ResetButton` is not subscribed to
+form state — wrap it in `form.Subscribe` to disable it during the save round-trip.
+
+<Preview>
+  <SubmittingExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Field, FieldError, FieldGroup, FieldLabel } from "@zeno/ui/field"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@zeno/ui/input-group"
+import { Spinner } from "@zeno/ui/spinner"
+import { z } from "zod"
+
+const schema = z.object({
+  email: z.email("Enter a valid email"),
+  name: z.string().min(2, "At least 2 characters"),
+})
+
+export function AccountSettings() {
+  const form = useZenoForm({
+    defaultValues: { email: "", name: "" },
+    onSubmit: async ({ value }) => {
+      await saveAccount(value)
+    },
+    schema,
+  })
+  const { Field: FormField, InputField, ResetButton, Subscribe, SubmitButton } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form>
+        <FieldGroup>
+          <InputField label="Name" name="name" placeholder="Ada Lovelace" />
+          <FormField
+            asyncDebounceMs={500}
+            name="email"
+            validators={{
+              onChangeAsync: async ({ value }) => {
+                const exists = await checkEmailExists(value)
+                return exists ? "Email already in use" : undefined
+              },
+            }}
+          >
+            {(field) => {
+              const hasErrors = field.state.meta.errors.length > 0
+              return (
+                <Field>
+                  <FieldLabel htmlFor="email">Email</FieldLabel>
+                  <InputGroup>
+                    <InputGroupInput
+                      aria-invalid={hasErrors || undefined}
+                      id="email"
+                      name="email"
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="you@zeno.dev"
+                      type="email"
+                      value={field.state.value}
+                    />
+                    {field.state.meta.isValidating && (
+                      <InputGroupAddon align="inline-end">
+                        <Spinner />
+                      </InputGroupAddon>
+                    )}
+                  </InputGroup>
+                  {hasErrors && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              )
+            }}
+          </FormField>
+        </FieldGroup>
+        <Subscribe selector={(state) => state.isSubmitting}>
+          {(isSubmitting) => <ResetButton disabled={isSubmitting} />}
+        </Subscribe>
+        <SubmitButton>Save changes</SubmitButton>
+      </Form>
     </FormProvider>
   )
 }
@@ -257,7 +357,7 @@ export function Signup() {
 
   return (
     <FormProvider form={form}>
-      <Form id="signup-form">
+      <Form>
         <FieldGroup>
           <EmailField placeholder="you@zeno.dev" />
           <PasswordField autoComplete="new-password" />
@@ -267,9 +367,9 @@ export function Signup() {
             name="confirmPassword"
           />
         </FieldGroup>
+        <ResetButton />
+        <SubmitButton>Create account</SubmitButton>
       </Form>
-      <ResetButton />
-      <SubmitButton form="signup-form">Create account</SubmitButton>
     </FormProvider>
   )
 }
@@ -323,7 +423,7 @@ export function TeamInvites() {
 
   return (
     <FormProvider form={form}>
-      <Form id="team-form">
+      <Form>
         <FieldGroup>
           <ArrayField mode="array" name="members">
             {(arrayField) => (
@@ -364,9 +464,9 @@ export function TeamInvites() {
             )}
           </ArrayField>
         </FieldGroup>
+        <ResetButton />
+        <SubmitButton>Send invites</SubmitButton>
       </Form>
-      <ResetButton />
-      <SubmitButton form="team-form">Send invites</SubmitButton>
     </FormProvider>
   )
 }
@@ -405,7 +505,7 @@ export function Shipping() {
 
   return (
     <FormProvider form={form}>
-      <Form id="shipping-form">
+      <Form>
         <FieldGroup>
           <SelectField label="Country" name="country">
             <SelectItem value="US">United States</SelectItem>
@@ -425,9 +525,9 @@ export function Shipping() {
             }
           </Subscribe>
         </FieldGroup>
+        <ResetButton />
+        <SubmitButton>Save address</SubmitButton>
       </Form>
-      <ResetButton />
-      <SubmitButton form="shipping-form">Save address</SubmitButton>
     </FormProvider>
   )
 }
@@ -490,7 +590,7 @@ export function Profile() {
 
   return (
     <FormProvider form={form}>
-      <Form id="profile-form">
+      <Form>
         <FieldGroup>
           <InputField label="Display name" name="name" placeholder="Ada Lovelace" />
           <NumberField label="Age" min={13} name="age" />
@@ -508,9 +608,65 @@ export function Profile() {
           <SwitchField label="Push notifications" name="pushNotifications" />
           <CheckboxField label="Email me product updates" name="marketing" />
         </FieldGroup>
+        <ResetButton />
+        <SubmitButton>Save profile</SubmitButton>
       </Form>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+## Submit from outside the form
+
+When a submit button can't live inside the `<form>` element — a card footer,
+drawer action bar, or sticky page footer — wrap everything in `<FormProvider>`
+and add an `id` to `<Form>`. `FormProvider` extends the form context beyond the
+`<form>` element, and `form="…"` on `SubmitButton` links it for native
+submission (Enter-to-submit, accessibility).
+
+`SubmitButton` needs `form="…"` because it renders as `type="submit"`, which
+the browser only associates with its nearest ancestor `<form>`. It still must
+be inside `<FormProvider>` — the `form="…"` attribute only handles the HTML
+link for native submission; the button reads `canSubmit` and `isSubmitting` via
+`useFormContext()` regardless. `ResetButton` uses `onClick={() => form.reset()}`
+through the same context, so it needs no extra wiring.
+
+<Preview>
+  <OutsideFormExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { z } from "zod"
+
+const schema = z.object({
+  name: z.string().min(2, "At least 2 characters"),
+})
+
+export function Settings() {
+  const form = useZenoForm({
+    defaultValues: { name: "" },
+    onSubmit: async ({ value }) => {
+      await saveSettings(value)
+    },
+    schema,
+  })
+  const { InputField, ResetButton, SubmitButton } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form id="settings-form">
+        <FieldGroup>
+          <InputField label="Name" name="name" placeholder="Ada Lovelace" />
+        </FieldGroup>
+      </Form>
+      {/* Outside the <form> element — FormProvider keeps context alive */}
       <ResetButton />
-      <SubmitButton form="profile-form">Save profile</SubmitButton>
+      <SubmitButton form="settings-form">Save</SubmitButton>
     </FormProvider>
   )
 }

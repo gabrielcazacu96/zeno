@@ -27,17 +27,6 @@ It gives you:
 - An escape hatch (`AppField` + `useFieldContext`) for building your own
   typed fields.
 
-## Imports
-
-```tsx
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
-import {
-  Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,
-} from "@zeno/ui/card"
-import { Field, FieldGroup } from "@zeno/ui/field"
-import { z } from "zod"
-```
-
 ## Quick start
 
 A newsletter form, validated with Zod:
@@ -49,13 +38,9 @@ A newsletter form, validated with Zod:
 "use client"
 
 import { Form, FormProvider, useZenoForm } from "@zeno/forms"
-import {
-  Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,
-} from "@zeno/ui/card"
-import { Field, FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
-const newsletterSchema = z.object({
+const schema = z.object({
   email: z.email("Enter a valid email"),
 })
 
@@ -65,31 +50,16 @@ export function Newsletter() {
     onSubmit: async ({ value }) => {
       await subscribe(value.email)
     },
-    schema: newsletterSchema,
+    schema,
   })
-  const { EmailField, ResetButton, SubmitButton } = form
+  const { EmailField, SubmitButton } = form
 
   return (
     <FormProvider form={form}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Subscribe</CardTitle>
-          <CardDescription>Monthly digest, no spam.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form id="newsletter-form">
-            <FieldGroup>
-              <EmailField placeholder="you@zeno.dev" />
-            </FieldGroup>
-          </Form>
-        </CardContent>
-        <CardFooter>
-          <Field orientation="horizontal">
-            <ResetButton />
-            <SubmitButton form="newsletter-form">Subscribe</SubmitButton>
-          </Field>
-        </CardFooter>
-      </Card>
+      <Form>
+        <EmailField placeholder="you@zeno.dev" />
+        <SubmitButton>Subscribe</SubmitButton>
+      </Form>
     </FormProvider>
   )
 }
@@ -99,17 +69,14 @@ export function Newsletter() {
 
 What each piece does:
 
-- **`<FormProvider form={form}>`** wraps your card (or whatever container) and
-  publishes the form via React context. Anything inside it — including buttons
-  in `<CardFooter>` outside the `<form>` HTML — can resolve the destructured
-  components.
-- **`<Form id="…">`** sits inside `<CardContent>` and renders the `<form>` HTML
-  element. Pass an `id` so `<SubmitButton form="…">` can associate with it for
-  native submission (Enter-to-submit, accessibility).
-- **`<FieldGroup>`** inside `<CardContent>` stacks fields with consistent
-  vertical spacing.
-- **`<Field orientation="horizontal">`** in `<CardFooter>` pairs Reset and
-  Submit side by side.
+- **`<FormProvider form={form}>`** publishes the form via React context so every
+  destructured component (`EmailField`, `SubmitButton`, …) inside it resolves
+  the right form instance.
+- **`<Form>`** renders the `<form>` HTML element and wires up the `onSubmit`
+  handler.
+- **`<SubmitButton>`** disables itself (and shows a spinner) while the form is
+  submitting or invalid. Place it inside `<Form>` and no extra `id`/`form`
+  wiring is needed.
 
 ## Why `useZenoForm`?
 
@@ -136,17 +103,17 @@ remounting:
 ```tsx
 // Recommended
 const form = useZenoForm({ /* … */ })
-const { EmailField, PasswordField, ResetButton, SubmitButton } = form
+const { EmailField, PasswordField, SubmitButton } = form
 
 return (
   <FormProvider form={form}>
-    <Form id="…">
+    <Form>
       <FieldGroup>
         <EmailField />
         <PasswordField />
       </FieldGroup>
+      <SubmitButton>Sign in</SubmitButton>
     </Form>
-    <SubmitButton form="…">Sign in</SubmitButton>
   </FormProvider>
 )
 ```
