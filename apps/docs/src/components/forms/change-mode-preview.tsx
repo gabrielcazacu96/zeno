@@ -14,40 +14,43 @@ import { z } from "zod"
 
 import { toastSubmitted, wrapperClass } from "./preview-utils"
 
-const loginSchema = z.object({
-  email: z.email("Enter a valid email"),
-  password: z.string().min(8, "At least 8 characters"),
+const schema = z.object({
+  password: z
+    .string()
+    .min(8, "At least 8 characters")
+    .regex(/[A-Z]/, "Include at least one uppercase letter")
+    .regex(/\d/, "Include at least one digit"),
 })
 
-export function LoginExample() {
+export function ChangeModeExample() {
   const form = useZenoForm({
-    defaultValues: { email: "", password: "" },
-    onSubmit: ({ value }) =>
-      toastSubmitted({ email: value.email, password: "•••" }),
-    schema: loginSchema,
+    defaultValues: { password: "" },
+    onSubmit: ({ value }) => toastSubmitted({ password: value.password }),
+    schema,
+    validation: "change",
   })
-  const { EmailField, PasswordField, ResetButton, SubmitButton } = form
+  const { PasswordField, ResetButton, SubmitButton } = form
+
   return (
     <FormProvider form={form}>
       <Card className={wrapperClass}>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Pick a password</CardTitle>
           <CardDescription>
-            Enter your email and password to sign in.
+            Errors update on every keystroke — useful for live feedback.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form id="login-form">
+          <Form id="change-mode-form">
             <FieldGroup>
-              <EmailField placeholder="you@zeno.dev" />
-              <PasswordField />
+              <PasswordField autoComplete="new-password" label="New password" />
             </FieldGroup>
           </Form>
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
             <ResetButton />
-            <SubmitButton form="login-form">Sign in</SubmitButton>
+            <SubmitButton form="change-mode-form">Save</SubmitButton>
           </Field>
         </CardFooter>
       </Card>

@@ -14,51 +14,42 @@ import { z } from "zod"
 
 import { toastSubmitted, wrapperClass } from "./preview-utils"
 
-const signupSchema = z
-  .object({
-    confirmPassword: z.string(),
-    email: z.email("Enter a valid email"),
-    password: z.string().min(8, "At least 8 characters"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  })
+const schema = z.object({
+  email: z.email("Enter a valid email"),
+  password: z.string().min(8, "At least 8 characters"),
+})
 
-export function SignupExample() {
+export function ReValidateExample() {
   const form = useZenoForm({
-    defaultValues: { confirmPassword: "", email: "", password: "" },
+    defaultValues: { email: "", password: "" },
     onSubmit: ({ value }) =>
       toastSubmitted({ email: value.email, password: "•••" }),
-    schema: signupSchema,
+    schema,
   })
   const { EmailField, PasswordField, ResetButton, SubmitButton } = form
+
   return (
     <FormProvider form={form}>
       <Card className={wrapperClass}>
         <CardHeader>
-          <CardTitle>Create your account</CardTitle>
+          <CardTitle>Sign in</CardTitle>
           <CardDescription>
-            Pick an email and password — confirmation must match.
+            Type, leave the field, then come back to fix the error — the message
+            updates as you type.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form id="signup-form">
+          <Form id="revalidate-form">
             <FieldGroup>
               <EmailField placeholder="you@zeno.dev" />
-              <PasswordField autoComplete="new-password" />
-              <PasswordField
-                autoComplete="new-password"
-                label="Confirm password"
-                name="confirmPassword"
-              />
+              <PasswordField />
             </FieldGroup>
           </Form>
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
             <ResetButton />
-            <SubmitButton form="signup-form">Create account</SubmitButton>
+            <SubmitButton form="revalidate-form">Sign in</SubmitButton>
           </Field>
         </CardFooter>
       </Card>

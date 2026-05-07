@@ -11,9 +11,7 @@ const wrapperClass = "w-full max-w-sm"
 export function InputFieldPreview() {
   const form = useZenoForm({
     defaultValues: { name: "" },
-    validators: {
-      onChange: z.object({ name: z.string().min(2, "At least 2 characters") }),
-    },
+    schema: z.object({ name: z.string().min(2, "At least 2 characters") }),
   })
   const { InputField } = form
   return (
@@ -35,9 +33,7 @@ export function InputFieldPreview() {
 export function EmailFieldPreview() {
   const form = useZenoForm({
     defaultValues: { email: "" },
-    validators: {
-      onChange: z.object({ email: z.email("Enter a valid email") }),
-    },
+    schema: z.object({ email: z.email("Enter a valid email") }),
   })
   const { EmailField } = form
   return (
@@ -54,11 +50,9 @@ export function EmailFieldPreview() {
 export function PasswordFieldPreview() {
   const form = useZenoForm({
     defaultValues: { password: "" },
-    validators: {
-      onChange: z.object({
-        password: z.string().min(8, "At least 8 characters"),
-      }),
-    },
+    schema: z.object({
+      password: z.string().min(8, "At least 8 characters"),
+    }),
   })
   const { PasswordField } = form
   return (
@@ -75,11 +69,9 @@ export function PasswordFieldPreview() {
 export function TextAreaFieldPreview() {
   const form = useZenoForm({
     defaultValues: { bio: "" },
-    validators: {
-      onChange: z.object({
-        bio: z.string().max(160, "Keep it under 160 characters"),
-      }),
-    },
+    schema: z.object({
+      bio: z.string().max(160, "Keep it under 160 characters"),
+    }),
   })
   const { TextAreaField } = form
   return (
@@ -101,14 +93,12 @@ export function TextAreaFieldPreview() {
 export function NumberFieldPreview() {
   const form = useZenoForm({
     defaultValues: { age: 18 as number | undefined },
-    validators: {
-      onChange: z.object({
-        age: z
-          .number({ error: "Enter your age" })
-          .int()
-          .min(13, "Must be at least 13"),
-      }),
-    },
+    schema: z.object({
+      age: z
+        .number({ error: "Enter your age" })
+        .int()
+        .min(13, "Must be at least 13"),
+    }),
   })
   const { NumberField } = form
   return (
@@ -125,13 +115,11 @@ export function NumberFieldPreview() {
 export function SelectFieldPreview() {
   const form = useZenoForm({
     defaultValues: { role: "" },
-    validators: {
-      onChange: z.object({
-        role: z.enum(["engineer", "designer", "manager"], {
-          error: "Pick a role",
-        }),
+    schema: z.object({
+      role: z.enum(["engineer", "designer", "manager"], {
+        error: "Pick a role",
       }),
-    },
+    }),
   })
   const { SelectField } = form
   return (
@@ -152,11 +140,9 @@ export function SelectFieldPreview() {
 export function CheckboxFieldPreview() {
   const form = useZenoForm({
     defaultValues: { terms: false },
-    validators: {
-      onChange: z.object({
-        terms: z.literal(true, { error: "You must accept the terms" }),
-      }),
-    },
+    schema: z.object({
+      terms: z.literal(true, { error: "You must accept the terms" }),
+    }),
   })
   const { CheckboxField } = form
   return (

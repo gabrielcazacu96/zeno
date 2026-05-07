@@ -21,6 +21,10 @@ blocks focus on the form-specific bits (`<FormProvider>`, `<Form>`,
 `<FieldGroup>`, fields, buttons). For the explicit layout patterns see
 [Form in a Card](#form-in-a-card) and [Form in a Dialog](#form-in-a-dialog).
 
+For validation patterns — live forms without actions, per-field validation
+modes, async server checks — see
+[Validation modes](/docs/feature-modules/components/forms/validation).
+
 ## Form in a Card
 
 Drop the form into a `<Card>`: header on top, fields in `<CardContent>`,
@@ -56,7 +60,7 @@ export function DisplayNameCard() {
   const form = useZenoForm({
     defaultValues: { name: "" },
     onSubmit: ({ value }) => saveName(value.name),
-    validators: { onChange: schema },
+    schema,
   })
   const { InputField, ResetButton, SubmitButton } = form
   return (
@@ -129,7 +133,7 @@ export function CreateProjectDialog() {
       createProject(value)
       setOpen(false)
     },
-    validators: { onChange: schema },
+    schema,
   })
   const { InputField, ResetButton, SubmitButton } = form
 
@@ -195,7 +199,7 @@ export function Login() {
   const form = useZenoForm({
     defaultValues: { email: "", password: "" },
     onSubmit: ({ value }) => signIn(value),
-    validators: { onChange: schema },
+    schema,
   })
   const { EmailField, PasswordField, ResetButton, SubmitButton } = form
 
@@ -247,7 +251,7 @@ export function Signup() {
   const form = useZenoForm({
     defaultValues: { confirmPassword: "", email: "", password: "" },
     onSubmit: ({ value }) => createAccount(value),
-    validators: { onChange: schema },
+    schema,
   })
   const { EmailField, PasswordField, ResetButton, SubmitButton } = form
 
@@ -305,7 +309,7 @@ export function TeamInvites() {
   const form = useZenoForm({
     defaultValues: { members: [{ email: "", name: "" }] as Member[] },
     onSubmit: ({ value }) => inviteMembers(value.members),
-    validators: { onChange: schema },
+    schema,
   })
   // `Field` is TanStack Form's render-prop component; rename to avoid clashing
   // with `@zeno/ui/field`'s `Field`.
@@ -470,7 +474,7 @@ export function Profile() {
       role: "engineer" as const,
     },
     onSubmit: ({ value }) => saveProfile(value),
-    validators: { onChange: schema },
+    schema,
   })
   const {
     CheckboxField,

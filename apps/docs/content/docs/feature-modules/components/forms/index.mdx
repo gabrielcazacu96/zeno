@@ -65,7 +65,7 @@ export function Newsletter() {
     onSubmit: async ({ value }) => {
       await subscribe(value.email)
     },
-    validators: { onChange: newsletterSchema },
+    schema: newsletterSchema,
   })
   const { EmailField, ResetButton, SubmitButton } = form
 
@@ -180,13 +180,19 @@ const schema = z.object({
 
 const form = useZenoForm({
   defaultValues: { email: "", password: "" },
-  validators: { onChange: schema },
+  schema, // a Zod / Valibot / ArkType schema (anything Standard Schema)
   onSubmit: async ({ value }) => {
     /* `value` is fully typed from the schema */
   },
 })
 ```
 
-Errors appear under the field once it has been touched (`field.state.meta.isTouched`).
-The shipped fields read `field.state.meta.errors` and render them through
-`<FieldError>` from `@zeno/ui/field`.
+`useZenoForm` accepts a single `schema` prop and a `validation` prop
+(`'blur-then-change' | 'change' | 'blur' | 'submit'`, default
+`'blur-then-change'`). The shipped fields gate the error UI to match,
+so the recommended default gives a calm pristine field, an error on first
+blur, and live updates as the user corrects. See
+[Validation modes](/docs/feature-modules/components/forms/validation) for
+the full breakdown — including escape hatches via the underlying TanStack
+Form `validators` / `validationLogic` props, per-field overrides, and
+async server checks.

@@ -6,6 +6,7 @@ import type { ComponentProps, ReactNode } from "react"
 
 import { describedBy } from "../lib/aria"
 import { useFieldContext } from "../lib/contexts"
+import { useHideFieldErrors, useIsInvalid } from "../lib/use-is-invalid"
 
 type TextAreaFieldProps = Omit<
   ComponentProps<typeof Textarea>,
@@ -19,7 +20,9 @@ function TextAreaField({ description, label, ...props }: TextAreaFieldProps) {
   const field = useFieldContext<string>()
   const errorId = `${field.name}-error`
   const descriptionId = `${field.name}-description`
-  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+  const isInvalid = useIsInvalid(field)
+  const hideErrors = useHideFieldErrors(field)
+  const showError = isInvalid && !hideErrors
 
   return (
     <Field data-invalid={isInvalid}>
@@ -27,7 +30,7 @@ function TextAreaField({ description, label, ...props }: TextAreaFieldProps) {
       <Textarea
         aria-describedby={describedBy(
           [description, descriptionId],
-          [isInvalid, errorId]
+          [showError, errorId]
         )}
         aria-invalid={isInvalid || undefined}
         id={field.name}
@@ -40,7 +43,7 @@ function TextAreaField({ description, label, ...props }: TextAreaFieldProps) {
       {description && (
         <FieldDescription id={descriptionId}>{description}</FieldDescription>
       )}
-      {isInvalid && (
+      {showError && (
         <FieldError errors={field.state.meta.errors} id={errorId} />
       )}
     </Field>

@@ -12,10 +12,9 @@ import {
 } from "@zeno/ui/card"
 import { Field, FieldGroup } from "@zeno/ui/field"
 import { SelectItem } from "@zeno/ui/select"
-import { useState } from "react"
 import { z } from "zod"
 
-import { SubmittedValues, wrapperClass } from "./preview-utils"
+import { toastSubmitted, wrapperClass } from "./preview-utils"
 
 const profileSchema = z.object({
   age: z
@@ -43,11 +42,10 @@ const profileDefaults: ProfileValues = {
 }
 
 export function LargeExample() {
-  const [submitted, setSubmitted] = useState<unknown>(null)
   const form = useZenoForm({
     defaultValues: profileDefaults,
-    onSubmit: ({ value }) => setSubmitted(value),
-    validators: { onChange: profileSchema },
+    onSubmit: ({ value }) => toastSubmitted(value),
+    schema: profileSchema,
   })
   const {
     CheckboxField,
@@ -115,7 +113,6 @@ export function LargeExample() {
           </Field>
         </CardFooter>
       </Card>
-      <SubmittedValues value={submitted} />
     </FormProvider>
   )
 }

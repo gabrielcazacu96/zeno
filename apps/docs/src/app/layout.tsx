@@ -1,5 +1,6 @@
 import { RootProvider } from "fumadocs-ui/provider/next"
 import "./global.css"
+import { Toaster } from "@zeno/ui/sonner"
 import { HomeLayout } from "fumadocs-ui/layouts/home"
 import { Inter } from "next/font/google"
 import { NavbarScrollHide } from "@/components/layout/navbar-scroll-hide"
@@ -15,6 +16,7 @@ export default function Layout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-screen flex-col">
         <RootProvider>
           <HomeLayout {...homeOptions()}>{children}</HomeLayout>
+          <Toaster />
         </RootProvider>
         <NavbarScrollHide />
       </body>

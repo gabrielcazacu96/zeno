@@ -25,6 +25,9 @@ import {
 export * from "@tanstack/react-form"
 export { RadioGroupFieldItem } from "./fields/radio-group-field"
 export { useFieldContext, useFormContext } from "./lib/contexts"
+export { useHideFieldErrors, useIsInvalid } from "./lib/use-is-invalid"
+export { blurThenChangeLogic } from "./lib/validation-logic"
+export type { ValidationMode } from "./lib/validation-modes"
 export { useAppFields } from "./use-app-fields"
 export { useZenoForm } from "./use-zeno-form"
 

@@ -1,6 +1,12 @@
 "use client"
 
-import { Form, FormProvider, useFieldContext, useZenoForm } from "@zeno/forms"
+import {
+  Form,
+  FormProvider,
+  useFieldContext,
+  useIsInvalid,
+  useZenoForm,
+} from "@zeno/forms"
 import {
   Card,
   CardContent,
@@ -17,12 +23,12 @@ import {
   FieldLabel,
 } from "@zeno/ui/field"
 import { Slider } from "@zeno/ui/slider"
-import { useState } from "react"
+import { toast } from "@zeno/ui/sonner"
 import { z } from "zod"
 
 function VolumeField({ label }: { label: string }) {
   const field = useFieldContext<number>()
-  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+  const isInvalid = useIsInvalid(field)
   const value = field.state.value ?? 0
   return (
     <Field data-invalid={isInvalid}>
@@ -50,13 +56,12 @@ const audioSchema = z.object({
 })
 
 export function CustomFieldPreview() {
-  const [applied, setApplied] = useState<number | null>(null)
   const form = useZenoForm({
     defaultValues: { volume: 35 },
     onSubmit: ({ value }) => {
-      setApplied(value.volume)
+      toast.success("Volume applied", { description: String(value.volume) })
     },
-    validators: { onChange: audioSchema },
+    schema: audioSchema,
   })
   const { AppField, ResetButton, SubmitButton } = form
 
@@ -85,11 +90,6 @@ export function CustomFieldPreview() {
           </Field>
         </CardFooter>
       </Card>
-      {applied !== null && (
-        <p className="text-muted-foreground text-sm">
-          Applied volume: <span className="font-medium">{applied}</span>
-        </p>
-      )}
     </FormProvider>
   )
 }

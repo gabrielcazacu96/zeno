@@ -6,6 +6,7 @@ import type { ComponentProps, ReactNode } from "react"
 
 import { describedBy } from "../lib/aria"
 import { useFieldContext } from "../lib/contexts"
+import { useHideFieldErrors, useIsInvalid } from "../lib/use-is-invalid"
 
 type NumberFieldProps = Omit<
   ComponentProps<typeof Input>,
@@ -19,7 +20,9 @@ function NumberField({ description, label, ...props }: NumberFieldProps) {
   const field = useFieldContext<number | undefined>()
   const errorId = `${field.name}-error`
   const descriptionId = `${field.name}-description`
-  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+  const isInvalid = useIsInvalid(field)
+  const hideErrors = useHideFieldErrors(field)
+  const showError = isInvalid && !hideErrors
   const value = field.state.value
   const inputValue =
     typeof value === "number" && !Number.isNaN(value) ? value : ""
@@ -30,7 +33,7 @@ function NumberField({ description, label, ...props }: NumberFieldProps) {
       <Input
         aria-describedby={describedBy(
           [description, descriptionId],
-          [isInvalid, errorId]
+          [showError, errorId]
         )}
         aria-invalid={isInvalid || undefined}
         id={field.name}
@@ -48,7 +51,7 @@ function NumberField({ description, label, ...props }: NumberFieldProps) {
       {description && (
         <FieldDescription id={descriptionId}>{description}</FieldDescription>
       )}
-      {isInvalid && (
+      {showError && (
         <FieldError errors={field.state.meta.errors} id={errorId} />
       )}
     </Field>

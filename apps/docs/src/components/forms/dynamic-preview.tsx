@@ -11,15 +11,13 @@ import {
 } from "@zeno/ui/card"
 import { Field, FieldGroup } from "@zeno/ui/field"
 import { SelectItem } from "@zeno/ui/select"
-import { useState } from "react"
 
-import { SubmittedValues, wrapperClass } from "./preview-utils"
+import { toastSubmitted, wrapperClass } from "./preview-utils"
 
 export function DynamicExample() {
-  const [submitted, setSubmitted] = useState<unknown>(null)
   const form = useZenoForm({
     defaultValues: { country: "US", region: "", state: "" },
-    onSubmit: ({ value }) => setSubmitted(value),
+    onSubmit: ({ value }) => toastSubmitted(value),
   })
   const { InputField, ResetButton, SelectField, SubmitButton, Subscribe } = form
   return (
@@ -70,7 +68,6 @@ export function DynamicExample() {
           </Field>
         </CardFooter>
       </Card>
-      <SubmittedValues value={submitted} />
     </FormProvider>
   )
 }

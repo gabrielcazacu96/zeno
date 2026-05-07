@@ -24,6 +24,11 @@ and field error rendering for you. Each is reached by destructuring the
 `defaultValues`. Touch the field, leave it empty, then try to submit to see
 the error UX.
 
+Each field accepts an optional `validators` prop that's forwarded straight
+to TanStack Form's `<Field>`, so you can override the form-level validation
+mode per field — see
+[Validation modes](/docs/feature-modules/components/forms/validation#mixing-onblur-and-onchange-per-field).
+
 ```tsx
 const form = useZenoForm({ defaultValues: { /* ... */ } })
 const { InputField /* …, PasswordField, SubmitButton, … */ } = form
@@ -197,13 +202,13 @@ Need something that's not in the gallery? Build it on top of
 ```tsx lineNumbers
 "use client"
 
-import { useFieldContext } from "@zeno/forms"
+import { useFieldContext, useIsInvalid } from "@zeno/forms"
 import { Field, FieldError, FieldLabel } from "@zeno/ui/field"
 import { Slider } from "@zeno/ui/slider"
 
 function VolumeField({ label }: { label: string }) {
   const field = useFieldContext<number>()
-  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+  const isInvalid = useIsInvalid(field)
   const value = field.state.value ?? 0
   return (
     <Field data-invalid={isInvalid}>

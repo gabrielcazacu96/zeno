@@ -12,10 +12,9 @@ import {
 } from "@zeno/ui/card"
 import { Field, FieldGroup, FieldLegend, FieldSet } from "@zeno/ui/field"
 import { TrashIcon } from "lucide-react"
-import { useState } from "react"
 import { z } from "zod"
 
-import { SubmittedValues } from "./preview-utils"
+import { toastSubmitted } from "./preview-utils"
 
 const memberSchema = z.object({
   email: z.email("Enter a valid email"),
@@ -28,11 +27,10 @@ const teamSchema = z.object({
 type Member = z.infer<typeof memberSchema>
 
 export function ArrayExample() {
-  const [submitted, setSubmitted] = useState<unknown>(null)
   const form = useZenoForm({
     defaultValues: { members: [{ email: "", name: "" }] as Member[] },
-    onSubmit: ({ value }) => setSubmitted(value),
-    validators: { onChange: teamSchema },
+    onSubmit: ({ value }) => toastSubmitted(value),
+    schema: teamSchema,
   })
   const {
     EmailField,
@@ -106,7 +104,6 @@ export function ArrayExample() {
           </Field>
         </CardFooter>
       </Card>
-      <SubmittedValues value={submitted} />
     </FormProvider>
   )
 }

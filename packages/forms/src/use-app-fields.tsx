@@ -23,83 +23,152 @@ type AnyAppForm = {
 type WithDefaultName<T, D extends string> =
   D extends DeepKeys<T> ? { name?: DeepKeys<T> } : { name: DeepKeys<T> }
 
+// Loose validators type for the typed wrappers — name-aware validator typing
+// from TanStack Form would collide with our per-field generics. Callers pass
+// standard schemas (Zod) or functions; both flow through to `<Field>` at
+// runtime unchanged. The structural shape mirrors TanStack's `FieldValidators`
+// slots so prop-name autocomplete still works.
+type AnyFieldValidators = {
+  onMount?: unknown
+  onChange?: unknown
+  onChangeAsync?: unknown
+  onChangeAsyncDebounceMs?: number
+  onBlur?: unknown
+  onBlurAsync?: unknown
+  onBlurAsyncDebounceMs?: number
+  onSubmit?: unknown
+  onSubmitAsync?: unknown
+  onSubmitAsyncDebounceMs?: number
+  onDynamic?: unknown
+  onDynamicAsync?: unknown
+}
+
+type WithValidators = { validators?: AnyFieldValidators }
+
 function useAppFields<TForm extends AnyAppForm>(form: TForm) {
   type T = FormDataOf<TForm>
 
   return useMemo(() => {
-    const Field = form.AppField as unknown as React.ComponentType<{
+    const Field = form.AppField as React.ComponentType<{
       name: string
+      validators?: AnyFieldValidators
       children: () => React.ReactNode
     }>
 
     return {
       CheckboxField<N extends DeepKeys<T>>({
         name,
+        validators,
         ...props
-      }: ComponentProps<typeof CheckboxFieldImpl> & { name: N }) {
+      }: ComponentProps<typeof CheckboxFieldImpl> & {
+        name: N
+      } & WithValidators) {
         return (
-          <Field name={name}>{() => <CheckboxFieldImpl {...props} />}</Field>
+          <Field name={name} validators={validators}>
+            {() => <CheckboxFieldImpl {...props} />}
+          </Field>
         )
       },
       EmailField({
         name,
+        validators,
         ...props
-      }: ComponentProps<typeof EmailFieldImpl> & WithDefaultName<T, "email">) {
+      }: ComponentProps<typeof EmailFieldImpl> &
+        WithDefaultName<T, "email"> &
+        WithValidators) {
         return (
-          <Field name={(name ?? "email") as string}>
+          <Field name={(name ?? "email") as string} validators={validators}>
             {() => <EmailFieldImpl {...props} />}
           </Field>
         )
       },
       InputField<N extends DeepKeys<T>>({
         name,
+        validators,
         ...props
-      }: ComponentProps<typeof InputFieldImpl> & { name: N }) {
-        return <Field name={name}>{() => <InputFieldImpl {...props} />}</Field>
+      }: ComponentProps<typeof InputFieldImpl> & { name: N } & WithValidators) {
+        return (
+          <Field name={name} validators={validators}>
+            {() => <InputFieldImpl {...props} />}
+          </Field>
+        )
       },
       NumberField<N extends DeepKeys<T>>({
         name,
+        validators,
         ...props
-      }: ComponentProps<typeof NumberFieldImpl> & { name: N }) {
-        return <Field name={name}>{() => <NumberFieldImpl {...props} />}</Field>
+      }: ComponentProps<typeof NumberFieldImpl> & {
+        name: N
+      } & WithValidators) {
+        return (
+          <Field name={name} validators={validators}>
+            {() => <NumberFieldImpl {...props} />}
+          </Field>
+        )
       },
       PasswordField({
         name,
+        validators,
         ...props
       }: ComponentProps<typeof PasswordFieldImpl> &
-        WithDefaultName<T, "password">) {
+        WithDefaultName<T, "password"> &
+        WithValidators) {
         return (
-          <Field name={(name ?? "password") as string}>
+          <Field name={(name ?? "password") as string} validators={validators}>
             {() => <PasswordFieldImpl {...props} />}
           </Field>
         )
       },
       RadioGroupField<N extends DeepKeys<T>>({
         name,
+        validators,
         ...props
-      }: ComponentProps<typeof RadioGroupFieldImpl> & { name: N }) {
+      }: ComponentProps<typeof RadioGroupFieldImpl> & {
+        name: N
+      } & WithValidators) {
         return (
-          <Field name={name}>{() => <RadioGroupFieldImpl {...props} />}</Field>
+          <Field name={name} validators={validators}>
+            {() => <RadioGroupFieldImpl {...props} />}
+          </Field>
         )
       },
       SelectField<N extends DeepKeys<T>>({
         name,
+        validators,
         ...props
-      }: ComponentProps<typeof SelectFieldImpl> & { name: N }) {
-        return <Field name={name}>{() => <SelectFieldImpl {...props} />}</Field>
+      }: ComponentProps<typeof SelectFieldImpl> & {
+        name: N
+      } & WithValidators) {
+        return (
+          <Field name={name} validators={validators}>
+            {() => <SelectFieldImpl {...props} />}
+          </Field>
+        )
       },
       SwitchField<N extends DeepKeys<T>>({
         name,
+        validators,
         ...props
-      }: ComponentProps<typeof SwitchFieldImpl> & { name: N }) {
-        return <Field name={name}>{() => <SwitchFieldImpl {...props} />}</Field>
+      }: ComponentProps<typeof SwitchFieldImpl> & {
+        name: N
+      } & WithValidators) {
+        return (
+          <Field name={name} validators={validators}>
+            {() => <SwitchFieldImpl {...props} />}
+          </Field>
+        )
       },
       TextAreaField<N extends DeepKeys<T>>({
         name,
+        validators,
         ...props
-      }: ComponentProps<typeof TextAreaFieldImpl> & { name: N }) {
+      }: ComponentProps<typeof TextAreaFieldImpl> & {
+        name: N
+      } & WithValidators) {
         return (
-          <Field name={name}>{() => <TextAreaFieldImpl {...props} />}</Field>
+          <Field name={name} validators={validators}>
+            {() => <TextAreaFieldImpl {...props} />}
+          </Field>
         )
       },
     }

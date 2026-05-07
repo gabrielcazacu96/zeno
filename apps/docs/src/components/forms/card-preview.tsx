@@ -10,21 +10,19 @@ import {
   CardTitle,
 } from "@zeno/ui/card"
 import { Field, FieldGroup } from "@zeno/ui/field"
-import { useState } from "react"
 import { z } from "zod"
 
-import { SubmittedValues, wrapperClass } from "./preview-utils"
+import { toastSubmitted, wrapperClass } from "./preview-utils"
 
 const profileSchema = z.object({
   name: z.string().min(2, "At least 2 characters"),
 })
 
 export function FormInCardExample() {
-  const [submitted, setSubmitted] = useState<unknown>(null)
   const form = useZenoForm({
     defaultValues: { name: "" },
-    onSubmit: ({ value }) => setSubmitted(value),
-    validators: { onChange: profileSchema },
+    onSubmit: ({ value }) => toastSubmitted(value),
+    schema: profileSchema,
   })
   const { InputField, ResetButton, SubmitButton } = form
   return (
@@ -48,7 +46,6 @@ export function FormInCardExample() {
           </Field>
         </CardFooter>
       </Card>
-      <SubmittedValues value={submitted} />
     </FormProvider>
   )
 }

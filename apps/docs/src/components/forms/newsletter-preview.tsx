@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@zeno/ui/card"
 import { Field, FieldGroup } from "@zeno/ui/field"
-import { useState } from "react"
+import { toast } from "@zeno/ui/sonner"
 import { z } from "zod"
 
 import { wrapperClass } from "./preview-utils"
@@ -20,13 +20,12 @@ const newsletterSchema = z.object({
 })
 
 export function NewsletterPreview() {
-  const [submitted, setSubmitted] = useState<string | null>(null)
   const form = useZenoForm({
     defaultValues: { email: "" },
     onSubmit: ({ value }) => {
-      setSubmitted(value.email)
+      toast.success("Subscribed", { description: value.email })
     },
-    validators: { onChange: newsletterSchema },
+    schema: newsletterSchema,
   })
   const { EmailField, ResetButton, SubmitButton } = form
 
@@ -53,11 +52,6 @@ export function NewsletterPreview() {
           </Field>
         </CardFooter>
       </Card>
-      {submitted && (
-        <p className="text-muted-foreground text-sm">
-          Subscribed: <span className="font-medium">{submitted}</span>
-        </p>
-      )}
     </FormProvider>
   )
 }

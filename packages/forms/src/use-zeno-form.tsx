@@ -10,7 +10,99 @@ import { useMemo } from "react"
 import { ResetButton } from "./fields/reset-button"
 import { SubmitButton } from "./fields/submit-button"
 import { useAppForm } from "./form"
+import { blurThenChangeLogic } from "./lib/validation-logic"
+import {
+  DEFAULT_VALIDATION_MODE,
+  setFormZenoState,
+  type ValidationMode,
+} from "./lib/validation-modes"
 import { useAppFields } from "./use-app-fields"
+
+// Structural shape of a Standard Schema (Zod, Valibot, ArkType, …). Avoids a
+// direct dependency on `@standard-schema/spec`; runtime validation goes
+// through TanStack Form's standard-schema integration unchanged.
+type StandardSchema<T> = {
+  readonly "~standard": {
+    readonly validate: (value: unknown) => unknown
+    readonly types?: { readonly input: T; readonly output: T }
+  }
+}
+
+type ZenoFormExtras<TFormData> = {
+  /**
+   * A standard schema (Zod, Valibot, ArkType, …) describing the form data.
+   * `useZenoForm` uses it to generate `validators` and `validationLogic`
+   * based on the chosen `validation` mode. Pass your own `validators` /
+   * `validationLogic` to override.
+   */
+  schema?: StandardSchema<TFormData>
+  /**
+   * When the schema runs and when errors are displayed.
+   *
+   * - `'blur-then-change'` (default) — schema runs on blur, then on every
+   *   change for fields that have already been blurred. Errors appear after
+   *   first blur. Calm typing, live corrections.
+   * - `'change'` — schema runs on every keystroke. Errors appear as soon as
+   *   the user starts typing.
+   * - `'blur'` — schema runs only on blur. Errors appear after blur, but
+   *   do not update until the next blur.
+   * - `'submit'` — schema runs only on submit. No errors before submit.
+   */
+  validation?: ValidationMode
+  /**
+   * If `true`, shipped fields skip rendering their inline `<FieldError>`
+   * message. Use it when you collect errors in a single summary somewhere
+   * else (e.g. above the submit button). The fields still flip
+   * `data-invalid` and `aria-invalid`, so invalid styling is preserved.
+   */
+  hideFieldErrors?: boolean
+}
+
+type UseZenoFormOptions<
+  TFormData,
+  TOnMount extends undefined | FormValidateOrFn<TFormData>,
+  TOnChange extends undefined | FormValidateOrFn<TFormData>,
+  TOnChangeAsync extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TOnBlur extends undefined | FormValidateOrFn<TFormData>,
+  TOnBlurAsync extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TOnSubmit extends undefined | FormValidateOrFn<TFormData>,
+  TOnSubmitAsync extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TOnDynamic extends undefined | FormValidateOrFn<TFormData>,
+  TOnDynamicAsync extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TOnServer extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TSubmitMeta,
+> = FormOptions<
+  TFormData,
+  TOnMount,
+  TOnChange,
+  TOnChangeAsync,
+  TOnBlur,
+  TOnBlurAsync,
+  TOnSubmit,
+  TOnSubmitAsync,
+  TOnDynamic,
+  TOnDynamicAsync,
+  TOnServer,
+  TSubmitMeta
+> &
+  ZenoFormExtras<TFormData>
+
+function buildValidatorsFromSchema<TFormData>(
+  schema: StandardSchema<TFormData>,
+  mode: ValidationMode
+) {
+  switch (mode) {
+    case "change":
+    case "blur-then-change":
+      return { onChange: schema }
+    case "blur":
+      return { onBlur: schema }
+    case "submit":
+      return { onSubmit: schema }
+    default:
+      return { onChange: schema }
+  }
+}
 
 function useZenoForm<
   TFormData,
@@ -32,7 +124,7 @@ function useZenoForm<
   TOnServer extends undefined | FormAsyncValidateOrFn<TFormData> = undefined,
   TSubmitMeta = never,
 >(
-  options: FormOptions<
+  options: UseZenoFormOptions<
     TFormData,
     TOnMount,
     TOnChange,
@@ -47,6 +139,27 @@ function useZenoForm<
     TSubmitMeta
   >
 ) {
+  const {
+    schema,
+    validation = DEFAULT_VALIDATION_MODE,
+    hideFieldErrors = false,
+    validators,
+    validationLogic,
+    ...rest
+  } = options
+
+  const resolvedValidators =
+    validators ??
+    (schema
+      ? (buildValidatorsFromSchema(schema, validation) as unknown as
+          | typeof validators
+          | undefined)
+      : undefined)
+
+  const resolvedValidationLogic =
+    validationLogic ??
+    (validation === "blur-then-change" ? blurThenChangeLogic : undefined)
+
   const form = useAppForm<
     TFormData,
     TOnMount,
@@ -60,7 +173,29 @@ function useZenoForm<
     TOnDynamicAsync,
     TOnServer,
     TSubmitMeta
-  >(options)
+  >({
+    ...rest,
+    ...(resolvedValidators ? { validators: resolvedValidators } : {}),
+    ...(resolvedValidationLogic
+      ? { validationLogic: resolvedValidationLogic }
+      : {}),
+  } as FormOptions<
+    TFormData,
+    TOnMount,
+    TOnChange,
+    TOnChangeAsync,
+    TOnBlur,
+    TOnBlurAsync,
+    TOnSubmit,
+    TOnSubmitAsync,
+    TOnDynamic,
+    TOnDynamicAsync,
+    TOnServer,
+    TSubmitMeta
+  >)
+
+  setFormZenoState(form, { hideFieldErrors, validation })
+
   const fields = useAppFields(form)
   return useMemo(
     () => Object.assign(form, fields, { ResetButton, SubmitButton }),

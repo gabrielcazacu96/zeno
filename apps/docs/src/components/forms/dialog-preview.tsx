@@ -19,6 +19,7 @@ import {
   DialogTrigger,
 } from "@zeno/ui/dialog"
 import { FieldGroup } from "@zeno/ui/field"
+import { toast } from "@zeno/ui/sonner"
 import { useState } from "react"
 import { z } from "zod"
 
@@ -35,16 +36,15 @@ const projectSchema = z.object({
 
 export function DialogExample() {
   const [open, setOpen] = useState(false)
-  const [created, setCreated] = useState<{ name: string; slug: string } | null>(
-    null
-  )
   const form = useZenoForm({
     defaultValues: { name: "", slug: "" },
     onSubmit: ({ value }) => {
-      setCreated(value)
+      toast.success("Project created", {
+        description: `${value.name} (${value.slug})`,
+      })
       setOpen(false)
     },
-    validators: { onChange: projectSchema },
+    schema: projectSchema,
   })
   const { InputField, ResetButton, SubmitButton } = form
 
@@ -96,12 +96,6 @@ export function DialogExample() {
             </FormProvider>
           </DialogContent>
         </Dialog>
-        {created && (
-          <p className="text-muted-foreground text-sm">
-            Created <span className="font-medium">{created.name}</span> (
-            <code>{created.slug}</code>).
-          </p>
-        )}
       </CardContent>
     </Card>
   )
