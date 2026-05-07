@@ -196,3 +196,13 @@ blur, and live updates as the user corrects. See
 the full breakdown — including escape hatches via the underlying TanStack
 Form `validators` / `validationLogic` props, per-field overrides, and
 async server checks.
+
+## Devtools
+
+Because `@zeno/forms` is built on TanStack Form, the upstream
+[TanStack Form Devtools](https://tanstack.com/form/v1/docs/framework/react/guides/devtools)
+work without any wrapping — install
+`@tanstack/react-devtools` and `@tanstack/react-form-devtools` (declared
+as peer deps), drop `<TanStackDevtools plugins={[formDevtoolsPlugin()]} />`
+near your app root, and every `useZenoForm` instance shows up live in the
+panel.

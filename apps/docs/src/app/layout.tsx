@@ -3,6 +3,7 @@ import "./global.css"
 import { Toaster } from "@zeno/ui/sonner"
 import { HomeLayout } from "fumadocs-ui/layouts/home"
 import { Inter } from "next/font/google"
+import { Devtools } from "@/components/devtools"
 import { NavbarScrollHide } from "@/components/layout/navbar-scroll-hide"
 import { homeOptions } from "@/lib/layout.shared"
 
@@ -19,6 +20,7 @@ export default function Layout({ children }: LayoutProps<"/">) {
           <Toaster />
         </RootProvider>
         <NavbarScrollHide />
+        <Devtools />
       </body>
     </html>
   )

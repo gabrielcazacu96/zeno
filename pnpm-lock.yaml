@@ -23,6 +23,12 @@ importers:
 
   apps/docs:
     dependencies:
+      '@tanstack/react-devtools':
+        specifier: ^0.10.0
+        version: 0.10.2(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(csstype@3.2.3)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(solid-js@1.9.12)
+      '@tanstack/react-form-devtools':
+        specifier: ^0.2.0
+        version: 0.2.22(@types/react@19.2.14)(csstype@3.2.3)(react@19.2.5)(solid-js@1.9.12)
       '@zeno/forms':
         specifier: workspace:*
         version: link:../../packages/forms
