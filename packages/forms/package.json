@@ -12,6 +12,7 @@
   "peerDependencies": {
     "@tanstack/react-devtools": ">=0.10",
     "@tanstack/react-form-devtools": ">=0.2",
+    "@zeno/ui": "workspace:*",
     "next": ">=16",
     "react": ">=19",
     "react-dom": ">=19",
@@ -19,8 +20,7 @@
   },
   "dependencies": {
     "@tanstack/react-form": "1.29.1",
-    "@tanstack/react-form-nextjs": "1.29.1",
-    "@zeno/ui": "workspace:*"
+    "@tanstack/react-form-nextjs": "1.29.1"
   },
   "devDependencies": {
     "@types/node": "25.6.0",
