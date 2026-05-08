@@ -9,6 +9,8 @@ import {
   ComboboxList,
 } from "@zeno/ui/combobox"
 import { Field, FieldDescription, FieldError, FieldLabel } from "@zeno/ui/field"
+import { InputGroupAddon } from "@zeno/ui/input-group"
+import { Spinner } from "@zeno/ui/spinner"
 import type { ReactNode } from "react"
 
 import { describedBy } from "../lib/aria"
@@ -21,7 +23,7 @@ import {
 } from "../lib/use-is-invalid"
 
 type ComboboxFieldProps = {
-  /** String items shown in the dropdown. Filtered by Base UI. */
+  /** String items shown in the dropdown. Filtered by Base UI by default. */
   items: string[]
   description?: ReactNode
   label?: ReactNode
@@ -39,14 +41,35 @@ type ComboboxFieldProps = {
   className?: string
   /** Force the required `*` indicator on or off. Defaults to schema-derived. */
   required?: boolean
+  /**
+   * Controlled input text — pair with `onInputValueChange` for server-side
+   * search. When omitted, Base UI manages the input value internally.
+   */
+  inputValue?: string
+  /** Fires on every keystroke in the search input. */
+  onInputValueChange?: (value: string) => void
+  /**
+   * Replace Base UI's built-in client-side filter. Pass `null` for
+   * server-driven search where `items` is already filtered by the consumer.
+   */
+  filter?: ((item: string, query: string) => boolean) | null
+  /**
+   * Show a spinner addon inside the input while options are being fetched.
+   * Pair with `onInputValueChange` to drive a debounced server query.
+   */
+  loading?: boolean
 }
 
 function ComboboxField({
   className,
   description,
   emptyMessage = "No results.",
+  filter,
+  inputValue,
   items,
   label,
+  loading,
+  onInputValueChange,
   placeholder,
   renderItem,
   required,
@@ -72,7 +95,10 @@ function ComboboxField({
         </FieldLabel>
       )}
       <Combobox
+        filter={filter}
+        inputValue={inputValue}
         items={items}
+        onInputValueChange={onInputValueChange}
         onValueChange={(next) => field.handleChange(next ?? "")}
         value={value}
       >
@@ -87,8 +113,14 @@ function ComboboxField({
           name={field.name}
           onBlur={field.handleBlur}
           placeholder={placeholder}
-          showClear={showClear && Boolean(value)}
-        />
+          showClear={showClear && Boolean(value) && !loading}
+        >
+          {loading && (
+            <InputGroupAddon align="inline-end">
+              <Spinner />
+            </InputGroupAddon>
+          )}
+        </ComboboxInput>
         <ComboboxContent>
           <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
           <ComboboxList>

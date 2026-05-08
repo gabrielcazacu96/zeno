@@ -408,6 +408,21 @@ const FRAMEWORKS = ["Next.js", "Remix", "SvelteKit", "Nuxt.js", "Astro"]
 
 </Preview>
 
+| Prop | Type | What it does |
+|---|---|---|
+| `items` | `string[]` | Options shown in the dropdown. Filtered client-side by Base UI unless `filter={null}`. |
+| `renderItem` | `(item: string) => ReactNode` | Override per-row rendering. Default is a plain `<ComboboxItem>{item}</ComboboxItem>`. |
+| `emptyMessage` | `ReactNode` | Shown when filtering produces zero matches. |
+| `showClear` | `boolean` | Show the clear button when a value is selected. Defaults to `true`; pass `false` for required-style comboboxes. |
+| `placeholder` | `string` | Input placeholder when the field is empty. |
+| `inputValue` | `string` | Controlled search text — pair with `onInputValueChange` to drive the input from outside. |
+| `onInputValueChange` | `(value: string) => void` | Fires on every keystroke in the search input. |
+| `filter` | `((item: string, query: string) => boolean) \| null` | Replace Base UI's built-in client-side filter, or pass `null` for server-driven search where `items` is already filtered by the consumer. |
+| `loading` | `boolean` | Render a spinner addon inside the input while options are being fetched. Pair with `onInputValueChange` to drive a debounced server query. |
+
+For a server-driven search with debouncing and a loading spinner, see
+[Async-search Combobox](/docs/feature-modules/components/forms/examples#async-search-combobox).
+
 ## Custom fields
 
 Need something that's not in the gallery? Build it on top of

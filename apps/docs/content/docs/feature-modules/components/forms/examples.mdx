@@ -6,6 +6,7 @@ status: in progress
 ---
 
 import { ArrayExample } from "@/components/forms/array-preview"
+import { AsyncSearchExample } from "@/components/forms/async-search-preview"
 import { FormInCardExample } from "@/components/forms/card-preview"
 import { DialogExample } from "@/components/forms/dialog-preview"
 import { DynamicExample } from "@/components/forms/dynamic-preview"
@@ -645,6 +646,87 @@ export function Settings() {
       {/* Outside the <form> element — FormProvider keeps context alive */}
       <ResetButton />
       <SubmitButton form="settings-form">Save</SubmitButton>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+## Async-search Combobox
+
+Drive the option list from a server. Pass `inputValue` / `onInputValueChange`
+to take control of the search text, `filter={null}` to disable Base UI's
+client-side matching (the items you supply are already filtered), and
+`loading` to show a spinner inside the input while the request is in flight.
+Debounce in your `useEffect` — typing one character per keystroke shouldn't
+fire one request per keystroke. See the full prop table on
+[Combobox Field](/docs/feature-modules/components/forms/fields#combobox-field).
+
+<Preview>
+  <AsyncSearchExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { useEffect, useState } from "react"
+
+async function searchUsers(query: string): Promise<string[]> {
+  const response = await fetch(`/api/users?q=${encodeURIComponent(query)}`)
+  return (await response.json()) as string[]
+}
+
+export function AssignReviewer() {
+  const [query, setQuery] = useState("")
+  const [items, setItems] = useState<string[]>([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const trimmed = query.trim()
+    if (!trimmed) {
+      setItems([])
+      setLoading(false)
+      return
+    }
+    setLoading(true)
+    let cancelled = false
+    const handle = window.setTimeout(async () => {
+      const results = await searchUsers(trimmed)
+      if (!cancelled) {
+        setItems(results)
+        setLoading(false)
+      }
+    }, 250)
+    return () => {
+      cancelled = true
+      window.clearTimeout(handle)
+    }
+  }, [query])
+
+  const form = useZenoForm({ defaultValues: { assignee: "" } })
+  const { ComboboxField } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form>
+        <FieldGroup>
+          <ComboboxField
+            emptyMessage={
+              query.trim() && !loading ? "No matches." : "Type to search…"
+            }
+            filter={null}
+            inputValue={query}
+            items={items}
+            label="Assignee"
+            loading={loading}
+            name="assignee"
+            onInputValueChange={setQuery}
+            placeholder="Search teammates…"
+          />
+        </FieldGroup>
+      </Form>
     </FormProvider>
   )
 }
