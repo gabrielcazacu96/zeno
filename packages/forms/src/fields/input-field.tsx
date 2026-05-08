@@ -7,7 +7,12 @@ import { Children, type ComponentProps, type ReactNode } from "react"
 
 import { describedBy } from "../lib/aria"
 import { useFieldContext } from "../lib/contexts"
-import { useHideFieldErrors, useIsInvalid } from "../lib/use-is-invalid"
+import { RequiredIndicator } from "../lib/required-indicator"
+import {
+  useHideFieldErrors,
+  useIsFieldRequired,
+  useIsInvalid,
+} from "../lib/use-is-invalid"
 
 type InputFieldProps = Omit<
   ComponentProps<typeof Input>,
@@ -16,12 +21,18 @@ type InputFieldProps = Omit<
   children?: ReactNode
   description?: ReactNode
   label?: ReactNode
+  /**
+   * Force the required `*` indicator on or off for this field. When omitted,
+   * the value is derived from the form's schema.
+   */
+  required?: boolean
 }
 
 function InputField({
   children,
   description,
   label,
+  required,
   ...props
 }: InputFieldProps) {
   const field = useFieldContext<string>()
@@ -31,6 +42,8 @@ function InputField({
   const hideErrors = useHideFieldErrors(field)
   const showError = isInvalid && !hideErrors
   const hasAddons = Children.count(children) > 0
+  const schemaRequired = useIsFieldRequired(field)
+  const isRequired = required ?? schemaRequired
 
   const inputProps = {
     "aria-describedby": describedBy(
@@ -49,7 +62,12 @@ function InputField({
 
   return (
     <Field data-invalid={isInvalid}>
-      {label && <FieldLabel htmlFor={field.name}>{label}</FieldLabel>}
+      {label && (
+        <FieldLabel htmlFor={field.name}>
+          {label}
+          {isRequired && <RequiredIndicator />}
+        </FieldLabel>
+      )}
       {hasAddons ? (
         <InputGroup>
           <InputGroupInput {...inputProps} />

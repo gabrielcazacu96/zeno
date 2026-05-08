@@ -12,7 +12,12 @@ import type { ComponentProps, ReactNode } from "react"
 
 import { describedBy } from "../lib/aria"
 import { useFieldContext } from "../lib/contexts"
-import { useHideFieldErrors, useIsInvalid } from "../lib/use-is-invalid"
+import { RequiredIndicator } from "../lib/required-indicator"
+import {
+  useHideFieldErrors,
+  useIsFieldRequired,
+  useIsInvalid,
+} from "../lib/use-is-invalid"
 
 type SwitchFieldProps = Omit<
   ComponentProps<typeof Switch>,
@@ -20,20 +25,34 @@ type SwitchFieldProps = Omit<
 > & {
   description?: ReactNode
   label?: ReactNode
+  /** Force the required `*` indicator on or off. Defaults to schema-derived. */
+  required?: boolean
 }
 
-function SwitchField({ description, label, ...props }: SwitchFieldProps) {
+function SwitchField({
+  description,
+  label,
+  required,
+  ...props
+}: SwitchFieldProps) {
   const field = useFieldContext<boolean>()
   const errorId = `${field.name}-error`
   const descriptionId = `${field.name}-description`
   const isInvalid = useIsInvalid(field)
   const hideErrors = useHideFieldErrors(field)
   const showError = isInvalid && !hideErrors
+  const schemaRequired = useIsFieldRequired(field)
+  const isRequired = required ?? schemaRequired
 
   return (
     <Field data-invalid={isInvalid} orientation="horizontal">
       <FieldContent>
-        {label && <FieldLabel htmlFor={field.name}>{label}</FieldLabel>}
+        {label && (
+          <FieldLabel htmlFor={field.name}>
+            {label}
+            {isRequired && <RequiredIndicator />}
+          </FieldLabel>
+        )}
         {description && (
           <FieldDescription id={descriptionId}>{description}</FieldDescription>
         )}

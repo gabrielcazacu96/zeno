@@ -9,6 +9,7 @@ import { ChangeModeExample } from "@/components/forms/change-mode-preview"
 import { ErrorSummaryExample } from "@/components/forms/error-summary-preview"
 import { LiveSearchExample } from "@/components/forms/live-preview"
 import { MixedValidationExample } from "@/components/forms/mixed-validation-preview"
+import { RequiredIndicatorExample } from "@/components/forms/required-indicator-preview"
 import { ReValidateExample } from "@/components/forms/revalidate-preview"
 
 `useZenoForm` accepts two validation props:
@@ -359,6 +360,79 @@ For an async server-side check (e.g. uniqueness against the database),
 swap to `onChangeAsync` and use `onChangeAsyncDebounceMs` to throttle the
 request.
 
+## Required-field indicator
+
+Every shipped field appends a `*` to its label when the form's schema
+treats that field as required. It's on by default — pass
+`requiredIndicator: false` to `useZenoForm` to opt out form-wide, or
+override per field with the boolean `required` prop.
+
+<Preview>
+  <RequiredIndicatorExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { SelectItem } from "@zeno/ui/select"
+import { z } from "zod"
+
+const schema = z.object({
+  email: z.email("Enter a valid email"),         // required → `*`
+  password: z.string().min(8, "At least 8…"),    // required → `*`
+  role: z.string().default("member"),            // defaulted → no `*`
+  newsletter: z.boolean().optional(),            // optional → no `*`
+})
+
+export function SignUp() {
+  const form = useZenoForm({
+    defaultValues: {
+      email: "",
+      newsletter: false,
+      password: "",
+      role: "member",
+    },
+    schema,
+    // requiredIndicator: false, // disable for the whole form
+  })
+  const { CheckboxField, EmailField, PasswordField, SelectField } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form>
+        <FieldGroup>
+          <EmailField placeholder="you@zeno.dev" />
+          <PasswordField />
+          <SelectField label="Role" name="role" placeholder="Pick a role">
+            <SelectItem value="member">Member</SelectItem>
+            <SelectItem value="admin">Admin</SelectItem>
+          </SelectField>
+          <CheckboxField label="Subscribe to newsletter" name="newsletter" />
+        </FieldGroup>
+      </Form>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+How it's detected: `useZenoForm` probes the schema once with an empty
+object on mount. Fields wrapped in `.optional()`, `.nullable()`, or
+`.default(...)` stay silent because the schema considers them satisfied;
+every other field surfaces an issue and gets the `*`. Async schemas
+can't be probed this way and produce no indicators — pass `required` on
+the field to set it explicitly.
+
+```tsx
+{/* Force on, regardless of schema */}
+<InputField label="Slug" name="slug" required />
+
+{/* Force off, even if schema marks it required */}
+<InputField label="Notes" name="notes" required={false} />
+```
+
 ## Where the error message lives
 
 By default the shipped fields render their own error inline, right under
@@ -508,6 +582,7 @@ const form = useZenoForm({
 - **Don't use `'change'` with an expensive sync schema.** Every keystroke
   re-runs the whole thing. For network checks, switch to a per-field
   `onChangeAsync` with `onChangeAsyncDebounceMs`.
-- **Don't validate on `onMount` to "show what's required."** Use
-  `<FieldDescription>` or placeholders. `onMount` is for cases where
-  pre-filled defaults legitimately violate the schema.
+- **Don't validate on `onMount` to "show what's required."** The shipped
+  fields already render a `*` next to required-field labels (see
+  [Required-field indicator](#required-field-indicator)). `onMount` is
+  for cases where pre-filled defaults legitimately violate the schema.

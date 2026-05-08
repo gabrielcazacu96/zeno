@@ -10,6 +10,7 @@ import { useMemo } from "react"
 import { ResetButton } from "./fields/reset-button"
 import { SubmitButton } from "./fields/submit-button"
 import { useAppForm } from "./form"
+import { getRequiredPaths } from "./lib/schema-required"
 import { blurThenChangeLogic } from "./lib/validation-logic"
 import {
   DEFAULT_VALIDATION_MODE,
@@ -56,6 +57,17 @@ type ZenoFormExtras<TFormData> = {
    * `data-invalid` and `aria-invalid`, so invalid styling is preserved.
    */
   hideFieldErrors?: boolean
+  /**
+   * Show a `*` next to the label of every field the schema treats as
+   * required. Defaults to `true`. Set to `false` to opt out form-wide.
+   *
+   * Required-ness is detected by probing the schema with an empty object;
+   * fields wrapped in `.optional()`, `.nullable()`, or `.default(…)` are
+   * treated as not required. Async schemas can't be probed and produce no
+   * indicators. Pass `required` directly on a field to override the
+   * schema-derived value.
+   */
+  requiredIndicator?: boolean
 }
 
 type UseZenoFormOptions<
@@ -143,10 +155,19 @@ function useZenoForm<
     schema,
     validation = DEFAULT_VALIDATION_MODE,
     hideFieldErrors = false,
+    requiredIndicator = true,
     validators,
     validationLogic,
     ...rest
   } = options
+
+  const requiredFields = useMemo(
+    () =>
+      schema && requiredIndicator
+        ? getRequiredPaths(schema as Parameters<typeof getRequiredPaths>[0])
+        : new Set<string>(),
+    [schema, requiredIndicator]
+  )
 
   const resolvedValidators =
     validators ??
@@ -194,7 +215,12 @@ function useZenoForm<
     TSubmitMeta
   >)
 
-  setFormZenoState(form, { hideFieldErrors, validation })
+  setFormZenoState(form, {
+    hideFieldErrors,
+    requiredFields,
+    requiredIndicator,
+    validation,
+  })
 
   const fields = useAppFields(form)
   return useMemo(

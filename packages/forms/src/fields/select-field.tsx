@@ -11,7 +11,12 @@ import type { ComponentProps, ReactNode } from "react"
 
 import { describedBy } from "../lib/aria"
 import { useFieldContext } from "../lib/contexts"
-import { useHideFieldErrors, useIsInvalid } from "../lib/use-is-invalid"
+import { RequiredIndicator } from "../lib/required-indicator"
+import {
+  useHideFieldErrors,
+  useIsFieldRequired,
+  useIsInvalid,
+} from "../lib/use-is-invalid"
 
 type SelectFieldProps = Omit<
   ComponentProps<typeof Select>,
@@ -21,6 +26,8 @@ type SelectFieldProps = Omit<
   description?: ReactNode
   label?: ReactNode
   placeholder?: string
+  /** Force the required `*` indicator on or off. Defaults to schema-derived. */
+  required?: boolean
   triggerClassName?: string
   triggerSize?: ComponentProps<typeof SelectTrigger>["size"]
 }
@@ -30,6 +37,7 @@ function SelectField({
   description,
   label,
   placeholder,
+  required,
   triggerClassName,
   triggerSize,
   ...props
@@ -40,10 +48,17 @@ function SelectField({
   const isInvalid = useIsInvalid(field)
   const hideErrors = useHideFieldErrors(field)
   const showError = isInvalid && !hideErrors
+  const schemaRequired = useIsFieldRequired(field)
+  const isRequired = required ?? schemaRequired
 
   return (
     <Field data-invalid={isInvalid}>
-      {label && <FieldLabel htmlFor={field.name}>{label}</FieldLabel>}
+      {label && (
+        <FieldLabel htmlFor={field.name}>
+          {label}
+          {isRequired && <RequiredIndicator />}
+        </FieldLabel>
+      )}
       <Select
         name={field.name}
         onValueChange={(value) => field.handleChange(String(value))}

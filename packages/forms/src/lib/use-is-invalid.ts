@@ -5,6 +5,7 @@ import { type AnyFieldApi, useStore } from "@tanstack/react-form"
 import {
   getFormHideFieldErrors,
   getFormValidationMode,
+  isFieldRequired,
   type ValidationMode,
 } from "./validation-modes"
 
@@ -97,4 +98,12 @@ function useHideFieldErrors(field: AnyFieldApi): boolean {
   return getFormHideFieldErrors(field.form)
 }
 
-export { useHideFieldErrors, useIsInvalid }
+// Returns whether the form's schema marks this field as required. Drives the
+// inline `*` indicator next to field labels. Returns `false` when the form
+// has no schema, was constructed with `requiredIndicator: false`, or the
+// schema doesn't mark this field's path as required.
+function useIsFieldRequired(field: AnyFieldApi): boolean {
+  return isFieldRequired(field.form, field.name)
+}
+
+export { useHideFieldErrors, useIsFieldRequired, useIsInvalid }

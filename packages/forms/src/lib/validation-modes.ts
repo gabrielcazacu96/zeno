@@ -9,10 +9,16 @@ const DEFAULT_VALIDATION_MODE: ValidationMode = "blur-then-change"
 type ZenoFormState = {
   validation: ValidationMode
   hideFieldErrors: boolean
+  requiredIndicator: boolean
+  requiredFields: ReadonlySet<string>
 }
+
+const EMPTY_REQUIRED_FIELDS: ReadonlySet<string> = new Set<string>()
 
 const DEFAULT_FORM_STATE: ZenoFormState = {
   hideFieldErrors: false,
+  requiredFields: EMPTY_REQUIRED_FIELDS,
+  requiredIndicator: true,
   validation: DEFAULT_VALIDATION_MODE,
 }
 
@@ -49,10 +55,19 @@ function getFormHideFieldErrors(form: AnyFormApi): boolean {
   return getFormZenoState(form).hideFieldErrors
 }
 
+function isFieldRequired(form: AnyFormApi, name: string): boolean {
+  const state = getFormZenoState(form)
+  if (!state.requiredIndicator) {
+    return false
+  }
+  return state.requiredFields.has(name)
+}
+
 export {
   DEFAULT_VALIDATION_MODE,
   getFormHideFieldErrors,
   getFormValidationMode,
+  isFieldRequired,
   setFormZenoState,
   type ValidationMode,
 }

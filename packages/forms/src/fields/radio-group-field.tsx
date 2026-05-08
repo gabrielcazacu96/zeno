@@ -7,7 +7,12 @@ import { type ComponentProps, type ReactNode, useId } from "react"
 
 import { describedBy } from "../lib/aria"
 import { useFieldContext } from "../lib/contexts"
-import { useHideFieldErrors, useIsInvalid } from "../lib/use-is-invalid"
+import { RequiredIndicator } from "../lib/required-indicator"
+import {
+  useHideFieldErrors,
+  useIsFieldRequired,
+  useIsInvalid,
+} from "../lib/use-is-invalid"
 
 type RadioGroupFieldProps = Omit<
   ComponentProps<typeof RadioGroup>,
@@ -15,12 +20,15 @@ type RadioGroupFieldProps = Omit<
 > & {
   description?: ReactNode
   label?: ReactNode
+  /** Force the required `*` indicator on or off. Defaults to schema-derived. */
+  required?: boolean
 }
 
 function RadioGroupField({
   children,
   description,
   label,
+  required,
   ...props
 }: RadioGroupFieldProps) {
   const field = useFieldContext<string>()
@@ -29,10 +37,17 @@ function RadioGroupField({
   const isInvalid = useIsInvalid(field)
   const hideErrors = useHideFieldErrors(field)
   const showError = isInvalid && !hideErrors
+  const schemaRequired = useIsFieldRequired(field)
+  const isRequired = required ?? schemaRequired
 
   return (
     <Field data-invalid={isInvalid}>
-      {label && <FieldLabel>{label}</FieldLabel>}
+      {label && (
+        <FieldLabel>
+          {label}
+          {isRequired && <RequiredIndicator />}
+        </FieldLabel>
+      )}
       <RadioGroup
         aria-describedby={describedBy(
           [description, descriptionId],

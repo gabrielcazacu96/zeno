@@ -6,7 +6,12 @@ import type { ReactNode } from "react"
 
 import { describedBy } from "../lib/aria"
 import { useFieldContext } from "../lib/contexts"
-import { useHideFieldErrors, useIsInvalid } from "../lib/use-is-invalid"
+import { RequiredIndicator } from "../lib/required-indicator"
+import {
+  useHideFieldErrors,
+  useIsFieldRequired,
+  useIsInvalid,
+} from "../lib/use-is-invalid"
 
 // Flat surface — `OTPInput`'s prop type is a discriminated union over
 // `render`/`children`, which doesn't compose cleanly with `Omit`. Listing the
@@ -27,6 +32,8 @@ type OtpFieldProps = {
    * you need a separator between segments.
    */
   children?: ReactNode
+  /** Force the required `*` indicator on or off. Defaults to schema-derived. */
+  required?: boolean
 }
 
 function OtpField({
@@ -39,6 +46,7 @@ function OtpField({
   label,
   maxLength = 6,
   pattern,
+  required,
 }: OtpFieldProps) {
   const field = useFieldContext<string>()
   const errorId = `${field.name}-error`
@@ -46,10 +54,17 @@ function OtpField({
   const isInvalid = useIsInvalid(field)
   const hideErrors = useHideFieldErrors(field)
   const showError = isInvalid && !hideErrors
+  const schemaRequired = useIsFieldRequired(field)
+  const isRequired = required ?? schemaRequired
 
   return (
     <Field data-invalid={isInvalid}>
-      {label && <FieldLabel htmlFor={field.name}>{label}</FieldLabel>}
+      {label && (
+        <FieldLabel htmlFor={field.name}>
+          {label}
+          {isRequired && <RequiredIndicator />}
+        </FieldLabel>
+      )}
       <InputOTP
         aria-describedby={describedBy(
           [description, descriptionId],

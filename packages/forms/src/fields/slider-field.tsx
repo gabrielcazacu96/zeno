@@ -12,7 +12,12 @@ import type { ComponentProps, ReactNode } from "react"
 
 import { describedBy } from "../lib/aria"
 import { useFieldContext } from "../lib/contexts"
-import { useHideFieldErrors, useIsInvalid } from "../lib/use-is-invalid"
+import { RequiredIndicator } from "../lib/required-indicator"
+import {
+  useHideFieldErrors,
+  useIsFieldRequired,
+  useIsInvalid,
+} from "../lib/use-is-invalid"
 
 type SliderValue = number | number[]
 
@@ -27,12 +32,15 @@ type SliderFieldProps = Omit<
    * value(s) so callers can format units (e.g. `${v}%`, `$${a}-$${b}`).
    */
   formatValue?: (value: SliderValue) => ReactNode
+  /** Force the required `*` indicator on or off. Defaults to schema-derived. */
+  required?: boolean
 }
 
 function SliderField({
   description,
   formatValue,
   label,
+  required,
   ...props
 }: SliderFieldProps) {
   const field = useFieldContext<SliderValue>()
@@ -41,6 +49,8 @@ function SliderField({
   const isInvalid = useIsInvalid(field)
   const hideErrors = useHideFieldErrors(field)
   const showError = isInvalid && !hideErrors
+  const schemaRequired = useIsFieldRequired(field)
+  const isRequired = required ?? schemaRequired
 
   const value = field.state.value
   const readout = formatValue && value !== undefined ? formatValue(value) : null
@@ -49,7 +59,12 @@ function SliderField({
     <Field data-invalid={isInvalid}>
       {(label || readout) && (
         <FieldContent className="flex-row items-center justify-between">
-          {label && <FieldLabel htmlFor={field.name}>{label}</FieldLabel>}
+          {label && (
+            <FieldLabel htmlFor={field.name}>
+              {label}
+              {isRequired && <RequiredIndicator />}
+            </FieldLabel>
+          )}
           {readout && (
             <span className="text-muted-foreground text-sm tabular-nums">
               {readout}

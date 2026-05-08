@@ -9,7 +9,12 @@ import type { ComponentProps, ReactNode } from "react"
 
 import { describedBy } from "../lib/aria"
 import { useFieldContext } from "../lib/contexts"
-import { useHideFieldErrors, useIsInvalid } from "../lib/use-is-invalid"
+import { RequiredIndicator } from "../lib/required-indicator"
+import {
+  useHideFieldErrors,
+  useIsFieldRequired,
+  useIsInvalid,
+} from "../lib/use-is-invalid"
 
 type CalendarProps = ComponentProps<typeof Calendar>
 
@@ -23,6 +28,8 @@ type DatePickerFieldProps = {
   triggerClassName?: string
   /** Pass-through to the underlying `<Calendar>` (e.g. `disabled`, `locale`). */
   calendarProps?: Omit<CalendarProps, "mode" | "onSelect" | "selected">
+  /** Force the required `*` indicator on or off. Defaults to schema-derived. */
+  required?: boolean
 }
 
 const FALLBACK_PLACEHOLDER = "Pick a date"
@@ -41,6 +48,7 @@ function DatePickerField({
   formatValue = defaultFormat,
   label,
   placeholder = FALLBACK_PLACEHOLDER,
+  required,
   triggerClassName,
 }: DatePickerFieldProps) {
   const field = useFieldContext<Date | undefined>()
@@ -49,13 +57,20 @@ function DatePickerField({
   const isInvalid = useIsInvalid(field)
   const hideErrors = useHideFieldErrors(field)
   const showError = isInvalid && !hideErrors
+  const schemaRequired = useIsFieldRequired(field)
+  const isRequired = required ?? schemaRequired
 
   const value = field.state.value
   const empty = !value
 
   return (
     <Field data-invalid={isInvalid}>
-      {label && <FieldLabel htmlFor={field.name}>{label}</FieldLabel>}
+      {label && (
+        <FieldLabel htmlFor={field.name}>
+          {label}
+          {isRequired && <RequiredIndicator />}
+        </FieldLabel>
+      )}
       <Popover>
         <PopoverTrigger
           aria-describedby={describedBy(

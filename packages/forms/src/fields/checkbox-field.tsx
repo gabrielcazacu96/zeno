@@ -12,7 +12,12 @@ import type { ComponentProps, ReactNode } from "react"
 
 import { describedBy } from "../lib/aria"
 import { useFieldContext } from "../lib/contexts"
-import { useHideFieldErrors, useIsInvalid } from "../lib/use-is-invalid"
+import { RequiredIndicator } from "../lib/required-indicator"
+import {
+  useHideFieldErrors,
+  useIsFieldRequired,
+  useIsInvalid,
+} from "../lib/use-is-invalid"
 
 type CheckboxFieldProps = Omit<
   ComponentProps<typeof Checkbox>,
@@ -20,15 +25,24 @@ type CheckboxFieldProps = Omit<
 > & {
   description?: ReactNode
   label?: ReactNode
+  /** Force the required `*` indicator on or off. Defaults to schema-derived. */
+  required?: boolean
 }
 
-function CheckboxField({ description, label, ...props }: CheckboxFieldProps) {
+function CheckboxField({
+  description,
+  label,
+  required,
+  ...props
+}: CheckboxFieldProps) {
   const field = useFieldContext<boolean>()
   const errorId = `${field.name}-error`
   const descriptionId = `${field.name}-description`
   const isInvalid = useIsInvalid(field)
   const hideErrors = useHideFieldErrors(field)
   const showError = isInvalid && !hideErrors
+  const schemaRequired = useIsFieldRequired(field)
+  const isRequired = required ?? schemaRequired
 
   return (
     <Field data-invalid={isInvalid} orientation="horizontal">
@@ -46,7 +60,12 @@ function CheckboxField({ description, label, ...props }: CheckboxFieldProps) {
         {...props}
       />
       <FieldContent>
-        {label && <FieldLabel htmlFor={field.name}>{label}</FieldLabel>}
+        {label && (
+          <FieldLabel htmlFor={field.name}>
+            {label}
+            {isRequired && <RequiredIndicator />}
+          </FieldLabel>
+        )}
         {description && (
           <FieldDescription id={descriptionId}>{description}</FieldDescription>
         )}
