@@ -29,6 +29,7 @@ import {
 export * from "@tanstack/react-form"
 export * from "./addons"
 export { RadioGroupFieldItem } from "./fields/radio-group-field"
+export { applyValidationError } from "./lib/apply-validation-error"
 export { useFieldContext, useFormContext } from "./lib/contexts"
 export {
   RequiredIndicator,
@@ -39,6 +40,7 @@ export {
   useIsFieldRequired,
   useIsInvalid,
 } from "./lib/use-is-invalid"
+export { type FieldMessage, ValidationError } from "./lib/validation-error"
 export { blurThenChangeLogic } from "./lib/validation-logic"
 export type { ValidationMode } from "./lib/validation-modes"
 export { useAppFields } from "./use-app-fields"

@@ -13,6 +13,7 @@ import { DynamicExample } from "@/components/forms/dynamic-preview"
 import { LargeExample } from "@/components/forms/large-preview"
 import { LoginExample } from "@/components/forms/login-preview"
 import { OutsideFormExample } from "@/components/forms/outside-form-preview"
+import { ServerErrorExample } from "@/components/forms/server-error-preview"
 import { SignupExample } from "@/components/forms/signup-preview"
 import { SubmittingExample } from "@/components/forms/submitting-preview"
 
@@ -733,3 +734,81 @@ export function AssignReviewer() {
 ```
 
 </Preview>
+
+## Server-side error handler
+
+When the server rejects a submission with per-field messages, throw a
+`ValidationError` from anywhere inside `onSubmit` (typically from your API
+client). `useZenoForm` catches it and writes each field message onto the
+matching field's meta — no boilerplate try/catch, no `setFieldMeta` calls.
+The error lands on `errorMap.onChange`, so the form-level schema overwrites
+it the moment the user edits the field; the message clears automatically
+once the value passes.
+
+<Preview>
+  <ServerErrorExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm, ValidationError } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { z } from "zod"
+
+const schema = z.object({
+  email: z.email("Enter a valid email"),
+  username: z.string().min(2, "At least 2 characters"),
+})
+
+async function createAccount(value: z.infer<typeof schema>) {
+  const response = await fetch("/api/account", {
+    body: JSON.stringify(value),
+    method: "POST",
+  })
+  if (response.status === 422) {
+    const body = (await response.json()) as { fields: Record<string, string> }
+    throw new ValidationError(body.fields)
+  }
+}
+
+export function CreateAccount() {
+  const form = useZenoForm({
+    defaultValues: { email: "", username: "" },
+    onSubmit: ({ value }) => createAccount(value),
+    schema,
+  })
+  const { EmailField, InputField, SubmitButton } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form id="create-account-form">
+        <FieldGroup>
+          <InputField label="Username" name="username" />
+          <EmailField />
+        </FieldGroup>
+      </Form>
+      <SubmitButton form="create-account-form">Create</SubmitButton>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+`ValidationError` is throwable from anywhere reachable during submit — the
+API client, an async refinement, a custom guard. Pass an array of strings
+to surface multiple messages on the same field, and an optional
+`formError` for a top-level message that doesn't belong to any field:
+
+```tsx
+throw new ValidationError(
+  { email: ["Already taken", "Domain is blocked"] },
+  { formError: "Account creation is paused for new orgs." }
+)
+```
+
+Errors written by `ValidationError` clear on the next keystroke (they go
+into `errorMap.onChange`). If you need a server message that persists
+until the next submit, call `formApi.setFieldMeta` directly with
+`errorMap.onSubmit` instead.
+

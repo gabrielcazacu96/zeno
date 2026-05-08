@@ -1,6 +1,7 @@
 "use client"
 
 import type {
+  AnyFormApi,
   FormAsyncValidateOrFn,
   FormOptions,
   FormValidateOrFn,
@@ -10,7 +11,9 @@ import { useMemo } from "react"
 import { ResetButton } from "./fields/reset-button"
 import { SubmitButton } from "./fields/submit-button"
 import { useAppForm } from "./form"
+import { applyValidationError } from "./lib/apply-validation-error"
 import { getRequiredPaths } from "./lib/schema-required"
+import { ValidationError } from "./lib/validation-error"
 import { blurThenChangeLogic } from "./lib/validation-logic"
 import {
   DEFAULT_VALIDATION_MODE,
@@ -158,8 +161,27 @@ function useZenoForm<
     requiredIndicator = true,
     validators,
     validationLogic,
+    onSubmit: userOnSubmit,
     ...rest
   } = options
+
+  const wrappedOnSubmit = userOnSubmit
+    ? ((async (props: { formApi: AnyFormApi; value: TFormData }) => {
+        try {
+          await (
+            userOnSubmit as unknown as (
+              p: typeof props
+            ) => unknown | Promise<unknown>
+          )(props)
+        } catch (error) {
+          if (error instanceof ValidationError) {
+            applyValidationError(props.formApi, error)
+            return
+          }
+          throw error
+        }
+      }) as typeof userOnSubmit)
+    : undefined
 
   const requiredFields = useMemo(
     () =>
@@ -196,6 +218,7 @@ function useZenoForm<
     TSubmitMeta
   >({
     ...rest,
+    ...(wrappedOnSubmit ? { onSubmit: wrappedOnSubmit } : {}),
     ...(resolvedValidators ? { validators: resolvedValidators } : {}),
     ...(resolvedValidationLogic
       ? { validationLogic: resolvedValidationLogic }
