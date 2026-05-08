@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm, ValidationSpinner } from "@zeno/forms"
+import { Form, FormProvider, useForm, ValidationSpinner } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import {
   InputGroupAddon,
@@ -13,7 +13,7 @@ import { z } from "zod"
 const wrapperClass = "w-full max-w-sm"
 
 export function AddonInlineIconPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     schema: z.object({ email: z.email("Enter a valid email") }),
   })
   const { EmailField } = form
@@ -33,7 +33,7 @@ export function AddonInlineIconPreview() {
 }
 
 export function AddonInlineTextPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     schema: z.object({
       handle: z.string().min(1, "Enter a handle"),
     }),
@@ -58,7 +58,7 @@ export function AddonInlineTextPreview() {
 }
 
 export function AddonBlockToolbarPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     schema: z.object({
       bio: z.string().max(160, "Keep it under 160 characters"),
     }),
@@ -94,7 +94,7 @@ async function fakeCheckEmail(email: string) {
 }
 
 export function AddonValidationSpinnerPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     schema: z.object({ email: z.email("Enter a valid email") }),
   })
   const { EmailField } = form

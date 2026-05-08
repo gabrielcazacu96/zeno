@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { Button } from "@zeno/ui/button"
 import {
   Card,
@@ -36,7 +36,7 @@ const projectSchema = z.object({
 
 export function DialogExample() {
   const [open, setOpen] = useState(false)
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: ({ value }) => {
       toast.success("Project created", {
         description: `${value.name} (${value.slug})`,

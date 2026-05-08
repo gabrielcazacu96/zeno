@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { Badge } from "@zeno/ui/badge"
 import {
   Card,
@@ -15,7 +15,7 @@ import { Field, FieldGroup } from "@zeno/ui/field"
 import { toastSubmitted, wrapperClass } from "./preview-utils"
 
 export function UnsavedChangesExample() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { body: "", title: "" },
     onSubmit: ({ formApi, value }) => {
       toastSubmitted(value)

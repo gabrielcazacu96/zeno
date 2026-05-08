@@ -51,7 +51,7 @@ type PartialFormData<T> = T extends readonly unknown[]
 type ZenoFormExtras<TFormData> = {
   /**
    * A standard schema (Zod, Valibot, ArkType, …) describing the form data.
-   * `useZenoForm` uses it to generate `validators` and `validationLogic`
+   * `useForm` uses it to generate `validators` and `validationLogic`
    * based on the chosen `validation` mode. Pass your own `validators` /
    * `validationLogic` to override.
    */
@@ -116,7 +116,7 @@ type ZenoFormExtras<TFormData> = {
   defaultValues?: PartialFormData<TFormData>
 }
 
-type UseZenoFormOptions<
+type UseFormOptions<
   TFormData,
   TOnMount extends undefined | FormValidateOrFn<TFormData>,
   TOnChange extends undefined | FormValidateOrFn<TFormData>,
@@ -165,7 +165,7 @@ function buildValidatorsFromSchema<TFormData>(
   }
 }
 
-function useZenoForm<
+function useForm<
   TFormData,
   TOnMount extends undefined | FormValidateOrFn<TFormData> = undefined,
   TOnChange extends undefined | FormValidateOrFn<TFormData> = undefined,
@@ -185,7 +185,7 @@ function useZenoForm<
   TOnServer extends undefined | FormAsyncValidateOrFn<TFormData> = undefined,
   TSubmitMeta = never,
 >(
-  options: UseZenoFormOptions<
+  options: UseFormOptions<
     TFormData,
     TOnMount,
     TOnChange,
@@ -325,4 +325,4 @@ function useZenoForm<
   )
 }
 
-export { useZenoForm }
+export { useForm }

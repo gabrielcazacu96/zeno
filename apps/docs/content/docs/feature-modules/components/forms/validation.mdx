@@ -12,7 +12,7 @@ import { MixedValidationExample } from "@/components/forms/mixed-validation-prev
 import { RequiredIndicatorExample } from "@/components/forms/required-indicator-preview"
 import { ReValidateExample } from "@/components/forms/revalidate-preview"
 
-`useZenoForm` accepts two validation props:
+`useForm` accepts two validation props:
 
 - **`schema`**: any [Standard Schema](https://standardschema.dev/) (Zod,
   Valibot, ArkType, …) describing the form data.
@@ -20,7 +20,7 @@ import { ReValidateExample } from "@/components/forms/revalidate-preview"
   (default), `'change'`, `'blur'`, or `'submit'`.
 
 ```tsx
-const form = useZenoForm({
+const form = useForm({
   schema,
   validation: "blur-then-change", // optional, this is the default
   onSubmit: ({ value }) => signIn(value),
@@ -59,7 +59,7 @@ as the user corrects:
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
@@ -69,7 +69,7 @@ const schema = z.object({
 })
 
 export function SignIn() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: ({ value }) => signIn(value),
     schema,
   })
@@ -105,7 +105,7 @@ soon as the field is dirty.
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
@@ -118,7 +118,7 @@ const schema = z.object({
 })
 
 export function ChangePassword() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: ({ value }) => savePassword(value.password),
     schema,
     validation: "change",
@@ -145,7 +145,7 @@ export function ChangePassword() {
 
 Search bars, filter panels, computed previews. Anything where there's no
 submit step and the values themselves drive a side-effect. Drop the
-schema from `useZenoForm` and validate manually inside `listeners.onChange`:
+schema from `useForm` and validate manually inside `listeners.onChange`:
 
 <Preview>
   <LiveSearchExample />
@@ -153,7 +153,7 @@ schema from `useZenoForm` and validate manually inside `listeners.onChange`:
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
@@ -164,7 +164,7 @@ const schema = z.object({
 export function LiveSearch({
   onQueryChange,
 }: { onQueryChange: (q: string) => void }) {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { query: "" },
     listeners: {
       onChange: ({ formApi }) => {
@@ -211,7 +211,7 @@ is cheap and independent and blur-validating each one would feel chatty
 (long settings pages).
 
 ```tsx
-const form = useZenoForm({
+const form = useForm({
   defaultValues,
   schema,
   validation: "submit",
@@ -235,7 +235,7 @@ even though the form is in the default `'blur-then-change'` mode.
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
@@ -257,7 +257,7 @@ const slugAvailability = z
   })
 
 export function CreateWorkspace() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: ({ value }) => createWorkspace(value),
     schema: formSchema,
   })
@@ -304,7 +304,7 @@ request.
 
 Every shipped field appends a `*` to its label when the schema treats
 that field as required. On by default. Pass `requiredIndicator: false`
-to `useZenoForm` to opt out form-wide, or override per field with the
+to `useForm` to opt out form-wide, or override per field with the
 boolean `required` prop.
 
 <Preview>
@@ -313,7 +313,7 @@ boolean `required` prop.
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { SelectItem } from "@zeno/ui/select"
 import { z } from "zod"
@@ -326,7 +326,7 @@ const schema = z.object({
 })
 
 export function SignUp() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { newsletter: false }, // strings & schema defaults flow from the schema
     schema,
     // requiredIndicator: false, // disable for the whole form
@@ -372,7 +372,7 @@ input. For longer forms or accessibility-driven designs, you may want to
 collect every error in one place (above or below the submit button) and
 keep the fields visually clean.
 
-Pass `hideFieldErrors: true` to `useZenoForm`. The shipped fields keep
+Pass `hideFieldErrors: true` to `useForm`. The shipped fields keep
 their `data-invalid` / `aria-invalid` styling but skip rendering the
 inline error. Then subscribe via `form.Subscribe` and render the summary
 yourself.
@@ -383,7 +383,7 @@ yourself.
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
@@ -393,7 +393,7 @@ const schema = z.object({
 })
 
 export function SignInWithSummary() {
-  const form = useZenoForm({
+  const form = useForm({
     hideFieldErrors: true,
     onSubmit: ({ value }) => signIn(value),
     schema,
@@ -482,7 +482,7 @@ import { blurThenChangeLogic } from "@zeno/forms"
 import { defaultValidationLogic } from "@tanstack/react-form"
 
 // Async uniqueness on blur, sync schema on every keystroke.
-const form = useZenoForm({
+const form = useForm({
   defaultValues,
   validators: {
     onChange: schema,

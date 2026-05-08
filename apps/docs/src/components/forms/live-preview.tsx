@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { useMemo, useState } from "react"
 import { z } from "zod"
@@ -24,7 +24,7 @@ const ITEMS = [
 
 export function LiveSearchExample() {
   const [query, setQuery] = useState("")
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { query: "" },
     listeners: {
       onChange: ({ formApi }) => {

@@ -115,7 +115,7 @@ function buildSubmitValidators(
 }
 
 // Custom validation logic implementing the "blur first, change after" pattern
-// used by `useZenoForm` by default.
+// used by `useForm` by default.
 //
 // **Why this exists.** TanStack Form's default logic stores errors per cause:
 // the `onBlur` validator writes to `errorMap.onBlur`, the `onChange` validator

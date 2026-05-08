@@ -46,7 +46,7 @@ function modeAllowsDisplay(
 }
 
 // Returns the "should we display errors?" gate for a field. The gate matches
-// the form's `validation` mode (set via `useZenoForm({ validation })`):
+// the form's `validation` mode (set via `useForm({ validation })`):
 //
 //   - `change`           → show as soon as the user has typed (live)
 //   - `blur`             → show after first blur
@@ -91,7 +91,7 @@ function useIsInvalid(field: AnyFieldApi): boolean {
 }
 
 // Returns whether the form was configured to hide inline field errors via
-// `useZenoForm({ hideFieldErrors: true })`. The shipped fields read this to
+// `useForm({ hideFieldErrors: true })`. The shipped fields read this to
 // skip rendering their inline `<FieldError>` while still flipping
 // `data-invalid` / `aria-invalid` for invalid styling.
 function useHideFieldErrors(field: AnyFieldApi): boolean {

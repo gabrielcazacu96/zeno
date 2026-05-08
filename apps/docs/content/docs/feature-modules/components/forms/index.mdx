@@ -22,7 +22,7 @@ A newsletter form, validated with Zod:
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { z } from "zod"
 
 const schema = z.object({
@@ -30,7 +30,7 @@ const schema = z.object({
 })
 
 export function Newsletter() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: async ({ value }) => {
       await subscribe(value.email)
     },
@@ -53,7 +53,7 @@ export function Newsletter() {
 
 Three pieces to know:
 
-- **`useZenoForm({ defaultValues, schema, onSubmit })`** returns the form
+- **`useForm({ defaultValues, schema, onSubmit })`** returns the form
   with typed field components attached. `name` props autocomplete against
   `defaultValues`, and `value` types match what your schema produces.
 - **`<FormProvider form={form}>`** lets every destructured component
@@ -68,7 +68,7 @@ The field components on `form` are stable, so destructure them at the top
 of your component for cleaner JSX:
 
 ```tsx
-const form = useZenoForm({ /* … */ })
+const form = useForm({ /* … */ })
 const { EmailField, PasswordField, SubmitButton } = form
 
 return (
@@ -102,7 +102,7 @@ const schema = z.object({
   password: z.string().min(8, "At least 8 characters"),
 })
 
-const form = useZenoForm({
+const form = useForm({
   schema,
   onSubmit: async ({ value }) => {
     // `value` is typed from the schema
@@ -118,7 +118,7 @@ update live. Full breakdown in
 
 ## Defaults from the schema
 
-When you pass a Zod schema, `useZenoForm` derives initial values from it
+When you pass a Zod schema, `useForm` derives initial values from it
 so you don't repeat yourself in `defaultValues`:
 
 - **`.default(value)`** flows through. Change the default in the schema,
@@ -143,7 +143,7 @@ const schema = z.object({
   newsletter: z.boolean().optional(),  // skipped (boolean) → user supplies
 })
 
-const form = useZenoForm({
+const form = useForm({
   defaultValues: { newsletter: false }, // only the boolean needs spelling out
   schema,
 })
@@ -172,4 +172,4 @@ import { formDevtoolsPlugin } from "@tanstack/react-form-devtools"
 <TanStackDevtools plugins={[formDevtoolsPlugin()]} />
 ```
 
-Every `useZenoForm` instance shows up live, no wrapping needed.
+Every `useForm` instance shows up live, no wrapping needed.

@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import {
   Card,
   CardContent,
@@ -33,7 +33,7 @@ function errorMessage(error: unknown): string {
 }
 
 export function ErrorSummaryExample() {
-  const form = useZenoForm({
+  const form = useForm({
     hideFieldErrors: true,
     onSubmit: ({ value }) =>
       toastSubmitted({ email: value.email, password: "•••" }),

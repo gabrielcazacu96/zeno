@@ -40,7 +40,7 @@ submission working (Enter-to-submit, accessibility).
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import {
   Card,
   CardContent,
@@ -57,7 +57,7 @@ const schema = z.object({
 })
 
 export function DisplayNameCard() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: ({ value }) => saveName(value.name),
     schema,
   })
@@ -101,7 +101,7 @@ Keep the form inside `<DialogContent>` and close the dialog from
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { Button } from "@zeno/ui/button"
 import {
   Dialog,
@@ -126,7 +126,7 @@ const schema = z.object({
 
 export function CreateProjectDialog() {
   const [open, setOpen] = useState(false)
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: ({ value }) => {
       createProject(value)
       setOpen(false)
@@ -184,7 +184,7 @@ A two-field form with a Zod schema. `name` autocompletes against
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
@@ -194,7 +194,7 @@ const schema = z.object({
 })
 
 export function Login() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: ({ value }) => signIn(value),
     schema,
   })
@@ -235,7 +235,7 @@ to disable it during the round-trip.
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm, ValidationSpinner } from "@zeno/forms"
+import { Form, FormProvider, useForm, ValidationSpinner } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
@@ -245,7 +245,7 @@ const schema = z.object({
 })
 
 export function AccountSettings() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: async ({ value }) => {
       await saveAccount(value)
     },
@@ -296,7 +296,7 @@ at, here the "Confirm password" field.
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
@@ -312,7 +312,7 @@ const schema = z
   })
 
 export function Signup() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: ({ value }) => createAccount(value),
     schema,
   })
@@ -352,7 +352,7 @@ bracketed paths like `members[0].name`, typed against the schema.
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { Button } from "@zeno/ui/button"
 import { FieldGroup, FieldLegend, FieldSet } from "@zeno/ui/field"
 import { TrashIcon } from "lucide-react"
@@ -369,7 +369,7 @@ const schema = z.object({
 type Member = z.infer<typeof memberSchema>
 
 export function TeamInvites() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { members: [{ email: "", name: "" }] as Member[] },
     onSubmit: ({ value }) => inviteMembers(value.members),
     schema,
@@ -449,12 +449,12 @@ between a `SelectField` and an `InputField`.
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { SelectItem } from "@zeno/ui/select"
 
 export function Shipping() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { country: "US", region: "", state: "" },
     onSubmit: ({ value }) => saveAddress(value),
   })
@@ -508,7 +508,7 @@ Most field types together, driven by a single Zod schema.
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { RadioGroupFieldItem } from "@zeno/forms/fields"
 import { FieldGroup } from "@zeno/ui/field"
 import { SelectItem } from "@zeno/ui/select"
@@ -525,7 +525,7 @@ const schema = z.object({
 })
 
 export function Profile() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: {
       age: 18,
       bio: "",
@@ -595,7 +595,7 @@ context the same way and needs no extra wiring.
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
@@ -604,7 +604,7 @@ const schema = z.object({
 })
 
 export function Settings() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: async ({ value }) => {
       await saveSettings(value)
     },
@@ -645,7 +645,7 @@ table on
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { useEffect, useState } from "react"
 
@@ -681,7 +681,7 @@ export function AssignReviewer() {
     }
   }, [query])
 
-  const form = useZenoForm({ defaultValues: { assignee: "" } })
+  const form = useForm({ defaultValues: { assignee: "" } })
   const { ComboboxField } = form
 
   return (
@@ -714,7 +714,7 @@ export function AssignReviewer() {
 
 When the server rejects a submission with per-field messages, throw a
 `ValidationError` from anywhere inside `onSubmit` (typically your API
-client). `useZenoForm` catches it and writes each field message onto the
+client). `useForm` catches it and writes each field message onto the
 matching field automatically. The error clears on the next keystroke, so
 the user sees feedback once and it goes away as they fix the value.
 
@@ -724,7 +724,7 @@ the user sees feedback once and it goes away as they fix the value.
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm, ValidationError } from "@zeno/forms"
+import { Form, FormProvider, useForm, ValidationError } from "@zeno/forms"
 import { FieldGroup } from "@zeno/ui/field"
 import { z } from "zod"
 
@@ -745,7 +745,7 @@ async function createAccount(value: z.infer<typeof schema>) {
 }
 
 export function CreateAccount() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: ({ value }) => createAccount(value),
     schema,
   })
@@ -785,7 +785,7 @@ of clearing on the next keystroke, call `formApi.setFieldMeta` directly.
 ## Unsaved-changes warning
 
 Pass `unsavedChangesWarning: "if-changed"` (or shorthand `true`) to
-`useZenoForm` and the browser prompts before navigating away while the
+`useForm` and the browser prompts before navigating away while the
 form's current values differ from its defaults. After a successful save,
 call `formApi.reset(value)` to rebase defaults to the saved values: the
 warning clears, and any further edits are diffed against the new
@@ -805,12 +805,12 @@ Two trigger modes:
 ```tsx lineNumbers
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { Badge } from "@zeno/ui/badge"
 import { FieldGroup } from "@zeno/ui/field"
 
 export function EditPost() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { body: "", title: "" },
     onSubmit: ({ formApi, value }) => {
       savePost(value)

@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { RadioGroupFieldItem } from "@zeno/forms/fields"
 import {
   Card,
@@ -42,7 +42,7 @@ const profileDefaults: ProfileValues = {
 }
 
 export function LargeExample() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: profileDefaults,
     onSubmit: ({ value }) => toastSubmitted(value),
     schema: profileSchema,

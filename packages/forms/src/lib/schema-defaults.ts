@@ -1,4 +1,4 @@
-// Extract default values from a Zod schema for `useZenoForm`.
+// Extract default values from a Zod schema for `useForm`.
 //
 // Tier A+ semantics:
 //   - `.default(...)` / `.prefault(...)` values flow through.

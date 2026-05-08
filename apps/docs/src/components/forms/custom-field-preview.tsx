@@ -5,7 +5,7 @@ import {
   FormProvider,
   useFieldContext,
   useIsInvalid,
-  useZenoForm,
+  useForm,
 } from "@zeno/forms"
 import {
   Card,
@@ -56,7 +56,7 @@ const audioSchema = z.object({
 })
 
 export function CustomFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { volume: 35 },
     onSubmit: ({ value }) => {
       toast.success("Volume applied", { description: String(value.volume) })

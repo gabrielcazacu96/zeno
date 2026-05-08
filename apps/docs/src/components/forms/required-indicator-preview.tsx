@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import {
   Card,
   CardContent,
@@ -22,7 +22,7 @@ const schema = z.object({
 })
 
 export function RequiredIndicatorExample() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: {
       newsletter: false,
     },

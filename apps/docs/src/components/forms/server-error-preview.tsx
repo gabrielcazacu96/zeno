@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm, ValidationError } from "@zeno/forms"
+import { Form, FormProvider, useForm, ValidationError } from "@zeno/forms"
 import {
   Card,
   CardContent,
@@ -37,7 +37,7 @@ async function createAccount(value: FormValues): Promise<void> {
 }
 
 export function ServerErrorExample() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: async ({ value }) => {
       await createAccount(value)
       toastSubmitted(value)

@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm, ValidationSpinner } from "@zeno/forms"
+import { Form, FormProvider, useForm, ValidationSpinner } from "@zeno/forms"
 import {
   Card,
   CardContent,
@@ -30,7 +30,7 @@ async function fakeCheckEmail(email: string) {
 }
 
 export function SubmittingExample() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: ({ value }) => fakeSave(value),
     schema,
   })

@@ -27,7 +27,7 @@ const DEFAULT_FORM_STATE: ZenoFormState = {
 // whose identity differs from the underlying `formApi` that fields receive
 // via `field.form`. The `store` instance is set in the FormApi constructor
 // and survives the spread, so it's the only reference shared by both the
-// caller of `useZenoForm` and every child field.
+// caller of `useForm` and every child field.
 const formZenoState = new WeakMap<object, ZenoFormState>()
 
 function stateKey(form: AnyFormApi): object {

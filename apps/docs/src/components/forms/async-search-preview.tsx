@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import {
   Card,
   CardContent,
@@ -67,7 +67,7 @@ export function AsyncSearchExample() {
     }
   }, [query])
 
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { assignee: "" },
   })
   const { ComboboxField } = form

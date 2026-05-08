@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import {
   Card,
   CardContent,
@@ -34,7 +34,7 @@ const slugAvailability = z
   })
 
 export function MixedValidationExample() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: ({ value }) => {
       toast.success("Workspace created", {
         description: `${value.name} (${value.slug})`,

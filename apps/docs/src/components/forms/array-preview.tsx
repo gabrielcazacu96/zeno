@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { Button } from "@zeno/ui/button"
 import {
   Card,
@@ -27,7 +27,7 @@ const teamSchema = z.object({
 type Member = z.infer<typeof memberSchema>
 
 export function ArrayExample() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { members: [{ email: "", name: "" }] as Member[] },
     onSubmit: ({ value }) => toastSubmitted(value),
     schema: teamSchema,

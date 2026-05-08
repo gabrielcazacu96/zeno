@@ -26,7 +26,6 @@ import {
   useFormContext,
 } from "./lib/contexts"
 
-export * from "@tanstack/react-form"
 export * from "./addons"
 export { RadioGroupFieldItem } from "./fields/radio-group-field"
 export { applyValidationError } from "./lib/apply-validation-error"
@@ -44,7 +43,7 @@ export { type FieldMessage, ValidationError } from "./lib/validation-error"
 export { blurThenChangeLogic } from "./lib/validation-logic"
 export type { ValidationMode } from "./lib/validation-modes"
 export { useAppFields } from "./use-app-fields"
-export { useZenoForm } from "./use-zeno-form"
+export { useForm } from "./use-zeno-form"
 
 const { useAppForm, withFieldGroup, withForm } = createFormHook({
   fieldComponents: {

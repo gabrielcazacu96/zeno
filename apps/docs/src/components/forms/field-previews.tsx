@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import { RadioGroupFieldItem } from "@zeno/forms/fields"
 import { FieldGroup } from "@zeno/ui/field"
 import { SelectItem } from "@zeno/ui/select"
@@ -9,7 +9,7 @@ import { z } from "zod"
 const wrapperClass = "w-full max-w-sm"
 
 export function InputFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     schema: z.object({ name: z.string().min(2, "At least 2 characters") }),
   })
   const { InputField } = form
@@ -30,7 +30,7 @@ export function InputFieldPreview() {
 }
 
 export function EmailFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     schema: z.object({ email: z.email("Enter a valid email") }),
   })
   const { EmailField } = form
@@ -46,7 +46,7 @@ export function EmailFieldPreview() {
 }
 
 export function PasswordFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     schema: z.object({
       password: z.string().min(8, "At least 8 characters"),
     }),
@@ -64,7 +64,7 @@ export function PasswordFieldPreview() {
 }
 
 export function TextAreaFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     schema: z.object({
       bio: z.string().max(160, "Keep it under 160 characters"),
     }),
@@ -87,7 +87,7 @@ export function TextAreaFieldPreview() {
 }
 
 export function NumberFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { age: 18 as number | undefined },
     schema: z.object({
       age: z
@@ -109,7 +109,7 @@ export function NumberFieldPreview() {
 }
 
 export function SelectFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { role: "" },
     schema: z.object({
       role: z.enum(["engineer", "designer", "manager"], {
@@ -134,7 +134,7 @@ export function SelectFieldPreview() {
 }
 
 export function CheckboxFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { terms: false },
     schema: z.object({
       terms: z.literal(true, { error: "You must accept the terms" }),
@@ -157,7 +157,7 @@ export function CheckboxFieldPreview() {
 }
 
 export function SwitchFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { pushNotifications: true },
   })
   const { SwitchField } = form
@@ -177,7 +177,7 @@ export function SwitchFieldPreview() {
 }
 
 export function RadioGroupFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { plan: "free" },
   })
   const { RadioGroupField } = form
@@ -197,7 +197,7 @@ export function RadioGroupFieldPreview() {
 }
 
 export function SliderFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { volume: 50 },
   })
   const { SliderField } = form
@@ -221,7 +221,7 @@ export function SliderFieldPreview() {
 }
 
 export function OtpFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     schema: z.object({
       code: z.string().length(6, "Enter the 6-digit code"),
     }),
@@ -244,7 +244,7 @@ export function OtpFieldPreview() {
 }
 
 export function DatePickerFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     defaultValues: { birthday: undefined as Date | undefined },
     schema: z.object({
       birthday: z.date({ error: "Pick a date" }),
@@ -277,7 +277,7 @@ const FRAMEWORKS = [
 ]
 
 export function ComboboxFieldPreview() {
-  const form = useZenoForm({
+  const form = useForm({
     schema: z.object({
       framework: z.string().min(1, "Pick a framework"),
     }),

@@ -1,6 +1,6 @@
 "use client"
 
-import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Form, FormProvider, useForm } from "@zeno/forms"
 import {
   Card,
   CardContent,
@@ -23,7 +23,7 @@ async function fakeSave(value: unknown) {
 }
 
 export function OutsideFormExample() {
-  const form = useZenoForm({
+  const form = useForm({
     onSubmit: ({ value }) => fakeSave(value),
     schema,
   })

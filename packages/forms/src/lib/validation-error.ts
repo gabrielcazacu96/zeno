@@ -1,4 +1,4 @@
-// Throwable error that carries per-field validation messages. `useZenoForm`
+// Throwable error that carries per-field validation messages. `useForm`
 // catches this inside `onSubmit` and writes each entry onto the matching
 // field's meta, so callers can `throw new ValidationError({ email: '…' })`
 // from anywhere (server response handler, custom async check, etc.) and have
