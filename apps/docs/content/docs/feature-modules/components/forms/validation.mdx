@@ -21,7 +21,6 @@ import { ReValidateExample } from "@/components/forms/revalidate-preview"
 
 ```tsx
 const form = useZenoForm({
-  defaultValues: { email: "", password: "" },
   schema,
   validation: "blur-then-change", // optional, this is the default
   onSubmit: ({ value }) => signIn(value),
@@ -71,7 +70,6 @@ const schema = z.object({
 
 export function SignIn() {
   const form = useZenoForm({
-    defaultValues: { email: "", password: "" },
     onSubmit: ({ value }) => signIn(value),
     schema,
   })
@@ -121,7 +119,6 @@ const schema = z.object({
 
 export function ChangePassword() {
   const form = useZenoForm({
-    defaultValues: { password: "" },
     onSubmit: ({ value }) => savePassword(value.password),
     schema,
     validation: "change",
@@ -261,7 +258,6 @@ const slugAvailability = z
 
 export function CreateWorkspace() {
   const form = useZenoForm({
-    defaultValues: { email: "", name: "", slug: "" },
     onSubmit: ({ value }) => createWorkspace(value),
     schema: formSchema,
   })
@@ -331,12 +327,7 @@ const schema = z.object({
 
 export function SignUp() {
   const form = useZenoForm({
-    defaultValues: {
-      email: "",
-      newsletter: false,
-      password: "",
-      role: "member",
-    },
+    defaultValues: { newsletter: false }, // strings & schema defaults flow from the schema
     schema,
     // requiredIndicator: false, // disable for the whole form
   })
@@ -403,7 +394,6 @@ const schema = z.object({
 
 export function SignInWithSummary() {
   const form = useZenoForm({
-    defaultValues: { email: "", password: "" },
     hideFieldErrors: true,
     onSubmit: ({ value }) => signIn(value),
     schema,

@@ -24,7 +24,6 @@ const schema = z.object({
 
 export function ChangeModeExample() {
   const form = useZenoForm({
-    defaultValues: { password: "" },
     onSubmit: ({ value }) => toastSubmitted({ password: value.password }),
     schema,
     validation: "change",

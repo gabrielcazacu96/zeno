@@ -21,7 +21,6 @@ const newsletterSchema = z.object({
 
 export function NewsletterPreview() {
   const form = useZenoForm({
-    defaultValues: { email: "" },
     onSubmit: ({ value }) => {
       toast.success("Subscribed", { description: value.email })
     },

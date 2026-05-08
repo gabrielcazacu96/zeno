@@ -20,7 +20,6 @@ const profileSchema = z.object({
 
 export function FormInCardExample() {
   const form = useZenoForm({
-    defaultValues: { name: "" },
     onSubmit: ({ value }) => toastSubmitted(value),
     schema: profileSchema,
   })

@@ -35,7 +35,6 @@ const slugAvailability = z
 
 export function MixedValidationExample() {
   const form = useZenoForm({
-    defaultValues: { email: "", name: "", slug: "" },
     onSubmit: ({ value }) => {
       toast.success("Workspace created", {
         description: `${value.name} (${value.slug})`,

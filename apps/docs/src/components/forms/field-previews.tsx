@@ -10,7 +10,6 @@ const wrapperClass = "w-full max-w-sm"
 
 export function InputFieldPreview() {
   const form = useZenoForm({
-    defaultValues: { name: "" },
     schema: z.object({ name: z.string().min(2, "At least 2 characters") }),
   })
   const { InputField } = form
@@ -32,7 +31,6 @@ export function InputFieldPreview() {
 
 export function EmailFieldPreview() {
   const form = useZenoForm({
-    defaultValues: { email: "" },
     schema: z.object({ email: z.email("Enter a valid email") }),
   })
   const { EmailField } = form
@@ -49,7 +47,6 @@ export function EmailFieldPreview() {
 
 export function PasswordFieldPreview() {
   const form = useZenoForm({
-    defaultValues: { password: "" },
     schema: z.object({
       password: z.string().min(8, "At least 8 characters"),
     }),
@@ -68,7 +65,6 @@ export function PasswordFieldPreview() {
 
 export function TextAreaFieldPreview() {
   const form = useZenoForm({
-    defaultValues: { bio: "" },
     schema: z.object({
       bio: z.string().max(160, "Keep it under 160 characters"),
     }),
@@ -226,7 +222,6 @@ export function SliderFieldPreview() {
 
 export function OtpFieldPreview() {
   const form = useZenoForm({
-    defaultValues: { code: "" },
     schema: z.object({
       code: z.string().length(6, "Enter the 6-digit code"),
     }),
@@ -283,7 +278,6 @@ const FRAMEWORKS = [
 
 export function ComboboxFieldPreview() {
   const form = useZenoForm({
-    defaultValues: { framework: "" },
     schema: z.object({
       framework: z.string().min(1, "Pick a framework"),
     }),

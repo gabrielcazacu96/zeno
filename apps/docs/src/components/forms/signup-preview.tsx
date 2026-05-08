@@ -27,7 +27,6 @@ const signupSchema = z
 
 export function SignupExample() {
   const form = useZenoForm({
-    defaultValues: { confirmPassword: "", email: "", password: "" },
     onSubmit: ({ value }) =>
       toastSubmitted({ email: value.email, password: "•••" }),
     schema: signupSchema,

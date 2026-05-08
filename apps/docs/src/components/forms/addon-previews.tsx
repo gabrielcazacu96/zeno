@@ -14,7 +14,6 @@ const wrapperClass = "w-full max-w-sm"
 
 export function AddonInlineIconPreview() {
   const form = useZenoForm({
-    defaultValues: { email: "" },
     schema: z.object({ email: z.email("Enter a valid email") }),
   })
   const { EmailField } = form
@@ -35,7 +34,6 @@ export function AddonInlineIconPreview() {
 
 export function AddonInlineTextPreview() {
   const form = useZenoForm({
-    defaultValues: { handle: "" },
     schema: z.object({
       handle: z.string().min(1, "Enter a handle"),
     }),
@@ -61,7 +59,6 @@ export function AddonInlineTextPreview() {
 
 export function AddonBlockToolbarPreview() {
   const form = useZenoForm({
-    defaultValues: { bio: "" },
     schema: z.object({
       bio: z.string().max(160, "Keep it under 160 characters"),
     }),
@@ -98,7 +95,6 @@ async function fakeCheckEmail(email: string) {
 
 export function AddonValidationSpinnerPreview() {
   const form = useZenoForm({
-    defaultValues: { email: "" },
     schema: z.object({ email: z.email("Enter a valid email") }),
   })
   const { EmailField } = form

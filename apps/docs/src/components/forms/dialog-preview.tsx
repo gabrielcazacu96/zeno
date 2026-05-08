@@ -37,7 +37,6 @@ const projectSchema = z.object({
 export function DialogExample() {
   const [open, setOpen] = useState(false)
   const form = useZenoForm({
-    defaultValues: { name: "", slug: "" },
     onSubmit: ({ value }) => {
       toast.success("Project created", {
         description: `${value.name} (${value.slug})`,

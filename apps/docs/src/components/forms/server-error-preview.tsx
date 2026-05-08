@@ -38,7 +38,6 @@ async function createAccount(value: FormValues): Promise<void> {
 
 export function ServerErrorExample() {
   const form = useZenoForm({
-    defaultValues: { email: "", username: "" },
     onSubmit: async ({ value }) => {
       await createAccount(value)
       toastSubmitted(value)

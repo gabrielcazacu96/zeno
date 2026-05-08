@@ -24,10 +24,7 @@ const schema = z.object({
 export function RequiredIndicatorExample() {
   const form = useZenoForm({
     defaultValues: {
-      email: "",
       newsletter: false,
-      password: "",
-      role: "member",
     },
     schema,
   })

@@ -12,6 +12,7 @@ import { ResetButton } from "./fields/reset-button"
 import { SubmitButton } from "./fields/submit-button"
 import { useAppForm } from "./form"
 import { applyValidationError } from "./lib/apply-validation-error"
+import { deepMergeDefaults, extractZodDefaults } from "./lib/schema-defaults"
 import { getRequiredPaths } from "./lib/schema-required"
 import { useUnsavedChangesWarning } from "./lib/use-unsaved-changes-warning"
 import { ValidationError } from "./lib/validation-error"
@@ -32,6 +33,20 @@ type StandardSchema<T> = {
     readonly types?: { readonly input: T; readonly output: T }
   }
 }
+
+// Recursive partial that preserves arrays, dates, and other structural types
+// as atomic — only plain object keys become optional. Used to relax
+// `defaultValues` so users can omit fields covered by the schema's
+// `.default(...)` values or by the string/array auto-fill (see
+// `lib/schema-defaults.ts`). `value` on submit is still typed as the full
+// `TFormData` because TanStack's runtime state assertion is unchanged.
+type PartialFormData<T> = T extends readonly unknown[]
+  ? T
+  : T extends Date | RegExp | ((...args: never[]) => unknown)
+    ? T
+    : T extends object
+      ? { [K in keyof T]?: PartialFormData<T[K]> }
+      : T
 
 type ZenoFormExtras<TFormData> = {
   /**
@@ -89,6 +104,16 @@ type ZenoFormExtras<TFormData> = {
    * form yourself and prompt before pushing the next route.
    */
   unsavedChangesWarning?: boolean | "if-changed" | "if-touched"
+  /**
+   * Initial values for the form fields. Relaxed to a deep partial so you can
+   * omit fields whose defaults come from the schema — `.default(...)` values
+   * flow through, and `z.string()` / `z.array(...)` without a default
+   * initialise to `""` / `[]` to keep inputs controlled. See `lib/schema-defaults.ts`.
+   *
+   * Numbers, booleans, dates, and other domain-loaded types still need an
+   * explicit value here when the schema doesn't provide one.
+   */
+  defaultValues?: PartialFormData<TFormData>
 }
 
 type UseZenoFormOptions<
@@ -104,19 +129,22 @@ type UseZenoFormOptions<
   TOnDynamicAsync extends undefined | FormAsyncValidateOrFn<TFormData>,
   TOnServer extends undefined | FormAsyncValidateOrFn<TFormData>,
   TSubmitMeta,
-> = FormOptions<
-  TFormData,
-  TOnMount,
-  TOnChange,
-  TOnChangeAsync,
-  TOnBlur,
-  TOnBlurAsync,
-  TOnSubmit,
-  TOnSubmitAsync,
-  TOnDynamic,
-  TOnDynamicAsync,
-  TOnServer,
-  TSubmitMeta
+> = Omit<
+  FormOptions<
+    TFormData,
+    TOnMount,
+    TOnChange,
+    TOnChangeAsync,
+    TOnBlur,
+    TOnBlurAsync,
+    TOnSubmit,
+    TOnSubmitAsync,
+    TOnDynamic,
+    TOnDynamicAsync,
+    TOnServer,
+    TSubmitMeta
+  >,
+  "defaultValues"
 > &
   ZenoFormExtras<TFormData>
 
@@ -210,6 +238,27 @@ function useZenoForm<
     [schema, requiredIndicator]
   )
 
+  const { defaultValues: userDefaultValues, ...restWithoutDefaults } = rest
+
+  const schemaDefaults = useMemo(
+    () =>
+      schema
+        ? extractZodDefaults(schema as Parameters<typeof extractZodDefaults>[0])
+        : undefined,
+    [schema]
+  )
+
+  const mergedDefaultValues = useMemo(
+    () =>
+      schemaDefaults
+        ? (deepMergeDefaults(
+            schemaDefaults,
+            userDefaultValues as Record<string, unknown> | undefined
+          ) as typeof userDefaultValues)
+        : userDefaultValues,
+    [schemaDefaults, userDefaultValues]
+  )
+
   const resolvedValidators =
     validators ??
     (schema
@@ -236,7 +285,10 @@ function useZenoForm<
     TOnServer,
     TSubmitMeta
   >({
-    ...rest,
+    ...restWithoutDefaults,
+    ...(mergedDefaultValues === undefined
+      ? {}
+      : { defaultValues: mergedDefaultValues }),
     ...(wrappedOnSubmit ? { onSubmit: wrappedOnSubmit } : {}),
     ...(resolvedValidators ? { validators: resolvedValidators } : {}),
     ...(resolvedValidationLogic

@@ -34,7 +34,6 @@ function errorMessage(error: unknown): string {
 
 export function ErrorSummaryExample() {
   const form = useZenoForm({
-    defaultValues: { email: "", password: "" },
     hideFieldErrors: true,
     onSubmit: ({ value }) =>
       toastSubmitted({ email: value.email, password: "•••" }),

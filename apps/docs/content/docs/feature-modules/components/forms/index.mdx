@@ -31,7 +31,6 @@ const schema = z.object({
 
 export function Newsletter() {
   const form = useZenoForm({
-    defaultValues: { email: "" },
     onSubmit: async ({ value }) => {
       await subscribe(value.email)
     },
@@ -104,7 +103,6 @@ const schema = z.object({
 })
 
 const form = useZenoForm({
-  defaultValues: { email: "", password: "" },
   schema,
   onSubmit: async ({ value }) => {
     // `value` is typed from the schema
@@ -117,6 +115,43 @@ A second prop, `validation`, controls when errors appear:
 default keeps pristine fields quiet, errors land on first blur, then
 update live. Full breakdown in
 [Validation modes](/docs/feature-modules/components/forms/validation).
+
+## Defaults from the schema
+
+When you pass a Zod schema, `useZenoForm` derives initial values from it
+so you don't repeat yourself in `defaultValues`:
+
+- **`.default(value)`** flows through. Change the default in the schema,
+  the form follows.
+- **Strings** (`z.string()`, `z.email()`, `z.url()`, …) and **arrays**
+  (`z.array(...)`) without a `.default(...)` initialise as `""` and `[]`
+  respectively, so React inputs render controlled.
+- **Numbers, booleans, dates, enums, files** without a `.default(...)`
+  carry domain meaning (`0`? `false`? `today`?), so the user supplies
+  them explicitly via `defaultValues` — passing them is the only way to
+  tell the form "this is the empty value I want".
+- Anything you put in `defaultValues` always wins on conflict — schema
+  defaults are a baseline, not a guard.
+- Nested `z.object(...)` recurses with the same rules; partial user
+  overrides are deep-merged into the schema-derived shape.
+
+```tsx
+const schema = z.object({
+  email: z.email(),                    // → ""
+  password: z.string().min(8),         // → ""
+  role: z.string().default("member"),  // → "member"
+  newsletter: z.boolean().optional(),  // skipped (boolean) → user supplies
+})
+
+const form = useZenoForm({
+  defaultValues: { newsletter: false }, // only the boolean needs spelling out
+  schema,
+})
+```
+
+This Zod-only behaviour degrades gracefully: pass a Valibot or ArkType
+schema and the hook simply skips extraction, leaving your
+`defaultValues` untouched.
 
 ## Custom fields
 

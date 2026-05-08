@@ -21,7 +21,6 @@ const schema = z.object({
 
 export function ReValidateExample() {
   const form = useZenoForm({
-    defaultValues: { email: "", password: "" },
     onSubmit: ({ value }) =>
       toastSubmitted({ email: value.email, password: "•••" }),
     schema,

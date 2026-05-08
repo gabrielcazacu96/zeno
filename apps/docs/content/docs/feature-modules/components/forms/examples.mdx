@@ -58,7 +58,6 @@ const schema = z.object({
 
 export function DisplayNameCard() {
   const form = useZenoForm({
-    defaultValues: { name: "" },
     onSubmit: ({ value }) => saveName(value.name),
     schema,
   })
@@ -128,7 +127,6 @@ const schema = z.object({
 export function CreateProjectDialog() {
   const [open, setOpen] = useState(false)
   const form = useZenoForm({
-    defaultValues: { name: "", slug: "" },
     onSubmit: ({ value }) => {
       createProject(value)
       setOpen(false)
@@ -197,7 +195,6 @@ const schema = z.object({
 
 export function Login() {
   const form = useZenoForm({
-    defaultValues: { email: "", password: "" },
     onSubmit: ({ value }) => signIn(value),
     schema,
   })
@@ -249,7 +246,6 @@ const schema = z.object({
 
 export function AccountSettings() {
   const form = useZenoForm({
-    defaultValues: { email: "", name: "" },
     onSubmit: async ({ value }) => {
       await saveAccount(value)
     },
@@ -317,7 +313,6 @@ const schema = z
 
 export function Signup() {
   const form = useZenoForm({
-    defaultValues: { confirmPassword: "", email: "", password: "" },
     onSubmit: ({ value }) => createAccount(value),
     schema,
   })
@@ -610,7 +605,6 @@ const schema = z.object({
 
 export function Settings() {
   const form = useZenoForm({
-    defaultValues: { name: "" },
     onSubmit: async ({ value }) => {
       await saveSettings(value)
     },
@@ -752,7 +746,6 @@ async function createAccount(value: z.infer<typeof schema>) {
 
 export function CreateAccount() {
   const form = useZenoForm({
-    defaultValues: { email: "", username: "" },
     onSubmit: ({ value }) => createAccount(value),
     schema,
   })

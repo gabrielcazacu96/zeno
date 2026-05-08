@@ -31,7 +31,6 @@ async function fakeCheckEmail(email: string) {
 
 export function SubmittingExample() {
   const form = useZenoForm({
-    defaultValues: { email: "", name: "" },
     onSubmit: ({ value }) => fakeSave(value),
     schema,
   })

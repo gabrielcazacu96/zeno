@@ -31,10 +31,10 @@ import {
 Every shipped field handles its own label, description, error message, and
 accessibility wiring. Destructure from the `form` returned by `useZenoForm`,
 drop it inside `<Form>`, and the `name` prop autocompletes against your
-`defaultValues`.
+schema (or `defaultValues` when no schema is passed).
 
 ```tsx
-const form = useZenoForm({ defaultValues: { /* … */ } })
+const form = useZenoForm({ schema })
 const { InputField, SubmitButton } = form
 
 <FormProvider form={form}>

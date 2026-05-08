@@ -21,7 +21,6 @@ const loginSchema = z.object({
 
 export function LoginExample() {
   const form = useZenoForm({
-    defaultValues: { email: "", password: "" },
     onSubmit: ({ value }) =>
       toastSubmitted({ email: value.email, password: "•••" }),
     schema: loginSchema,

@@ -24,7 +24,6 @@ async function fakeSave(value: unknown) {
 
 export function OutsideFormExample() {
   const form = useZenoForm({
-    defaultValues: { name: "" },
     onSubmit: ({ value }) => fakeSave(value),
     schema,
   })
