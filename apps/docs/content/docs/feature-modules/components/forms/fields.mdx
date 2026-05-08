@@ -28,30 +28,28 @@ import {
   TextAreaFieldPreview,
 } from "@/components/forms/field-previews"
 
-Every shipped field handles label, description, value, blur, `aria-invalid`,
-and field error rendering for you. Each is reached by destructuring the
-`form` returned by `useZenoForm` — `name` is autocompleted against your
-`defaultValues`. Touch the field, leave it empty, then try to submit to see
-the error UX.
-
-Each field accepts an optional `validators` prop that's forwarded straight
-to TanStack Form's `<Field>`, so you can override the form-level validation
-mode per field — see
-[Validation modes](/docs/feature-modules/components/forms/validation#mixing-onblur-and-onchange-per-field).
+Every shipped field handles its own label, description, error message, and
+accessibility wiring. Destructure from the `form` returned by `useZenoForm`,
+drop it inside `<Form>`, and the `name` prop autocompletes against your
+`defaultValues`.
 
 ```tsx
-const form = useZenoForm({ defaultValues: { /* ... */ } })
-const { InputField /* …, PasswordField, SubmitButton, … */ } = form
+const form = useZenoForm({ defaultValues: { /* … */ } })
+const { InputField, SubmitButton } = form
 
-// Wrap with <FormProvider form={form}> and put fields inside <Form>:
 <FormProvider form={form}>
-  <Form id="my-form">
+  <Form>
     <FieldGroup>
       <InputField name="…" />
     </FieldGroup>
+    <SubmitButton>Save</SubmitButton>
   </Form>
 </FormProvider>
 ```
+
+Every field accepts an optional `validators` prop forwarded to TanStack
+Form's `<Field>` for per-field overrides. See
+[Validation modes](/docs/feature-modules/components/forms/validation#per-field-validators).
 
 ## Input Field
 
@@ -71,9 +69,9 @@ const { InputField /* …, PasswordField, SubmitButton, … */ } = form
 
 ## Email Field
 
-A preset over `InputField` with `type="email"`, `inputMode="email"`, and
-`autoComplete="email"`. `label` defaults to `"Email"`. `name` defaults to
-`"email"` when your form has that key — pass `name` explicitly otherwise.
+Preset over `InputField` with `type="email"`, `inputMode="email"`, and
+`autoComplete="email"`. Defaults `label` to `"Email"` and `name` to
+`"email"` (when your form has that key).
 
 <Preview>
   <EmailFieldPreview />
@@ -86,10 +84,9 @@ A preset over `InputField` with `type="email"`, `inputMode="email"`, and
 
 ## Password Field
 
-A preset over `InputField` with `type="password"` and
-`autoComplete="current-password"` (override with `autoComplete="new-password"`
-on signup). `label` defaults to `"Password"`. `name` defaults to `"password"`
-when your form has that key — pass `name` explicitly otherwise.
+Preset over `InputField` with `type="password"` and
+`autoComplete="current-password"`. Pass `autoComplete="new-password"` on
+signup. Defaults `label` to `"Password"` and `name` to `"password"`.
 
 <Preview>
   <PasswordFieldPreview />
@@ -118,8 +115,8 @@ when your form has that key — pass `name` explicitly otherwise.
 
 ## Number Field
 
-Sets `type="number"` and `inputMode="numeric"`, and coerces the input value to
-a `number` (or `undefined` when empty).
+Stores the input as `number` (or `undefined` when empty), so your form
+state stays typed without manual coercion.
 
 <Preview>
   <NumberFieldPreview />
@@ -132,19 +129,17 @@ a `number` (or `undefined` when empty).
 
 ## Composing addons (input groups)
 
-Input-style fields — `InputField`, `EmailField`, `PasswordField`, `NumberField`,
-and `TextAreaField` — accept children that flow through to an internal
-[`<InputGroup>`](https://ui.shadcn.com/docs/components/base/input-group). Drop
-shadcn's `<InputGroupAddon>`, `<InputGroupButton>`, or `<InputGroupText>` in as
-children to add prefix icons, suffix actions, or block-level toolbars without
-falling back to the low-level `<AppField>` render-prop. When no children are
-passed the field renders a bare `<Input>` / `<Textarea>` — no extra DOM cost.
+`InputField`, `EmailField`, `PasswordField`, `NumberField`, and
+`TextAreaField` accept addon children that render inside an
+[`<InputGroup>`](https://ui.shadcn.com/docs/components/base/input-group):
+prefix icons, suffix actions, block-level toolbars. Without children the
+field renders a plain input.
 
-`<InputGroupAddon align>` accepts `inline-start`, `inline-end`, `block-start`,
-and `block-end`. Visual ordering is driven by CSS, so the JSX child order
-doesn't matter.
+`<InputGroupAddon align>` accepts `inline-start`, `inline-end`,
+`block-start`, and `block-end`. Visual order is driven by CSS, so the JSX
+order doesn't matter.
 
-### Inline addons — prefix icon
+### Prefix icon
 
 <Preview>
   <AddonInlineIconPreview />
@@ -162,7 +157,7 @@ import { MailIcon } from "lucide-react"
 
 </Preview>
 
-### Inline addons — prefix and suffix text
+### Prefix and suffix text
 
 <Preview>
   <AddonInlineTextPreview />
@@ -182,10 +177,11 @@ import { InputGroupAddon, InputGroupText } from "@zeno/ui/input-group"
 
 </Preview>
 
-### Block addons — textarea toolbar
+### Block toolbar
 
-`block-start` and `block-end` render above and below the input inside the same
-focus ring — useful for textarea toolbars, helper rows, or character counters.
+`block-start` and `block-end` render above and below the input inside the
+same focus ring. Useful for textarea toolbars, helper rows, character
+counters.
 
 <Preview>
   <AddonBlockToolbarPreview />
@@ -210,11 +206,11 @@ import { BoldIcon, ItalicIcon } from "lucide-react"
 
 ### Async-validation indicator
 
-For state-dependent addons, write a small component that calls
-`useFieldContext()` and returns the addon (or `null`). The field's children
-render inside the field context, so subscribing composes naturally.
-`@zeno/forms` ships `ValidationSpinner` for the common async-validation case
-(see the [Async submission example](/docs/feature-modules/components/forms/examples#async-submission)):
+`@zeno/forms` ships `<ValidationSpinner />` for the common case: a spinner
+appears in the input while an async validator is in flight, and clears
+when it resolves. See the
+[Async submission example](/docs/feature-modules/components/forms/examples#async-submission)
+for a full setup.
 
 <Preview>
   <AddonValidationSpinnerPreview />
@@ -238,14 +234,16 @@ import { ValidationSpinner } from "@zeno/forms"
 
 </Preview>
 
-A spinner appears `inline-end` while the validator is in flight and disappears
-once it resolves. Pass `align="inline-start"` to flip it.
+For other state-dependent addons, write a small component that calls
+`useFieldContext()` and returns an addon (or `null`). The field's
+children render inside the field context, so subscribing composes
+naturally.
 
-> **Caveat.** Don't toggle the children themselves — `<EmailField>{cond &&
-> <Addon />}</EmailField>` swaps the field between `<Input>` and `<InputGroup>`
-> wrappers, which remounts the input and loses focus. Wrap state-dependent
-> rendering inside a child component (the way `ValidationSpinner` does) so the
-> child element is always present and conditionally returns `null`.
+> **Don't toggle children directly.** `<EmailField>{cond && <Addon />}</EmailField>`
+> swaps the field between plain `<Input>` and `<InputGroup>` wrappers,
+> remounting the input and losing focus. Always render the child element,
+> let it return `null` internally when not needed (the way
+> `ValidationSpinner` does).
 
 ## Select Field
 
@@ -298,9 +296,8 @@ import { SelectItem } from "@zeno/ui/select"
 
 ## Radio Group Field
 
-Wraps `@zeno/ui/radio-group`. Use `<RadioGroupFieldItem value="...">` to add
-options — it pairs each radio with its own label and `htmlFor` so you don't
-have to wire IDs by hand.
+Wraps `@zeno/ui/radio-group`. `<RadioGroupFieldItem>` pairs each radio
+with its label and `htmlFor` so you don't wire IDs by hand.
 
 <Preview>
   <RadioGroupFieldPreview />
@@ -319,10 +316,9 @@ import { RadioGroupFieldItem } from "@zeno/forms/fields"
 
 ## Slider Field
 
-Wraps `@zeno/ui/slider`. Form value is `number` for a single thumb or
-`number[]` for a range — pick by typing your `defaultValues`. Pass
-`formatValue` to render a live readout next to the label (units, currency,
-range delimiters).
+Wraps `@zeno/ui/slider`. The form value is `number` for a single thumb,
+`number[]` for a range (pick by typing your `defaultValues`). Pass
+`formatValue` to render a live readout next to the label.
 
 <Preview>
   <SliderFieldPreview />
@@ -343,10 +339,9 @@ range delimiters).
 
 ## OTP Field
 
-Wraps `@zeno/ui/input-otp`. Defaults to a single 6-slot group; pass
-`maxLength` to change the digit count and `pattern` (a string regex) to
-restrict accepted characters. Use `children` to insert a separator between
-groups.
+Wraps `@zeno/ui/input-otp`. Defaults to a 6-slot group. Override with
+`maxLength`, restrict input with `pattern` (a string regex), or pass
+`children` to insert a separator between groups.
 
 <Preview>
   <OtpFieldPreview />
@@ -364,10 +359,10 @@ groups.
 
 ## Date Picker Field
 
-Composition of `@zeno/ui/popover` and `@zeno/ui/calendar`. Form value is
-`Date | undefined`. The trigger button shows the selected date via
-`toLocaleDateString` by default — pass `formatValue` for a custom format,
-or `calendarProps` to forward props (e.g. `disabled`, `locale`) to the
+Composes `@zeno/ui/popover` and `@zeno/ui/calendar`. The form value is
+`Date | undefined`. The trigger formats the selected date via
+`toLocaleDateString` by default; pass `formatValue` to override or
+`calendarProps` to forward options (`disabled`, `locale`, …) to the
 underlying `<Calendar>`.
 
 <Preview>
@@ -385,10 +380,8 @@ underlying `<Calendar>`.
 
 ## Combobox Field
 
-Wraps `@zeno/ui/combobox`. Single-select over a `string[]` items list with
-built-in filtering as the user types. Pass `renderItem` for custom row
-markup, `emptyMessage` for the no-results state, and `showClear={false}`
-to hide the clear button on required fields.
+Wraps `@zeno/ui/combobox`. Single-select over a `string[]` with
+client-side filtering as the user types.
 
 <Preview>
   <ComboboxFieldPreview />
@@ -410,24 +403,24 @@ const FRAMEWORKS = ["Next.js", "Remix", "SvelteKit", "Nuxt.js", "Astro"]
 
 | Prop | Type | What it does |
 |---|---|---|
-| `items` | `string[]` | Options shown in the dropdown. Filtered client-side by Base UI unless `filter={null}`. |
-| `renderItem` | `(item: string) => ReactNode` | Override per-row rendering. Default is a plain `<ComboboxItem>{item}</ComboboxItem>`. |
+| `items` | `string[]` | Options shown in the dropdown. Filtered client-side unless `filter={null}`. |
+| `renderItem` | `(item: string) => ReactNode` | Override per-row rendering. |
 | `emptyMessage` | `ReactNode` | Shown when filtering produces zero matches. |
-| `showClear` | `boolean` | Show the clear button when a value is selected. Defaults to `true`; pass `false` for required-style comboboxes. |
+| `showClear` | `boolean` | Show the clear button when a value is selected. Defaults to `true`. |
 | `placeholder` | `string` | Input placeholder when the field is empty. |
-| `inputValue` | `string` | Controlled search text — pair with `onInputValueChange` to drive the input from outside. |
+| `inputValue` | `string` | Controlled search text. Pair with `onInputValueChange`. |
 | `onInputValueChange` | `(value: string) => void` | Fires on every keystroke in the search input. |
-| `filter` | `((item: string, query: string) => boolean) \| null` | Replace Base UI's built-in client-side filter, or pass `null` for server-driven search where `items` is already filtered by the consumer. |
-| `loading` | `boolean` | Render a spinner addon inside the input while options are being fetched. Pair with `onInputValueChange` to drive a debounced server query. |
+| `filter` | `((item, query) => boolean) \| null` | Replace the built-in filter, or `null` for server-driven search. |
+| `loading` | `boolean` | Show a spinner inside the input while options load. |
 
-For a server-driven search with debouncing and a loading spinner, see
+For server-driven search with debouncing, see
 [Async-search Combobox](/docs/feature-modules/components/forms/examples#async-search-combobox).
 
 ## Custom fields
 
-Need something that's not in the gallery? Build it on top of
-`useFieldContext<T>()` and drop it inside `<AppField>` (also destructured from
-`form`) — same typed field state and accessibility plumbing the built-ins use:
+When the gallery doesn't fit, build your own on top of `useFieldContext<T>()`
+and drop it inside `<AppField>` (destructured from `form`). You get the
+same typed field state and accessibility plumbing the shipped fields use.
 
 <Preview>
   <CustomFieldPreview />
@@ -472,5 +465,5 @@ const { AppField } = form
 
 </Preview>
 
-`AppField` is also the escape hatch when you want direct access to the field
-instance for any of the shipped fields.
+`AppField` is also the escape hatch when you want direct access to a
+shipped field's instance.

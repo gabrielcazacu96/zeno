@@ -18,26 +18,21 @@ import { SignupExample } from "@/components/forms/signup-preview"
 import { SubmittingExample } from "@/components/forms/submitting-preview"
 import { UnsavedChangesExample } from "@/components/forms/unsaved-changes-preview"
 
-A walk-through from layout patterns to per-feature recipes. Each example is
-fully working — fill it in and submit to see the returned values.
+A walk-through from layout patterns to per-feature recipes. Each example
+below is fully working: fill it in and submit to see the returned values.
 
-The previews below render in a `<Card>` for nice presentation, but most code
-blocks focus on the form-specific bits (`<FormProvider>`, `<Form>`,
-`<FieldGroup>`, fields, buttons). For the explicit layout patterns see
-[Form in a Card](#form-in-a-card) and [Form in a Dialog](#form-in-a-dialog).
-
-For validation patterns — live forms without actions, per-field validation
-modes, async server checks — see
+For validation patterns (live forms without actions, per-field validation
+modes, async server checks), see
 [Validation modes](/docs/feature-modules/components/forms/validation).
 
 ## Form in a Card
 
-Drop the form into a `<Card>`: header on top, fields in `<CardContent>`,
-actions in `<CardFooter>` paired by `<Field orientation="horizontal">`.
-`<FormProvider>` wraps the whole `<Card>` so the buttons in `<CardFooter>` —
-which sit outside the `<form>` HTML — still resolve `ResetButton` and
-`SubmitButton`. The `id` on `<Form>` plus `form="…"` on `<SubmitButton>`
-keeps native submission (Enter-to-submit) working.
+Drop the form into a `<Card>` with header on top, fields in
+`<CardContent>`, actions in `<CardFooter>`. `<FormProvider>` wraps the
+whole `<Card>` so the buttons in `<CardFooter>` (which sit outside the
+`<form>` element) still resolve `ResetButton` and `SubmitButton`. The
+`id` on `<Form>` plus `form="…"` on `<SubmitButton>` keeps native
+submission working (Enter-to-submit, accessibility).
 
 <Preview>
   <FormInCardExample />
@@ -98,8 +93,8 @@ export function DisplayNameCard() {
 
 ## Form in a Dialog
 
-Keep the form inside `<DialogContent>` and close the dialog from `onSubmit`
-once the work is done.
+Keep the form inside `<DialogContent>` and close the dialog from
+`onSubmit` once the work is done.
 
 <Preview>
   <DialogExample />
@@ -182,8 +177,8 @@ export function CreateProjectDialog() {
 
 ## Simple login
 
-A two-field form with a Zod schema. `useZenoForm` returns a form with typed
-field components attached — `name` is autocompleted against `defaultValues`.
+A two-field form with a Zod schema. `name` autocompletes against
+`defaultValues`.
 
 <Preview>
   <LoginExample />
@@ -227,23 +222,15 @@ export function Login() {
 
 ## Async submission
 
-`SubmitButton` is automatically disabled and shows a spinner while the form is
-submitting or while any async field validator is running — no extra code needed.
-For submission, the key requirement is that `onSubmit` returns a `Promise`;
-`isSubmitting` stays `true` until it settles.
+`SubmitButton` disables itself and shows a spinner while `onSubmit` is in
+flight or while any async field validator is running. The only
+requirement is that `onSubmit` returns a `Promise`.
 
-For async field validation, set `validators.onChangeAsync` (with
-`onChangeAsyncDebounceMs` to throttle) on any field. While the check is in
-flight, `canSubmit` is `false`, so `SubmitButton` stays disabled automatically.
-`ResetButton` is not subscribed to form state — wrap it in `form.Subscribe` to
-disable it during the save round-trip.
-
-Drop a `<ValidationSpinner />` inside any input-style field (`InputField`,
-`EmailField`, `PasswordField`, `NumberField`) to render a spinner inside the
-input while the async validator is running. Children passed to these fields
-flow through to an internal `InputGroup`, so you can use any `InputGroupAddon`
-/ `InputGroupButton` / `InputGroupText` for prefixes, suffixes, or block-level
-toolbars without dropping to the low-level `<Field>` render-prop.
+For per-field async checks, set `validators.onChangeAsync` (with
+`onChangeAsyncDebounceMs` to throttle). Drop a `<ValidationSpinner />`
+inside any input-style field to render a spinner inline. `ResetButton`
+isn't subscribed to form state by default; wrap it in `form.Subscribe`
+to disable it during the round-trip.
 
 <Preview>
   <SubmittingExample />
@@ -303,9 +290,9 @@ export function AccountSettings() {
 
 ## Sign up with cross-field validation
 
-`z.refine` runs after the object schema and lets you compare values across
-fields. The error attaches to whichever field you point `path` at — here, the
-"Confirm password" field.
+`z.refine` runs after the object schema and lets you compare values
+across fields. The error attaches to whichever field you point `path`
+at, here the "Confirm password" field.
 
 <Preview>
   <SignupExample />
@@ -360,9 +347,9 @@ export function Signup() {
 
 ## Array fields
 
-Drop `mode="array"` on `form.Field` to manage a list. The render-prop receives
-the array field with `pushValue` and `removeValue`, and you address each row
-with bracketed paths like `members[0].name` — typed against the schema.
+Pass `mode="array"` on `form.Field` to manage a list. The render-prop
+exposes `pushValue` and `removeValue`, and you address each row with
+bracketed paths like `members[0].name`, typed against the schema.
 
 <Preview>
   <ArrayExample />
@@ -392,8 +379,8 @@ export function TeamInvites() {
     onSubmit: ({ value }) => inviteMembers(value.members),
     schema,
   })
-  // `Field` is TanStack Form's render-prop component; rename to avoid clashing
-  // with `@zeno/ui/field`'s `Field`.
+  // `Field` is TanStack Form's render-prop component; rename to avoid
+  // clashing with `@zeno/ui/field`'s `Field`.
   const {
     EmailField,
     Field: ArrayField,
@@ -457,9 +444,9 @@ export function TeamInvites() {
 
 ## Dynamic fields
 
-`form.Subscribe` lets you read other field values reactively without
-re-rendering the entire form. Here, switching the country swaps the second
-field between a `SelectField` and an `InputField`.
+`form.Subscribe` reads other field values reactively without re-rendering
+the entire form. Here, switching the country swaps the second field
+between a `SelectField` and an `InputField`.
 
 <Preview>
   <DynamicExample />
@@ -518,8 +505,7 @@ export function Shipping() {
 
 ## Large form
 
-Most field types together — text, number, textarea, select, radio, switch,
-checkbox — driven by a single Zod schema.
+Most field types together, driven by a single Zod schema.
 
 <Preview>
   <LargeExample />
@@ -601,18 +587,12 @@ export function Profile() {
 
 ## Submit from outside the form
 
-When a submit button can't live inside the `<form>` element — a card footer,
-drawer action bar, or sticky page footer — wrap everything in `<FormProvider>`
-and add an `id` to `<Form>`. `FormProvider` extends the form context beyond the
-`<form>` element, and `form="…"` on `SubmitButton` links it for native
-submission (Enter-to-submit, accessibility).
-
-`SubmitButton` needs `form="…"` because it renders as `type="submit"`, which
-the browser only associates with its nearest ancestor `<form>`. It still must
-be inside `<FormProvider>` — the `form="…"` attribute only handles the HTML
-link for native submission; the button reads `canSubmit` and `isSubmitting` via
-`useFormContext()` regardless. `ResetButton` uses `onClick={() => form.reset()}`
-through the same context, so it needs no extra wiring.
+When a submit button can't live inside the `<form>` element (a card
+footer, drawer action bar, sticky page footer), wrap everything in
+`<FormProvider>` and add an `id` to `<Form>`. `FormProvider` extends the
+form context beyond the `<form>` element, and `form="…"` on
+`SubmitButton` links it for native submission. `ResetButton` reads
+context the same way and needs no extra wiring.
 
 <Preview>
   <OutsideFormExample />
@@ -645,7 +625,7 @@ export function Settings() {
           <InputField label="Name" name="name" placeholder="Ada Lovelace" />
         </FieldGroup>
       </Form>
-      {/* Outside the <form> element — FormProvider keeps context alive */}
+      {/* Outside the <form> element, FormProvider keeps context alive */}
       <ResetButton />
       <SubmitButton form="settings-form">Save</SubmitButton>
     </FormProvider>
@@ -657,12 +637,12 @@ export function Settings() {
 
 ## Async-search Combobox
 
-Drive the option list from a server. Pass `inputValue` / `onInputValueChange`
-to take control of the search text, `filter={null}` to disable Base UI's
-client-side matching (the items you supply are already filtered), and
-`loading` to show a spinner inside the input while the request is in flight.
-Debounce in your `useEffect` — typing one character per keystroke shouldn't
-fire one request per keystroke. See the full prop table on
+Drive the option list from a server. Pass `inputValue` /
+`onInputValueChange` to take control of the search text, `filter={null}`
+to disable client-side matching (the items you supply are already
+filtered), and `loading` to show a spinner inside the input. Debounce in
+your `useEffect` so one keystroke doesn't fire one request. Full prop
+table on
 [Combobox Field](/docs/feature-modules/components/forms/fields#combobox-field).
 
 <Preview>
@@ -739,12 +719,10 @@ export function AssignReviewer() {
 ## Server-side error handler
 
 When the server rejects a submission with per-field messages, throw a
-`ValidationError` from anywhere inside `onSubmit` (typically from your API
+`ValidationError` from anywhere inside `onSubmit` (typically your API
 client). `useZenoForm` catches it and writes each field message onto the
-matching field's meta — no boilerplate try/catch, no `setFieldMeta` calls.
-The error lands on `errorMap.onChange`, so the form-level schema overwrites
-it the moment the user edits the field; the message clears automatically
-once the value passes.
+matching field automatically. The error clears on the next keystroke, so
+the user sees feedback once and it goes away as they fix the value.
 
 <Preview>
   <ServerErrorExample />
@@ -782,13 +760,13 @@ export function CreateAccount() {
 
   return (
     <FormProvider form={form}>
-      <Form id="create-account-form">
+      <Form>
         <FieldGroup>
           <InputField label="Username" name="username" />
           <EmailField />
         </FieldGroup>
+        <SubmitButton>Create</SubmitButton>
       </Form>
-      <SubmitButton form="create-account-form">Create</SubmitButton>
     </FormProvider>
   )
 }
@@ -796,10 +774,10 @@ export function CreateAccount() {
 
 </Preview>
 
-`ValidationError` is throwable from anywhere reachable during submit — the
-API client, an async refinement, a custom guard. Pass an array of strings
-to surface multiple messages on the same field, and an optional
-`formError` for a top-level message that doesn't belong to any field:
+`ValidationError` is throwable from anywhere reachable during submit:
+the API client, an async refinement, a custom guard. Pass an array of
+strings to surface multiple messages on the same field, and an optional
+`formError` for a top-level message:
 
 ```tsx
 throw new ValidationError(
@@ -808,28 +786,25 @@ throw new ValidationError(
 )
 ```
 
-Errors written by `ValidationError` clear on the next keystroke (they go
-into `errorMap.onChange`). If you need a server message that persists
-until the next submit, call `formApi.setFieldMeta` directly with
-`errorMap.onSubmit` instead.
+If you need a server message that persists until the next submit instead
+of clearing on the next keystroke, call `formApi.setFieldMeta` directly.
 
 ## Unsaved-changes warning
 
 Pass `unsavedChangesWarning: "if-changed"` (or shorthand `true`) to
 `useZenoForm` and the browser prompts before navigating away while the
 form's current values differ from its defaults. After a successful save,
-call `formApi.reset(value)` to rebase defaults to the just-saved values —
-the warning clears, and any further edits are diffed against the new
+call `formApi.reset(value)` to rebase defaults to the saved values: the
+warning clears, and any further edits are diffed against the new
 baseline.
 
-The mode picks which "dirty" signal drives the warning:
+Two trigger modes:
 
-- **`"if-changed"`** (recommended) — fires while
-  `!state.isDefaultValue`. Clears if the user restores the original
-  values, or after `formApi.reset(value)` post-save.
-- **`"if-touched"`** — fires after the user has edited any field, even
-  if they reverted (`state.isDirty`, sticky once edited until
-  `formApi.reset()`).
+- **`"if-changed"`** (recommended): fires while values differ from
+  defaults. Clears if the user restores the originals, or after
+  `formApi.reset(value)` post-save.
+- **`"if-touched"`**: fires after the user has edited any field, even
+  if they reverted (sticky once edited until `formApi.reset()`).
 
 <Preview>
   <UnsavedChangesExample />
@@ -873,12 +848,12 @@ export function EditPost() {
 
 </Preview>
 
-The `Subscribe` block follows the same pattern as the warning itself —
-selecting `!state.isDefaultValue` for "if-changed" semantics, or
-`state.isDirty` if you want the sticky "if-touched" feel.
+The `Subscribe` block follows the same pattern as the warning: select
+`!state.isDefaultValue` for "if-changed", or `state.isDirty` for the
+sticky "if-touched" feel.
 
-`unsavedChangesWarning` only covers full-page navigation (closing the tab,
-typing a new URL, hitting the back button). For client-side route changes
-inside a SPA, read the matching state flag from the form and prompt
-before pushing the next route — most routers expose a `useBeforeUnload`-
-style hook for this.
+`unsavedChangesWarning` only covers full-page navigation (closing the
+tab, typing a new URL, hitting the back button). For client-side route
+changes inside a SPA, read the matching state flag from the form and
+prompt before pushing the next route. Most routers expose a
+`useBeforeUnload`-style hook for this.
