@@ -13,6 +13,7 @@ import { SubmitButton } from "./fields/submit-button"
 import { useAppForm } from "./form"
 import { applyValidationError } from "./lib/apply-validation-error"
 import { getRequiredPaths } from "./lib/schema-required"
+import { useUnsavedChangesWarning } from "./lib/use-unsaved-changes-warning"
 import { ValidationError } from "./lib/validation-error"
 import { blurThenChangeLogic } from "./lib/validation-logic"
 import {
@@ -71,6 +72,23 @@ type ZenoFormExtras<TFormData> = {
    * schema-derived value.
    */
   requiredIndicator?: boolean
+  /**
+   * Warn the user before they navigate away with unsaved changes. Two
+   * trigger modes:
+   *
+   * - `"if-changed"` (recommended) — warn while current values differ
+   *   from defaults (`!state.isDefaultValue`). Clears if the user
+   *   restores the original values, or after `formApi.reset(value)` is
+   *   called post-submit to rebase defaults.
+   * - `"if-touched"` — warn after the user has edited any field, even
+   *   if they reverted (`state.isDirty`, sticky once edited).
+   *
+   * Pass `true` as shorthand for `"if-changed"`. The warning never fires
+   * while the form is mid-submit. Covers full-page navigation only — for
+   * client-side route changes, read the relevant state flag from the
+   * form yourself and prompt before pushing the next route.
+   */
+  unsavedChangesWarning?: boolean | "if-changed" | "if-touched"
 }
 
 type UseZenoFormOptions<
@@ -159,6 +177,7 @@ function useZenoForm<
     validation = DEFAULT_VALIDATION_MODE,
     hideFieldErrors = false,
     requiredIndicator = true,
+    unsavedChangesWarning = false,
     validators,
     validationLogic,
     onSubmit: userOnSubmit,
@@ -244,6 +263,8 @@ function useZenoForm<
     requiredIndicator,
     validation,
   })
+
+  useUnsavedChangesWarning(form, unsavedChangesWarning)
 
   const fields = useAppFields(form)
   return useMemo(

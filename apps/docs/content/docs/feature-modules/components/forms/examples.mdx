@@ -16,6 +16,7 @@ import { OutsideFormExample } from "@/components/forms/outside-form-preview"
 import { ServerErrorExample } from "@/components/forms/server-error-preview"
 import { SignupExample } from "@/components/forms/signup-preview"
 import { SubmittingExample } from "@/components/forms/submitting-preview"
+import { UnsavedChangesExample } from "@/components/forms/unsaved-changes-preview"
 
 A walk-through from layout patterns to per-feature recipes. Each example is
 fully working — fill it in and submit to see the returned values.
@@ -812,3 +813,72 @@ into `errorMap.onChange`). If you need a server message that persists
 until the next submit, call `formApi.setFieldMeta` directly with
 `errorMap.onSubmit` instead.
 
+## Unsaved-changes warning
+
+Pass `unsavedChangesWarning: "if-changed"` (or shorthand `true`) to
+`useZenoForm` and the browser prompts before navigating away while the
+form's current values differ from its defaults. After a successful save,
+call `formApi.reset(value)` to rebase defaults to the just-saved values —
+the warning clears, and any further edits are diffed against the new
+baseline.
+
+The mode picks which "dirty" signal drives the warning:
+
+- **`"if-changed"`** (recommended) — fires while
+  `!state.isDefaultValue`. Clears if the user restores the original
+  values, or after `formApi.reset(value)` post-save.
+- **`"if-touched"`** — fires after the user has edited any field, even
+  if they reverted (`state.isDirty`, sticky once edited until
+  `formApi.reset()`).
+
+<Preview>
+  <UnsavedChangesExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useZenoForm } from "@zeno/forms"
+import { Badge } from "@zeno/ui/badge"
+import { FieldGroup } from "@zeno/ui/field"
+
+export function EditPost() {
+  const form = useZenoForm({
+    defaultValues: { body: "", title: "" },
+    onSubmit: ({ formApi, value }) => {
+      savePost(value)
+      formApi.reset(value) // rebase defaults so the badge clears
+    },
+    unsavedChangesWarning: "if-changed",
+  })
+  const { InputField, Subscribe, SubmitButton, TextAreaField } = form
+
+  return (
+    <FormProvider form={form}>
+      <Subscribe selector={(state) => !state.isDefaultValue}>
+        {(changed) =>
+          changed ? <Badge variant="destructive">Unsaved changes</Badge> : null
+        }
+      </Subscribe>
+      <Form>
+        <FieldGroup>
+          <InputField label="Title" name="title" />
+          <TextAreaField label="Body" name="body" rows={4} />
+        </FieldGroup>
+        <SubmitButton>Save</SubmitButton>
+      </Form>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+The `Subscribe` block follows the same pattern as the warning itself —
+selecting `!state.isDefaultValue` for "if-changed" semantics, or
+`state.isDirty` if you want the sticky "if-touched" feel.
+
+`unsavedChangesWarning` only covers full-page navigation (closing the tab,
+typing a new URL, hitting the back button). For client-side route changes
+inside a SPA, read the matching state flag from the form and prompt
+before pushing the next route — most routers expose a `useBeforeUnload`-
+style hook for this.
