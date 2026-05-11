@@ -42,7 +42,7 @@ function SelectField({
   triggerSize,
   ...props
 }: SelectFieldProps) {
-  const field = useFieldContext<string>()
+  const field = useFieldContext()
   const errorId = `${field.name}-error`
   const descriptionId = `${field.name}-description`
   const isInvalid = useIsInvalid(field)
@@ -61,8 +61,8 @@ function SelectField({
       )}
       <Select
         name={field.name}
-        onValueChange={(value) => field.handleChange(String(value))}
-        value={field.state.value ?? ""}
+        onValueChange={(value) => field.handleChange(value)}
+        value={field.state.value}
         {...props}
       >
         <SelectTrigger
