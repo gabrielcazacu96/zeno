@@ -43,7 +43,7 @@ export { type FieldMessage, ValidationError } from "./lib/validation-error"
 export { blurThenChangeLogic } from "./lib/validation-logic"
 export type { ValidationMode } from "./lib/validation-modes"
 export { useAppFields } from "./use-app-fields"
-export { useForm } from "./use-zeno-form"
+export { useForm } from "./use-form"
 
 const { useAppForm, withFieldGroup, withForm } = createFormHook({
   fieldComponents: {
