@@ -16,6 +16,7 @@ import { OutsideFormExample } from "@/components/forms/outside-form-preview"
 import { ServerErrorExample } from "@/components/forms/server-error-preview"
 import { SignupExample } from "@/components/forms/signup-preview"
 import { SubmittingExample } from "@/components/forms/submitting-preview"
+import { SelectNumberExample } from "@/components/forms/select-number-preview"
 import { UnsavedChangesExample } from "@/components/forms/unsaved-changes-preview"
 
 A walk-through from layout patterns to per-feature recipes. Each example
@@ -494,6 +495,55 @@ export function Shipping() {
     </FormProvider>
   )
 }
+```
+
+</Preview>
+
+## Select with numeric IDs
+
+`SelectField` accepts numeric values directly — pass `value={cat.id}` to
+each `<SelectItem>` and declare the schema field as `z.number()`. Submit the
+form below to see `categoryId` arrive as a number, not a string.
+
+<Preview>
+  <SelectNumberExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { SelectItem } from "@zeno/ui/select"
+import { z } from "zod"
+
+const categories = [
+  { id: 1, name: "Technology" },
+  { id: 2, name: "Design" },
+  { id: 3, name: "Marketing" },
+]
+
+const form = useForm({
+  defaultValues: { categoryId: undefined as number | undefined },
+  schema: z.object({
+    categoryId: z.number({ error: "Pick a category" }),
+  }),
+})
+const { SelectField, SubmitButton } = form
+
+<FormProvider form={form}>
+  <Form>
+    <FieldGroup>
+      <SelectField label="Category" name="categoryId" placeholder="Pick a category">
+        {categories.map((cat) => (
+          <SelectItem key={cat.id} value={cat.id}>
+            {cat.name}
+          </SelectItem>
+        ))}
+      </SelectField>
+    </FieldGroup>
+    <SubmitButton>Save</SubmitButton>
+  </Form>
+</FormProvider>
 ```
 
 </Preview>

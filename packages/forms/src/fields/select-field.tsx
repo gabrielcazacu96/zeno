@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@zeno/ui/select"
+import { Children, isValidElement, useMemo } from "react"
 import type { ComponentProps, ReactNode } from "react"
 
 import { describedBy } from "../lib/aria"
@@ -20,7 +21,7 @@ import {
 
 type SelectFieldProps = Omit<
   ComponentProps<typeof Select>,
-  "name" | "onValueChange" | "value"
+  "name" | "onValueChange" | "value" | "items"
 > & {
   children: ReactNode
   description?: ReactNode
@@ -51,6 +52,19 @@ function SelectField({
   const schemaRequired = useIsFieldRequired(field)
   const isRequired = required ?? schemaRequired
 
+  const items = useMemo(() => {
+    const map: Record<string, ReactNode> = {}
+    Children.forEach(children, (child) => {
+      if (isValidElement(child)) {
+        const p = child.props as { value?: unknown; children?: ReactNode }
+        if (p.value !== undefined) {
+          map[String(p.value)] = p.children
+        }
+      }
+    })
+    return map
+  }, [children])
+
   return (
     <Field data-invalid={isInvalid}>
       {label && (
@@ -60,9 +74,10 @@ function SelectField({
         </FieldLabel>
       )}
       <Select
+        items={items}
         name={field.name}
         onValueChange={(value) => field.handleChange(value)}
-        value={field.state.value}
+        value={field.state.value ?? null}
         {...props}
       >
         <SelectTrigger
