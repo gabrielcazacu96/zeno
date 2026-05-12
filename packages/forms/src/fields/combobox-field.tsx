@@ -22,16 +22,22 @@ import {
   useIsInvalid,
 } from "../lib/use-is-invalid"
 
-type ComboboxFieldProps = {
-  /** String items shown in the dropdown. Filtered by Base UI by default. */
-  items: string[]
+type ComboboxItemObject<V> = { value: V; label: string }
+
+type ComboboxFieldProps<T = string> = {
+  /**
+   * Items shown in the dropdown. Pass plain strings (value === label) or
+   * `{ value, label }` objects when the value isn't a string (e.g. numeric
+   * database IDs).
+   */
+  items: readonly T[]
   description?: ReactNode
   label?: ReactNode
   placeholder?: string
   /** Message shown when filtering produces zero matches. */
   emptyMessage?: ReactNode
-  /** Override per-row rendering. Default: plain `<ComboboxItem>{item}</ComboboxItem>`. */
-  renderItem?: (item: string) => ReactNode
+  /** Override per-row rendering. Default: plain `<ComboboxItem>{label}</ComboboxItem>`. */
+  renderItem?: (item: T) => ReactNode
   /**
    * If `true`, show the clear button when a value is selected. Defaults to
    * `true` — pass `false` for required-style comboboxes where clearing is
@@ -52,7 +58,7 @@ type ComboboxFieldProps = {
    * Replace Base UI's built-in client-side filter. Pass `null` for
    * server-driven search where `items` is already filtered by the consumer.
    */
-  filter?: ((item: string, query: string) => boolean) | null
+  filter?: ((item: T, query: string) => boolean) | null
   /**
    * Show a spinner addon inside the input while options are being fetched.
    * Pair with `onInputValueChange` to drive a debounced server query.
@@ -60,7 +66,16 @@ type ComboboxFieldProps = {
   loading?: boolean
 }
 
-function ComboboxField({
+function isItemObject(item: unknown): item is ComboboxItemObject<unknown> {
+  return (
+    typeof item === "object" &&
+    item !== null &&
+    "value" in item &&
+    "label" in item
+  )
+}
+
+function ComboboxField<T = string>({
   className,
   description,
   emptyMessage = "No results.",
@@ -74,8 +89,8 @@ function ComboboxField({
   renderItem,
   required,
   showClear = true,
-}: ComboboxFieldProps) {
-  const field = useFieldContext<string>()
+}: ComboboxFieldProps<T>) {
+  const field = useFieldContext()
   const errorId = `${field.name}-error`
   const descriptionId = `${field.name}-description`
   const isInvalid = useIsInvalid(field)
@@ -84,7 +99,12 @@ function ComboboxField({
   const schemaRequired = useIsFieldRequired(field)
   const isRequired = required ?? schemaRequired
 
-  const value = field.state.value ?? ""
+  const fieldValue = field.state.value
+  const hasObjectItems = items.some(isItemObject)
+  const value = hasObjectItems
+    ? ((items.find((item) => isItemObject(item) && item.value === fieldValue) ??
+        null) as T | null)
+    : ((fieldValue ?? null) as T | null)
 
   return (
     <Field data-invalid={isInvalid}>
@@ -99,7 +119,13 @@ function ComboboxField({
         inputValue={inputValue}
         items={items}
         onInputValueChange={onInputValueChange}
-        onValueChange={(next) => field.handleChange(next ?? "")}
+        onValueChange={(next) => {
+          if (next == null) {
+            field.handleChange(undefined)
+            return
+          }
+          field.handleChange(isItemObject(next) ? next.value : next)
+        }}
         value={value}
       >
         <ComboboxInput
@@ -113,7 +139,7 @@ function ComboboxField({
           name={field.name}
           onBlur={field.handleBlur}
           placeholder={placeholder}
-          showClear={showClear && Boolean(value) && !loading}
+          showClear={showClear && value != null && value !== "" && !loading}
         >
           {loading && (
             <InputGroupAddon align="inline-end">
@@ -124,15 +150,23 @@ function ComboboxField({
         <ComboboxContent>
           <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
           <ComboboxList>
-            {(item: string) =>
-              renderItem ? (
-                renderItem(item)
-              ) : (
-                <ComboboxItem key={item} value={item}>
-                  {item}
+            {(item: T) => {
+              if (renderItem) {
+                return renderItem(item)
+              }
+              if (isItemObject(item)) {
+                return (
+                  <ComboboxItem key={String(item.value)} value={item}>
+                    {item.label}
+                  </ComboboxItem>
+                )
+              }
+              return (
+                <ComboboxItem key={String(item)} value={item}>
+                  {String(item)}
                 </ComboboxItem>
               )
-            }
+            }}
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
@@ -146,5 +180,5 @@ function ComboboxField({
   )
 }
 
-export type { ComboboxFieldProps }
+export type { ComboboxFieldProps, ComboboxItemObject }
 export { ComboboxField }

@@ -7,8 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@zeno/ui/select"
-import { Children, isValidElement, useMemo } from "react"
 import type { ComponentProps, ReactNode } from "react"
+import { Children, isValidElement, useMemo } from "react"
 
 import { describedBy } from "../lib/aria"
 import { useFieldContext } from "../lib/contexts"

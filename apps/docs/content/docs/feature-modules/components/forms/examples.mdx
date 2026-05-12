@@ -16,6 +16,7 @@ import { OutsideFormExample } from "@/components/forms/outside-form-preview"
 import { ServerErrorExample } from "@/components/forms/server-error-preview"
 import { SignupExample } from "@/components/forms/signup-preview"
 import { SubmittingExample } from "@/components/forms/submitting-preview"
+import { ComboboxNumberExample } from "@/components/forms/combobox-number-preview"
 import { SelectNumberExample } from "@/components/forms/select-number-preview"
 import { UnsavedChangesExample } from "@/components/forms/unsaved-changes-preview"
 
@@ -499,11 +500,18 @@ export function Shipping() {
 
 </Preview>
 
-## Select with numeric IDs
+## Numeric IDs
 
-`SelectField` accepts numeric values directly — pass `value={cat.id}` to
-each `<SelectItem>` and declare the schema field as `z.number()`. Submit the
-form below to see `categoryId` arrive as a number, not a string.
+Both `SelectField` and `ComboboxField` accept numeric values directly — useful
+for database rows whose primary key is a number. Declare the schema field as
+`z.number()` and submit the form to see `categoryId` arrive as a number, not a
+string.
+
+### Select
+
+Pass `value={cat.id}` to each `<SelectItem>`. The trigger displays the label
+because `SelectField` derives Base UI's `items` map from the `<SelectItem>`
+children automatically.
 
 <Preview>
   <SelectNumberExample />
@@ -523,7 +531,6 @@ const categories = [
 ]
 
 const form = useForm({
-  defaultValues: { categoryId: undefined as number | undefined },
   schema: z.object({
     categoryId: z.number({ error: "Pick a category" }),
   }),
@@ -540,6 +547,52 @@ const { SelectField, SubmitButton } = form
           </SelectItem>
         ))}
       </SelectField>
+    </FieldGroup>
+    <SubmitButton>Save</SubmitButton>
+  </Form>
+</FormProvider>
+```
+
+</Preview>
+
+### Combobox
+
+Pass items as `{ value, label }` objects when the value isn't a string. Base
+UI uses `label` for both the input display and the built-in filter, and
+returns `value` (the numeric ID) to the form.
+
+<Preview>
+  <ComboboxNumberExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useForm } from "@zeno/forms"
+import { FieldGroup } from "@zeno/ui/field"
+import { z } from "zod"
+
+const categories = [
+  { value: 1, label: "Technology" },
+  { value: 2, label: "Design" },
+  { value: 3, label: "Marketing" },
+]
+
+const form = useForm({
+  schema: z.object({
+    categoryId: z.number({ error: "Pick a category" }),
+  }),
+})
+const { ComboboxField, SubmitButton } = form
+
+<FormProvider form={form}>
+  <Form>
+    <FieldGroup>
+      <ComboboxField
+        items={categories}
+        label="Category"
+        name="categoryId"
+        placeholder="Search categories…"
+      />
     </FieldGroup>
     <SubmitButton>Save</SubmitButton>
   </Form>

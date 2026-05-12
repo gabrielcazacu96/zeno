@@ -249,7 +249,7 @@ naturally.
 
 Wraps `@zeno/ui/select`. Pass `<SelectItem>` children for the options. For
 the common case of database rows where the ID is a number, see
-[Select with numeric IDs](/docs/feature-modules/components/forms/examples#select-with-numeric-ids).
+[Numeric IDs](/docs/feature-modules/components/forms/examples#numeric-ids).
 
 <Preview>
   <SelectFieldPreview />
@@ -382,8 +382,10 @@ underlying `<Calendar>`.
 
 ## Combobox Field
 
-Wraps `@zeno/ui/combobox`. Single-select over a `string[]` with
-client-side filtering as the user types.
+Wraps `@zeno/ui/combobox`. Single-select with client-side filtering as the
+user types. Pass plain strings for `string[]` items, or `{ value, label }`
+objects when the value isn't a string — see
+[Numeric IDs](/docs/feature-modules/components/forms/examples#numeric-ids).
 
 <Preview>
   <ComboboxFieldPreview />
@@ -405,8 +407,8 @@ const FRAMEWORKS = ["Next.js", "Remix", "SvelteKit", "Nuxt.js", "Astro"]
 
 | Prop | Type | What it does |
 |---|---|---|
-| `items` | `string[]` | Options shown in the dropdown. Filtered client-side unless `filter={null}`. |
-| `renderItem` | `(item: string) => ReactNode` | Override per-row rendering. |
+| `items` | `T[]` (`string` or `{ value, label }`) | Options shown in the dropdown. Filtered client-side unless `filter={null}`. |
+| `renderItem` | `(item: T) => ReactNode` | Override per-row rendering. |
 | `emptyMessage` | `ReactNode` | Shown when filtering produces zero matches. |
 | `showClear` | `boolean` | Show the clear button when a value is selected. Defaults to `true`. |
 | `placeholder` | `string` | Input placeholder when the field is empty. |

@@ -10,18 +10,17 @@ import {
   CardTitle,
 } from "@zeno/ui/card"
 import { Field, FieldGroup } from "@zeno/ui/field"
-import { SelectItem } from "@zeno/ui/select"
 import { z } from "zod"
 
 import { toastSubmitted, wrapperClass } from "./preview-utils"
 
 const categories = [
-  { id: 1, name: "Technology" },
-  { id: 2, name: "Design" },
-  { id: 3, name: "Marketing" },
+  { label: "Technology", value: 1 },
+  { label: "Design", value: 2 },
+  { label: "Marketing", value: 3 },
 ]
 
-export function SelectNumberExample() {
+export function ComboboxNumberExample() {
   const form = useForm({
     onSubmit: ({ value }) =>
       toastSubmitted({
@@ -32,37 +31,33 @@ export function SelectNumberExample() {
       categoryId: z.number({ error: "Pick a category" }),
     }),
   })
-  const { SelectField, ResetButton, SubmitButton } = form
+  const { ComboboxField, ResetButton, SubmitButton } = form
   return (
     <FormProvider form={form}>
       <Card className={wrapperClass}>
         <CardHeader>
-          <CardTitle>Assign category</CardTitle>
+          <CardTitle>Search category</CardTitle>
           <CardDescription>
             Submit to see the ID arrive as a number, not a string.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form id="select-number-form">
+          <Form id="combobox-number-form">
             <FieldGroup>
-              <SelectField
+              <ComboboxField
+                emptyMessage="No category matches."
+                items={categories}
                 label="Category"
                 name="categoryId"
-                placeholder="Pick a category"
-              >
-                {categories.map((cat) => (
-                  <SelectItem key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </SelectItem>
-                ))}
-              </SelectField>
+                placeholder="Search categories…"
+              />
             </FieldGroup>
           </Form>
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
             <ResetButton />
-            <SubmitButton form="select-number-form">Save</SubmitButton>
+            <SubmitButton form="combobox-number-form">Save</SubmitButton>
           </Field>
         </CardFooter>
       </Card>
