@@ -10,7 +10,6 @@ import { AsyncSearchExample } from "@/components/forms/async-search-preview"
 import { FormInCardExample } from "@/components/forms/card-preview"
 import { DialogExample } from "@/components/forms/dialog-preview"
 import { DynamicExample } from "@/components/forms/dynamic-preview"
-import { LargeExample } from "@/components/forms/large-preview"
 import { LoginExample } from "@/components/forms/login-preview"
 import { OutsideFormExample } from "@/components/forms/outside-form-preview"
 import { ServerErrorExample } from "@/components/forms/server-error-preview"
@@ -756,88 +755,6 @@ export function SkillsPicker() {
           <AppField name="skills">{() => <SkillsField />}</AppField>
         </FieldGroup>
         <SubmitButton>Save</SubmitButton>
-      </Form>
-    </FormProvider>
-  )
-}
-```
-
-</Preview>
-
-## Large form
-
-Most field types together, driven by a single Zod schema.
-
-<Preview>
-  <LargeExample />
-
-```tsx lineNumbers
-"use client"
-
-import { Form, FormProvider, useForm } from "@zeno/forms"
-import { RadioGroupFieldItem } from "@zeno/forms/fields"
-import { FieldGroup } from "@zeno/ui/field"
-import { SelectItem } from "@zeno/ui/select"
-import { z } from "zod"
-
-const schema = z.object({
-  age: z.number({ error: "Enter your age" }).int().min(13, "Must be at least 13"),
-  bio: z.string().max(160, "Keep it under 160 characters"),
-  marketing: z.boolean(),
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  plan: z.enum(["free", "pro", "team"]),
-  pushNotifications: z.boolean(),
-  role: z.enum(["engineer", "designer", "manager"]),
-})
-
-export function Profile() {
-  const form = useForm({
-    defaultValues: {
-      age: 18,
-      bio: "",
-      marketing: false,
-      name: "",
-      plan: "free" as const,
-      pushNotifications: true,
-      role: "engineer" as const,
-    },
-    onSubmit: ({ value }) => saveProfile(value),
-    schema,
-  })
-  const {
-    CheckboxField,
-    InputField,
-    NumberField,
-    RadioGroupField,
-    ResetButton,
-    SelectField,
-    SubmitButton,
-    SwitchField,
-    TextAreaField,
-  } = form
-
-  return (
-    <FormProvider form={form}>
-      <Form>
-        <FieldGroup>
-          <InputField label="Display name" name="name" placeholder="Ada Lovelace" />
-          <NumberField label="Age" min={13} name="age" />
-          <TextAreaField label="Bio" name="bio" placeholder="I build things on the web." />
-          <SelectField label="Role" name="role" placeholder="Pick a role">
-            <SelectItem value="engineer">Engineer</SelectItem>
-            <SelectItem value="designer">Designer</SelectItem>
-            <SelectItem value="manager">Manager</SelectItem>
-          </SelectField>
-          <RadioGroupField label="Plan" name="plan">
-            <RadioGroupFieldItem value="free">Free</RadioGroupFieldItem>
-            <RadioGroupFieldItem value="pro">Pro</RadioGroupFieldItem>
-            <RadioGroupFieldItem value="team">Team</RadioGroupFieldItem>
-          </RadioGroupField>
-          <SwitchField label="Push notifications" name="pushNotifications" />
-          <CheckboxField label="Email me product updates" name="marketing" />
-        </FieldGroup>
-        <ResetButton />
-        <SubmitButton>Save profile</SubmitButton>
       </Form>
     </FormProvider>
   )
