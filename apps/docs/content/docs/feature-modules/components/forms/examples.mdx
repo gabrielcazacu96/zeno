@@ -18,6 +18,7 @@ import { SignupExample } from "@/components/forms/signup-preview"
 import { SubmittingExample } from "@/components/forms/submitting-preview"
 import { ComboboxNumberExample } from "@/components/forms/combobox-number-preview"
 import { SelectNumberExample } from "@/components/forms/select-number-preview"
+import { SkillsPickerExample } from "@/components/forms/skills-picker-preview"
 import { UnsavedChangesExample } from "@/components/forms/unsaved-changes-preview"
 
 A walk-through from layout patterns to per-feature recipes. Each example
@@ -597,6 +598,168 @@ const { ComboboxField, SubmitButton } = form
     <SubmitButton>Save</SubmitButton>
   </Form>
 </FormProvider>
+```
+
+</Preview>
+
+## Combobox: multi-select, grouped, creatable
+
+The wrapper-free pattern for advanced Combobox use cases. This example
+combines four Base UI features into one field:
+
+- **`multiple`** — chips render inside the trigger via `<ComboboxValue>`.
+- **Input inside popup** — search lives in the popup, not in the trigger,
+  so the chips have room to breathe.
+- **Grouped** — `<ComboboxList>` iterates groups; `<ComboboxGroup
+  items={group.items}>` + `<ComboboxCollection>` iterate items.
+- **Creatable** — when the query has no exact match, an extra group is
+  appended with a `Create "…"` item. Selecting it appends a custom skill
+  to local state and to the form value.
+
+Wired to the form with `<AppField>` + `useFieldContext<string[]>()`. Items
+follow Base UI's `{ value, label }` shape so the chip text comes from
+`label` automatically — pair with `isItemEqualToValue` so referential
+equality doesn't bite when `groupsForView` is rebuilt each render.
+
+<Preview>
+  <SkillsPickerExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useFieldContext, useForm } from "@zeno/forms"
+import {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxCollection,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxLabel,
+  ComboboxList,
+  ComboboxValue,
+  useComboboxAnchor,
+} from "@zeno/ui/combobox"
+import { Field, FieldGroup, FieldLabel } from "@zeno/ui/field"
+import { useState } from "react"
+import { z } from "zod"
+
+type SkillItem = { value: string; label: string; creatable?: boolean }
+type SkillGroup = { value: string; items: SkillItem[] }
+
+const baseGroups: SkillGroup[] = [
+  { value: "Frontend", items: [/* … */] },
+  { value: "Backend",  items: [/* … */] },
+  { value: "DevOps",   items: [/* … */] },
+]
+
+function SkillsField() {
+  const field = useFieldContext<string[]>()
+  const [query, setQuery] = useState("")
+  const [customSkills, setCustomSkills] = useState<SkillItem[]>([])
+  const anchorRef = useComboboxAnchor()
+
+  const allGroups = customSkills.length
+    ? [...baseGroups, { value: "Custom", items: customSkills }]
+    : baseGroups
+  const allItems = allGroups.flatMap((g) => g.items)
+
+  // Append a "Create …" item when the query has no exact match.
+  const trimmed = query.trim()
+  const hasMatch = allItems.some(
+    (s) => s.label.toLowerCase() === trimmed.toLowerCase()
+  )
+  const groupsForView = !trimmed || hasMatch
+    ? allGroups
+    : [
+        ...allGroups,
+        {
+          value: "New",
+          items: [{ value: trimmed, label: `Create "${trimmed}"`, creatable: true }],
+        },
+      ]
+
+  // Field state is string[]; resolve to SkillItem[] so chips can read .label.
+  const selectedValues = field.state.value ?? []
+  const selectedItems = selectedValues
+    .map((v) => allItems.find((s) => s.value === v))
+    .filter((s): s is SkillItem => s != null)
+
+  return (
+    <Field>
+      <FieldLabel htmlFor={field.name}>Skills</FieldLabel>
+      <Combobox
+        items={groupsForView}
+        multiple
+        value={selectedItems}
+        inputValue={query}
+        onInputValueChange={setQuery}
+        isItemEqualToValue={(a, b) => a.value === b.value}
+        onValueChange={(next: SkillItem[]) => {
+          const created = next.find((i) => i.creatable)
+          if (created) {
+            const newSkill = { value: created.value.toLowerCase(), label: created.value }
+            setCustomSkills((c) => [...c, newSkill])
+            field.handleChange([...selectedValues, newSkill.value])
+            setQuery("")
+          } else {
+            field.handleChange(next.map((i) => i.value))
+          }
+        }}
+      >
+        <ComboboxChips ref={anchorRef}>
+          <ComboboxValue>
+            {(value: SkillItem[]) =>
+              value.map((item) => (
+                <ComboboxChip key={item.value}>{item.label}</ComboboxChip>
+              ))
+            }
+          </ComboboxValue>
+        </ComboboxChips>
+        <ComboboxContent anchor={anchorRef}>
+          <ComboboxInput placeholder="Search or type to create…" showTrigger={false} />
+          <ComboboxEmpty>No skill matches.</ComboboxEmpty>
+          <ComboboxList>
+            {(group: SkillGroup) => (
+              <ComboboxGroup items={group.items} key={group.value}>
+                <ComboboxLabel>{group.value}</ComboboxLabel>
+                <ComboboxCollection>
+                  {(item: SkillItem) => (
+                    <ComboboxItem key={item.value} value={item}>
+                      {item.label}
+                    </ComboboxItem>
+                  )}
+                </ComboboxCollection>
+              </ComboboxGroup>
+            )}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+    </Field>
+  )
+}
+
+export function SkillsPicker() {
+  const form = useForm({
+    schema: z.object({
+      skills: z.array(z.string()).min(1, "Pick at least one skill"),
+    }),
+  })
+  const { AppField, SubmitButton } = form
+  return (
+    <FormProvider form={form}>
+      <Form>
+        <FieldGroup>
+          <AppField name="skills">{() => <SkillsField />}</AppField>
+        </FieldGroup>
+        <SubmitButton>Save</SubmitButton>
+      </Form>
+    </FormProvider>
+  )
+}
 ```
 
 </Preview>
