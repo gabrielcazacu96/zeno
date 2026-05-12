@@ -12,17 +12,25 @@ import { MixedValidationExample } from "@/components/forms/mixed-validation-prev
 import { RequiredIndicatorExample } from "@/components/forms/required-indicator-preview"
 import { ReValidateExample } from "@/components/forms/revalidate-preview"
 
-`useForm` accepts two validation props:
+`useForm` has two validation paths, selected by what you pass to
+`validators`:
 
-- **`schema`**: any [Standard Schema](https://standardschema.dev/) (Zod,
-  Valibot, ArkType, …) describing the form data.
-- **`validation`**: when errors appear. One of `'blur-then-change'`
-  (default), `'change'`, `'blur'`, or `'submit'`.
+- **Schema path** — pass `schema` (any [Standard Schema](https://standardschema.dev/):
+  Zod, Valibot, ArkType, …). `validators` is then an optional
+  `ValidationMode` string controlling *when* the schema fires:
+  `'blur-then-change'` (default), `'change'`, `'blur'`, or `'submit'`.
+- **Manual path** — omit `schema` and pass `validators` as TanStack Form's
+  native per-cause object (`{ onChange, onBlur, onSubmit, … }`). Use this
+  when you need split sync/async slots, debounce knobs, or any mix the
+  schema modes don't cover.
+
+The two are mutually exclusive at the type level — `useForm({ schema, validators: { onChange } })`
+is a TS error.
 
 ```tsx
 const form = useForm({
   schema,
-  validation: "blur-then-change", // optional, this is the default
+  validators: "blur-then-change", // optional, this is the default
   onSubmit: ({ value }) => signIn(value),
 })
 ```
@@ -92,7 +100,7 @@ export function SignIn() {
 
 </Preview>
 
-## `validation: 'change'` for live feedback
+## `validators: 'change'` for live feedback
 
 Use `'change'` when the user wants feedback on every keystroke (password
 strength meters, character counters, anything where waiting for a blur
@@ -121,7 +129,7 @@ export function ChangePassword() {
   const form = useForm({
     onSubmit: ({ value }) => savePassword(value.password),
     schema,
-    validation: "change",
+    validators: "change",
   })
   const { PasswordField, ResetButton, SubmitButton } = form
 
@@ -198,7 +206,7 @@ export function LiveSearch({
 The listener runs the schema directly and gates the side-effect on
 validity. A one-character query never triggers a search.
 
-## `validation: 'blur'` and `'submit'`
+## `validators: 'blur'` and `'submit'`
 
 `'blur'` validates only when a field loses focus and doesn't re-validate
 on subsequent edits. A user who fixed a typo still sees the old error
@@ -214,7 +222,7 @@ is cheap and independent and blur-validating each one would feel chatty
 const form = useForm({
   defaultValues,
   schema,
-  validation: "submit",
+  validators: "submit",
 })
 ```
 
@@ -223,7 +231,7 @@ const form = useForm({
 When a single field needs an extra check on top of the form-level schema,
 pass a schema (or async function) to its `validators` prop. The cause you
 pick (`onChange`, `onBlur`, `onChangeAsync`, …) runs directly: the form's
-`validation` mode does **not** gate per-field validators.
+`validators` mode does **not** gate per-field validators.
 
 In the example below, `validators={{ onChange: slugAvailability }}` runs
 the reserved-name check on every keystroke from the very first character,
@@ -461,24 +469,24 @@ the summary and the form starts quiet. `role="alert"` and
 `aria-live="polite"` make the summary readable by screen readers as it
 updates.
 
-## Escape hatches
+## Manual path: `validators` as an object
 
-`schema` + `validation` is a sugar layer over TanStack Form's
-`validators` + `validationLogic`. When you need finer control, drop down
-to either:
+The schema path's `validators: <mode>` is sugar over TanStack Form's
+`validators` + `validationLogic`. Drop `schema` and pass `validators` as
+the native object when you need finer control:
 
 - **`validators`**: the original per-cause object (`{ onMount, onChange,
   onBlur, onSubmit, onChangeAsync, … }`). Useful for split sync/async
-  slots, debounce knobs, or per-cause schemas. Passing `validators`
-  makes `schema` ignored at the form level (per-field validators still
-  work).
-- **`validationLogic`**: the function that decides which validator runs
-  for each event. The `'blur-then-change'` mode wires up
-  `blurThenChangeLogic` (also exported); other modes leave it unset and
-  TanStack's `defaultValidationLogic` handles them.
+  slots, debounce knobs, or per-cause schemas. A schema variable can
+  still be used inside any slot (`onChange: schema`) — what TS forbids
+  is the `schema` *prop* coexisting with the object form.
+- **`validationLogic`**: only accepted in the manual path. The function
+  that decides which validator runs for each event.
+  `blurThenChangeLogic` is exported from `@zeno/forms` if you want the
+  default mode's behavior; otherwise pass TanStack's
+  `defaultValidationLogic`.
 
 ```tsx
-import { blurThenChangeLogic } from "@zeno/forms"
 import { defaultValidationLogic } from "@tanstack/react-form"
 
 // Async uniqueness on blur, sync schema on every keystroke.
@@ -495,8 +503,6 @@ const form = useForm({
 
 ## Anti-patterns
 
-- **Don't mix `schema` + `validators` on the same form.** `validators`
-  takes precedence and `schema` is silently dropped. Pick one.
 - **Don't use `'change'` with an expensive sync schema.** Every keystroke
   re-runs the whole thing. For network checks, switch to a per-field
   `onChangeAsync` with `onChangeAsyncDebounceMs`.

@@ -50,26 +50,6 @@ type PartialFormData<T> = T extends readonly unknown[]
 
 type ZenoFormExtras<TFormData> = {
   /**
-   * A standard schema (Zod, Valibot, ArkType, …) describing the form data.
-   * `useForm` uses it to generate `validators` and `validationLogic`
-   * based on the chosen `validation` mode. Pass your own `validators` /
-   * `validationLogic` to override.
-   */
-  schema?: StandardSchema<TFormData>
-  /**
-   * When the schema runs and when errors are displayed.
-   *
-   * - `'blur-then-change'` (default) — schema runs on blur, then on every
-   *   change for fields that have already been blurred. Errors appear after
-   *   first blur. Calm typing, live corrections.
-   * - `'change'` — schema runs on every keystroke. Errors appear as soon as
-   *   the user starts typing.
-   * - `'blur'` — schema runs only on blur. Errors appear after blur, but
-   *   do not update until the next blur.
-   * - `'submit'` — schema runs only on submit. No errors before submit.
-   */
-  validation?: ValidationMode
-  /**
    * If `true`, shipped fields skip rendering their inline `<FieldError>`
    * message. Use it when you collect errors in a single summary somewhere
    * else (e.g. above the submit button). The fields still flip
@@ -116,7 +96,79 @@ type ZenoFormExtras<TFormData> = {
   defaultValues?: PartialFormData<TFormData>
 }
 
-type UseFormOptions<
+// Schema path — `schema` drives validation. `validators` (if present) is a
+// `ValidationMode` string that selects *when* the schema fires; the matching
+// `validationLogic` is wired internally, so it must not be supplied by the
+// caller. To take manual control of `validators` / `validationLogic`, omit
+// `schema` and use the manual path instead.
+type SchemaPathExtras<TFormData> = {
+  /**
+   * A standard schema (Zod, Valibot, ArkType, …) describing the form data.
+   * Drives validation, default values, the `*` required indicator, and the
+   * `TFormData` type. Pair with `validators` (a `ValidationMode` string)
+   * to control timing.
+   */
+  schema: StandardSchema<TFormData>
+  /**
+   * When the schema runs and when errors are displayed.
+   *
+   * - `'blur-then-change'` (default) — schema runs on blur, then on every
+   *   change for fields that have already been blurred. Errors appear after
+   *   first blur. Calm typing, live corrections.
+   * - `'change'` — schema runs on every keystroke. Errors appear as soon as
+   *   the user starts typing.
+   * - `'blur'` — schema runs only on blur. Errors appear after blur, but
+   *   do not update until the next blur.
+   * - `'submit'` — schema runs only on submit. No errors before submit.
+   */
+  validators?: ValidationMode
+  /**
+   * Not accepted on the schema path — the mode chosen via `validators`
+   * selects the logic internally. Omit `schema` to supply your own.
+   */
+  validationLogic?: never
+}
+
+// Manual path — no schema. `validators` and `validationLogic` keep their
+// native TanStack Form types unchanged.
+type ManualPathExtras = {
+  schema?: never
+}
+
+type SchemaFormOptions<
+  TFormData,
+  TOnMount extends undefined | FormValidateOrFn<TFormData>,
+  TOnChange extends undefined | FormValidateOrFn<TFormData>,
+  TOnChangeAsync extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TOnBlur extends undefined | FormValidateOrFn<TFormData>,
+  TOnBlurAsync extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TOnSubmit extends undefined | FormValidateOrFn<TFormData>,
+  TOnSubmitAsync extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TOnDynamic extends undefined | FormValidateOrFn<TFormData>,
+  TOnDynamicAsync extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TOnServer extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TSubmitMeta,
+> = Omit<
+  FormOptions<
+    TFormData,
+    TOnMount,
+    TOnChange,
+    TOnChangeAsync,
+    TOnBlur,
+    TOnBlurAsync,
+    TOnSubmit,
+    TOnSubmitAsync,
+    TOnDynamic,
+    TOnDynamicAsync,
+    TOnServer,
+    TSubmitMeta
+  >,
+  "defaultValues" | "validators" | "validationLogic"
+> &
+  SchemaPathExtras<TFormData> &
+  ZenoFormExtras<TFormData>
+
+type ManualFormOptions<
   TFormData,
   TOnMount extends undefined | FormValidateOrFn<TFormData>,
   TOnChange extends undefined | FormValidateOrFn<TFormData>,
@@ -146,7 +198,51 @@ type UseFormOptions<
   >,
   "defaultValues"
 > &
+  ManualPathExtras &
   ZenoFormExtras<TFormData>
+
+type UseFormOptions<
+  TFormData,
+  TOnMount extends undefined | FormValidateOrFn<TFormData>,
+  TOnChange extends undefined | FormValidateOrFn<TFormData>,
+  TOnChangeAsync extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TOnBlur extends undefined | FormValidateOrFn<TFormData>,
+  TOnBlurAsync extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TOnSubmit extends undefined | FormValidateOrFn<TFormData>,
+  TOnSubmitAsync extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TOnDynamic extends undefined | FormValidateOrFn<TFormData>,
+  TOnDynamicAsync extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TOnServer extends undefined | FormAsyncValidateOrFn<TFormData>,
+  TSubmitMeta,
+> =
+  | SchemaFormOptions<
+      TFormData,
+      TOnMount,
+      TOnChange,
+      TOnChangeAsync,
+      TOnBlur,
+      TOnBlurAsync,
+      TOnSubmit,
+      TOnSubmitAsync,
+      TOnDynamic,
+      TOnDynamicAsync,
+      TOnServer,
+      TSubmitMeta
+    >
+  | ManualFormOptions<
+      TFormData,
+      TOnMount,
+      TOnChange,
+      TOnChangeAsync,
+      TOnBlur,
+      TOnBlurAsync,
+      TOnSubmit,
+      TOnSubmitAsync,
+      TOnDynamic,
+      TOnDynamicAsync,
+      TOnServer,
+      TSubmitMeta
+    >
 
 function buildValidatorsFromSchema<TFormData>(
   schema: StandardSchema<TFormData>,
@@ -200,17 +296,70 @@ function useForm<
     TSubmitMeta
   >
 ) {
+  type NativeFormOptions = FormOptions<
+    TFormData,
+    TOnMount,
+    TOnChange,
+    TOnChangeAsync,
+    TOnBlur,
+    TOnBlurAsync,
+    TOnSubmit,
+    TOnSubmitAsync,
+    TOnDynamic,
+    TOnDynamicAsync,
+    TOnServer,
+    TSubmitMeta
+  >
+  type NativeValidators = NativeFormOptions["validators"]
+  type NativeValidationLogic = NativeFormOptions["validationLogic"]
+
+  // Loosen the union for a single destructure. We narrow on `schema` below.
   const {
     schema,
-    validation = DEFAULT_VALIDATION_MODE,
+    validators: validatorsInput,
+    validationLogic: userValidationLogic,
     hideFieldErrors = false,
     requiredIndicator = true,
     unsavedChangesWarning = false,
-    validators,
-    validationLogic,
+    defaultValues: userDefaultValues,
     onSubmit: userOnSubmit,
     ...rest
-  } = options
+  } = options as Omit<NativeFormOptions, "defaultValues"> & {
+    schema?: StandardSchema<TFormData>
+    validators?: ValidationMode | NativeValidators
+    validationLogic?: NativeValidationLogic
+    defaultValues?: PartialFormData<TFormData>
+    hideFieldErrors?: boolean
+    requiredIndicator?: boolean
+    unsavedChangesWarning?: boolean | "if-changed" | "if-touched"
+  }
+
+  let schemaMode: ValidationMode | undefined
+  let resolvedValidators: NativeValidators | undefined
+  let resolvedValidationLogic: NativeValidationLogic | undefined
+
+  if (schema === undefined) {
+    schemaMode = undefined
+    resolvedValidators =
+      typeof validatorsInput === "object" && validatorsInput !== null
+        ? (validatorsInput as NativeValidators)
+        : undefined
+    resolvedValidationLogic = userValidationLogic
+  } else {
+    const mode: ValidationMode =
+      typeof validatorsInput === "string"
+        ? (validatorsInput as ValidationMode)
+        : DEFAULT_VALIDATION_MODE
+    schemaMode = mode
+    resolvedValidators = buildValidatorsFromSchema(
+      schema,
+      mode
+    ) as unknown as NativeValidators
+    resolvedValidationLogic =
+      mode === "blur-then-change"
+        ? (blurThenChangeLogic as unknown as NativeValidationLogic)
+        : undefined
+  }
 
   const wrappedOnSubmit = userOnSubmit
     ? ((async (props: { formApi: AnyFormApi; value: TFormData }) => {
@@ -238,8 +387,6 @@ function useForm<
     [schema, requiredIndicator]
   )
 
-  const { defaultValues: userDefaultValues, ...restWithoutDefaults } = rest
-
   const schemaDefaults = useMemo(
     () =>
       schema
@@ -259,18 +406,6 @@ function useForm<
     [schemaDefaults, userDefaultValues]
   )
 
-  const resolvedValidators =
-    validators ??
-    (schema
-      ? (buildValidatorsFromSchema(schema, validation) as unknown as
-          | typeof validators
-          | undefined)
-      : undefined)
-
-  const resolvedValidationLogic =
-    validationLogic ??
-    (validation === "blur-then-change" ? blurThenChangeLogic : undefined)
-
   const form = useAppForm<
     TFormData,
     TOnMount,
@@ -285,7 +420,7 @@ function useForm<
     TOnServer,
     TSubmitMeta
   >({
-    ...restWithoutDefaults,
+    ...rest,
     ...(mergedDefaultValues === undefined
       ? {}
       : { defaultValues: mergedDefaultValues }),
@@ -294,26 +429,13 @@ function useForm<
     ...(resolvedValidationLogic
       ? { validationLogic: resolvedValidationLogic }
       : {}),
-  } as FormOptions<
-    TFormData,
-    TOnMount,
-    TOnChange,
-    TOnChangeAsync,
-    TOnBlur,
-    TOnBlurAsync,
-    TOnSubmit,
-    TOnSubmitAsync,
-    TOnDynamic,
-    TOnDynamicAsync,
-    TOnServer,
-    TSubmitMeta
-  >)
+  } as NativeFormOptions)
 
   setFormZenoState(form, {
     hideFieldErrors,
     requiredFields,
     requiredIndicator,
-    validation,
+    ...(schemaMode === undefined ? {} : { validation: schemaMode }),
   })
 
   useUnsavedChangesWarning(form, unsavedChangesWarning)

@@ -26,7 +26,7 @@ export function ChangeModeExample() {
   const form = useForm({
     onSubmit: ({ value }) => toastSubmitted({ password: value.password }),
     schema,
-    validation: "change",
+    validators: "change",
   })
   const { PasswordField, ResetButton, SubmitButton } = form
 
