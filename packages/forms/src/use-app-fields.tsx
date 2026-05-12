@@ -47,7 +47,23 @@ type AnyFieldValidators = {
   onDynamicAsync?: unknown
 }
 
-type WithValidators = { validators?: AnyFieldValidators }
+// Mirrors TanStack's `FieldListeners`. Same loose-shape rationale as
+// `AnyFieldValidators`: prop-name autocomplete with no per-field generic
+// collisions. Use for cascade patterns where changing one field updates
+// another (`form.setFieldValue(...)` inside `onChange`).
+type AnyFieldListeners = {
+  onChange?: unknown
+  onChangeDebounceMs?: number
+  onBlur?: unknown
+  onBlurDebounceMs?: number
+  onMount?: unknown
+  onSubmit?: unknown
+}
+
+type WithValidators = {
+  validators?: AnyFieldValidators
+  listeners?: AnyFieldListeners
+}
 
 function useAppFields<TForm extends AnyAppForm>(form: TForm) {
   type T = FormDataOf<TForm>
@@ -56,6 +72,7 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
     const Field = form.AppField as React.ComponentType<{
       name: string
       validators?: AnyFieldValidators
+      listeners?: AnyFieldListeners
       children: () => React.ReactNode
     }>
 
@@ -63,12 +80,13 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
       CheckboxField<N extends DeepKeys<T>>({
         name,
         validators,
+        listeners,
         ...props
       }: ComponentProps<typeof CheckboxFieldImpl> & {
         name: N
       } & WithValidators) {
         return (
-          <Field name={name} validators={validators}>
+          <Field listeners={listeners} name={name} validators={validators}>
             {() => <CheckboxFieldImpl {...props} />}
           </Field>
         )
@@ -76,12 +94,13 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
       ComboboxField<N extends DeepKeys<T>>({
         name,
         validators,
+        listeners,
         ...props
       }: ComponentProps<typeof ComboboxFieldImpl> & {
         name: N
       } & WithValidators) {
         return (
-          <Field name={name} validators={validators}>
+          <Field listeners={listeners} name={name} validators={validators}>
             {() => <ComboboxFieldImpl {...props} />}
           </Field>
         )
@@ -89,12 +108,13 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
       DatePickerField<N extends DeepKeys<T>>({
         name,
         validators,
+        listeners,
         ...props
       }: ComponentProps<typeof DatePickerFieldImpl> & {
         name: N
       } & WithValidators) {
         return (
-          <Field name={name} validators={validators}>
+          <Field listeners={listeners} name={name} validators={validators}>
             {() => <DatePickerFieldImpl {...props} />}
           </Field>
         )
@@ -102,12 +122,17 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
       EmailField({
         name,
         validators,
+        listeners,
         ...props
       }: ComponentProps<typeof EmailFieldImpl> &
         WithDefaultName<T, "email"> &
         WithValidators) {
         return (
-          <Field name={(name ?? "email") as string} validators={validators}>
+          <Field
+            listeners={listeners}
+            name={(name ?? "email") as string}
+            validators={validators}
+          >
             {() => <EmailFieldImpl {...props} />}
           </Field>
         )
@@ -115,10 +140,11 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
       InputField<N extends DeepKeys<T>>({
         name,
         validators,
+        listeners,
         ...props
       }: ComponentProps<typeof InputFieldImpl> & { name: N } & WithValidators) {
         return (
-          <Field name={name} validators={validators}>
+          <Field listeners={listeners} name={name} validators={validators}>
             {() => <InputFieldImpl {...props} />}
           </Field>
         )
@@ -126,12 +152,13 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
       NumberField<N extends DeepKeys<T>>({
         name,
         validators,
+        listeners,
         ...props
       }: ComponentProps<typeof NumberFieldImpl> & {
         name: N
       } & WithValidators) {
         return (
-          <Field name={name} validators={validators}>
+          <Field listeners={listeners} name={name} validators={validators}>
             {() => <NumberFieldImpl {...props} />}
           </Field>
         )
@@ -139,12 +166,13 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
       OtpField<N extends DeepKeys<T>>({
         name,
         validators,
+        listeners,
         ...props
       }: ComponentProps<typeof OtpFieldImpl> & {
         name: N
       } & WithValidators) {
         return (
-          <Field name={name} validators={validators}>
+          <Field listeners={listeners} name={name} validators={validators}>
             {() => <OtpFieldImpl {...props} />}
           </Field>
         )
@@ -152,12 +180,17 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
       PasswordField({
         name,
         validators,
+        listeners,
         ...props
       }: ComponentProps<typeof PasswordFieldImpl> &
         WithDefaultName<T, "password"> &
         WithValidators) {
         return (
-          <Field name={(name ?? "password") as string} validators={validators}>
+          <Field
+            listeners={listeners}
+            name={(name ?? "password") as string}
+            validators={validators}
+          >
             {() => <PasswordFieldImpl {...props} />}
           </Field>
         )
@@ -165,12 +198,13 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
       RadioGroupField<N extends DeepKeys<T>>({
         name,
         validators,
+        listeners,
         ...props
       }: ComponentProps<typeof RadioGroupFieldImpl> & {
         name: N
       } & WithValidators) {
         return (
-          <Field name={name} validators={validators}>
+          <Field listeners={listeners} name={name} validators={validators}>
             {() => <RadioGroupFieldImpl {...props} />}
           </Field>
         )
@@ -178,12 +212,13 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
       SelectField<N extends DeepKeys<T>>({
         name,
         validators,
+        listeners,
         ...props
       }: ComponentProps<typeof SelectFieldImpl> & {
         name: N
       } & WithValidators) {
         return (
-          <Field name={name} validators={validators}>
+          <Field listeners={listeners} name={name} validators={validators}>
             {() => <SelectFieldImpl {...props} />}
           </Field>
         )
@@ -191,12 +226,13 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
       SliderField<N extends DeepKeys<T>>({
         name,
         validators,
+        listeners,
         ...props
       }: ComponentProps<typeof SliderFieldImpl> & {
         name: N
       } & WithValidators) {
         return (
-          <Field name={name} validators={validators}>
+          <Field listeners={listeners} name={name} validators={validators}>
             {() => <SliderFieldImpl {...props} />}
           </Field>
         )
@@ -204,12 +240,13 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
       SwitchField<N extends DeepKeys<T>>({
         name,
         validators,
+        listeners,
         ...props
       }: ComponentProps<typeof SwitchFieldImpl> & {
         name: N
       } & WithValidators) {
         return (
-          <Field name={name} validators={validators}>
+          <Field listeners={listeners} name={name} validators={validators}>
             {() => <SwitchFieldImpl {...props} />}
           </Field>
         )
@@ -217,12 +254,13 @@ function useAppFields<TForm extends AnyAppForm>(form: TForm) {
       TextAreaField<N extends DeepKeys<T>>({
         name,
         validators,
+        listeners,
         ...props
       }: ComponentProps<typeof TextAreaFieldImpl> & {
         name: N
       } & WithValidators) {
         return (
-          <Field name={name} validators={validators}>
+          <Field listeners={listeners} name={name} validators={validators}>
             {() => <TextAreaFieldImpl {...props} />}
           </Field>
         )

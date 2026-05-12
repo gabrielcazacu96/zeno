@@ -8,6 +8,7 @@ status: in progress
 import { ArrayExample } from "@/components/forms/array-preview"
 import { AsyncSearchExample } from "@/components/forms/async-search-preview"
 import { FormInCardExample } from "@/components/forms/card-preview"
+import { ConditionalExample } from "@/components/forms/conditional-preview"
 import { DialogExample } from "@/components/forms/dialog-preview"
 import { DynamicExample } from "@/components/forms/dynamic-preview"
 import { LoginExample } from "@/components/forms/login-preview"
@@ -439,14 +440,14 @@ export function TeamInvites() {
 
 </Preview>
 
-## Dynamic fields
+## Conditional fields
 
 `form.Subscribe` reads other field values reactively without re-rendering
 the entire form. Here, switching the country swaps the second field
 between a `SelectField` and an `InputField`.
 
 <Preview>
-  <DynamicExample />
+  <ConditionalExample />
 
 ```tsx lineNumbers
 "use client"
@@ -492,6 +493,78 @@ export function Shipping() {
         </FieldGroup>
         <ResetButton />
         <SubmitButton>Save address</SubmitButton>
+      </Form>
+    </FormProvider>
+  )
+}
+```
+
+</Preview>
+
+## Dynamic fields
+
+Pass `listeners.onChange` to a field to react to its value changes — call
+`form.setFieldValue(...)` inside the listener to cascade an update onto
+another field. Here, switching dietary preference auto-unticks incompatible
+meals so the form value stays consistent. Meals are stored as a nested
+object (`meals.salad`, `meals.sausage`, `meals.eggs`) so each
+`<CheckboxField>` binds to its own boolean leaf.
+
+<Preview>
+  <DynamicExample />
+
+```tsx lineNumbers
+"use client"
+
+import { Form, FormProvider, useForm } from "@zeno/forms"
+import { FieldGroup, FieldLegend, FieldSet } from "@zeno/ui/field"
+import { SelectItem } from "@zeno/ui/select"
+import { z } from "zod"
+
+type Diet = "none" | "vegetarian" | "vegan"
+
+export function Order() {
+  const form = useForm({
+    onSubmit: ({ value }) => saveOrder(value),
+    schema: z.object({
+      dietary: z.enum(["none", "vegetarian", "vegan"]).default("none"),
+      meals: z.object({
+        salad: z.boolean().default(true),
+        sausage: z.boolean().default(true),
+        eggs: z.boolean().default(true),
+      }),
+    }),
+  })
+  const { CheckboxField, SelectField, SubmitButton } = form
+
+  return (
+    <FormProvider form={form}>
+      <Form>
+        <FieldGroup>
+          <SelectField
+            label="Dietary restrictions"
+            name="dietary"
+            listeners={{
+              onChange: ({ value }: { value: Diet }) => {
+                if (value !== "none") form.setFieldValue("meals.sausage", false)
+                if (value === "vegan") form.setFieldValue("meals.eggs", false)
+              },
+            }}
+          >
+            <SelectItem value="none">No restrictions</SelectItem>
+            <SelectItem value="vegetarian">Vegetarian</SelectItem>
+            <SelectItem value="vegan">Vegan</SelectItem>
+          </SelectField>
+          <FieldSet>
+            <FieldLegend>Meals</FieldLegend>
+            <FieldGroup className="gap-3">
+              <CheckboxField label="Salad" name="meals.salad" />
+              <CheckboxField label="Sausage" name="meals.sausage" />
+              <CheckboxField label="Eggs" name="meals.eggs" />
+            </FieldGroup>
+          </FieldSet>
+        </FieldGroup>
+        <SubmitButton>Save</SubmitButton>
       </Form>
     </FormProvider>
   )

@@ -61,7 +61,7 @@ function CheckboxField({
       />
       <FieldContent>
         {label && (
-          <FieldLabel htmlFor={field.name}>
+          <FieldLabel className="font-normal" htmlFor={field.name}>
             {label}
             {isRequired && <RequiredIndicator />}
           </FieldLabel>
