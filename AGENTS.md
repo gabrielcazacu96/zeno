@@ -16,7 +16,7 @@ Linked entries below have a leaf node — open it before working in that area. E
   - [`ui/`](packages/ui/AGENTS.md) — `@zeno/ui` component primitives (Base UI + Tailwind)
   - [`authentication/`](packages/authentication/AGENTS.md) — `@zeno/authentication` Supabase auth flows (read before touching `verify/` or `email-sent/`)
   - [`supabase/`](packages/supabase/AGENTS.md) — `@zeno/supabase` SSR client + middleware
-  - [`e2e/`](packages/e2e/AGENTS.md) — `@resolve/e2e` Playwright suite
+  - [`e2e/`](packages/e2e/AGENTS.md) — `@zeno/e2e` Playwright suite
   - `typescript/` — shared `tsconfig` presets
   - `tailwind/` — shared Tailwind globals
   - `vitest/` — shared Vitest config

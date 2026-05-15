@@ -1,5 +1,5 @@
 {
-  "name": "@resolve/e2e",
+  "name": "@zeno/e2e",
   "version": "0.0.0",
   "scripts": {
     "e2e": "playwright test",
