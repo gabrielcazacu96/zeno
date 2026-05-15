@@ -1,6 +1,5 @@
 {
   "name": "@zeno/example",
-  "private": true,
   "scripts": {
     "test": "vitest --run",
     "test:watch": "vitest watch"

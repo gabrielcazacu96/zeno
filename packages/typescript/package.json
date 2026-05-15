@@ -1,26 +1,3 @@
 {
-  "name": "@zeno/typescript",
-  "version": "0.0.0",
-  "exports": {
-    "./base.json": "./base.json",
-    "./nextjs.json": "./nextjs.json",
-    "./react.json": "./react.json",
-    "./strict.json": "./strict.json",
-    "./strictest.json": "./strictest.json"
-  },
-  "files": [
-    "base.json",
-    "nextjs.json",
-    "react.json",
-    "strict.json",
-    "strictest.json"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zeno-lib/zeno.git",
-    "directory": "packages/typescript"
-  }
+  "name": "@zeno/typescript"
 }
