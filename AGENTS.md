@@ -44,6 +44,8 @@ Don't update the node for mechanical refactors, formatting, or implementation de
 | `pnpm test` / `pnpm test:watch` | Run / watch Vitest unit tests. `test` depends on `build` and `lint`. |
 | `pnpm e2e` / `pnpm e2e:watch` | Run / watch Playwright. Requires `pnpm exec playwright install --with-deps` once in `packages/e2e/`. |
 | `pnpm lint` / `pnpm lint:fix` | Ultracite check / autofix. |
+| `pnpm commitlint` | Lint the latest commit range against Conventional Commits. |
+| `pnpm release:pr` | Run `release-please` locally to create or update the manifest-based release PR. |
 | `pnpm ci` | Full pre-PR pipeline: `lint → types:check → build → test → e2e`. |
 
 Scope a command to one package with `pnpm turbo run <task> --filter <pkg-name>` (e.g. `--filter @zeno/docs`).

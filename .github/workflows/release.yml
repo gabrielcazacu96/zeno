@@ -1,0 +1,108 @@
+name: Release Packages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  verify:
+    name: Verify release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Browsers
+        run: pnpm dlx playwright install chromium
+
+      - name: Run CI
+        run: pnpm run ci
+
+  release:
+    name: Release
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create or update release PR
+        id: release
+        uses: googleapis/release-please-action@v5
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      - name: Checkout code
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Setup Node.js environment
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        run: corepack pnpm install --frozen-lockfile
+
+      - name: Publish released packages
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PATHS_RELEASED: ${{ steps.release.outputs.paths_released }}
+        run: |
+          node <<'EOF'
+          const { execFileSync } = require("node:child_process");
+
+          const releasedPaths = JSON.parse(process.env.PATHS_RELEASED || "[]");
+
+          for (const path of releasedPaths) {
+            console.log(`Publishing ${path}`);
+            execFileSync(
+              "corepack",
+              [
+                "pnpm",
+                "--dir",
+                path,
+                "publish",
+                "--access",
+                "public",
+                "--provenance",
+                "--no-git-checks"
+              ],
+              { stdio: "inherit" }
+            );
+          }
+          EOF

@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
+    "commitlint": "commitlint --from=HEAD~1 --to=HEAD",
     "types:check": "turbo types:check",
     "ci": "pnpm run lint && turbo run types:check build test e2e",
     "ci:force": "turbo run types:check build test e2e --force",
@@ -12,11 +13,15 @@
     "e2e:watch": "NODE_ENV=test && turbo run dev e2e:watch",
     "lint": "ultracite check",
     "lint:fix": "ultracite fix",
+    "release:pr": "release-please manifest-pr --config-file release-please-config.json --manifest-file .release-please-manifest.json",
     "test": "NODE_ENV=test && turbo run test",
     "test:watch": "NODE_ENV=test && turbo run dev test:watch"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.1",
+    "@commitlint/config-conventional": "^21.0.1",
     "@biomejs/biome": "2.4.14",
+    "release-please": "^17.6.0",
     "turbo": "2.9.7",
     "typescript": "6.0.3",
     "ultracite": "7.6.2"

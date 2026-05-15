@@ -39,6 +39,24 @@ To develop all apps and packages, run the following command:
 pnpm dev
 ```
 
+### Release packages
+
+Package publishing is standardized with [release-please](https://github.com/googleapis/release-please) and Conventional Commits. Release PRs, per-package version bumps, and changelog entries are generated from commit history for the public packages in `packages/`.
+
+Before publishing locally, authenticate with npm first:
+
+```bash
+pnpm login
+```
+
+1. Write release-worthy commits with [Conventional Commits](https://www.conventionalcommits.org/), for example `feat(ui): add combobox`, `fix(forms): preserve field defaults`, or `feat!: drop Node 20 support`.
+2. Keep release-worthy changes scoped to the package paths you want to release; a commit can affect every public package whose files it touches.
+3. When those commits land on `main`, the release workflow opens or updates a release PR with package versions and changelog entries derived from those commits.
+4. The release workflow only publishes after `pnpm run ci` passes on `main`.
+5. Merging the release PR publishes the released packages to npm with `NPM_TOKEN`.
+
+Only release-driving commit types such as `feat`, `fix`, `perf`, and `BREAKING CHANGE:` affect package versions. Docs, test, and chore commits are still recorded in git, but they do not create a package release by themselves.
+
 ### Remote Caching
 
 > [!TIP]
