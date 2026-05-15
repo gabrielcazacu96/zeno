@@ -1,17 +1,18 @@
 {
-  "name": "@resolve/e2e",
+  "name": "@egal_ro/e2e",
+  "version": "0.0.0",
   "scripts": {
     "e2e": "playwright test",
     "e2e:watch": "playwright test --ui",
     "verify-deps": "./verify-app-deps.mjs"
   },
   "dependencies": {
-    "@zeno/docs": "workspace:*"
+    "@egal_ro/docs": "workspace:*"
   },
   "devDependencies": {
     "@playwright/test": "1.59.1",
     "@types/node": "^25.6.0",
-    "@zeno/typescript": "workspace:*",
+    "@egal_ro/typescript": "workspace:*",
     "typescript": "6.0.3"
   }
 }

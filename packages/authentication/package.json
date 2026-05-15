@@ -1,5 +1,6 @@
 {
-  "name": "@zeno/authentication",
+  "name": "@egal_ro/authentication",
+  "version": "0.0.0",
   "scripts": {
     "check-types": "tsc --noEmit"
   },
@@ -14,11 +15,11 @@
     "react-hook-form": ">=7"
   },
   "dependencies": {
-    "@zeno/supabase": "workspace:*",
-    "@zeno/ui": "workspace:*"
+    "@egal_ro/supabase": "workspace:^",
+    "@egal_ro/ui": "workspace:^"
   },
   "devDependencies": {
-    "@zeno/typescript": "workspace:*",
+    "@egal_ro/typescript": "workspace:*",
     "@types/node": "24.12.2",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3"

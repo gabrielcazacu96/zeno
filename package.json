@@ -13,7 +13,7 @@
     "e2e:watch": "NODE_ENV=test && turbo run dev e2e:watch",
     "lint": "ultracite check",
     "lint:fix": "ultracite fix",
-    "release:pr": "release-please manifest-pr --repo-url zeno-lib/zeno --config-file release-please-config.json --manifest-file .release-please-manifest.json",
+    "release:pr": "release-please manifest-pr --repo-url gabrielcazacu96/zeno --config-file release-please-config.json --manifest-file .release-please-manifest.json",
     "test": "NODE_ENV=test && turbo run test",
     "test:watch": "NODE_ENV=test && turbo run dev test:watch"
   },

@@ -1,5 +1,5 @@
 {
-  "name": "@zeno/ui",
+  "name": "@egal_ro/ui",
   "version": "0.0.0",
   "private": true,
   "exports": {
@@ -47,8 +47,8 @@
     "@types/node": "25.6.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "@zeno/tailwind": "workspace:*",
-    "@zeno/typescript": "workspace:*",
+    "@egal_ro/tailwind": "workspace:*",
+    "@egal_ro/typescript": "workspace:*",
     "typescript": "6.0.3"
   }
 }
