@@ -46,7 +46,7 @@ Don't update the node for mechanical refactors, formatting, or implementation de
 | `pnpm lint` / `pnpm lint:fix` | Ultracite check / autofix. |
 | `pnpm changeset` | Create a release note for publishable packages under `packages/`. |
 | `pnpm prerelease:beta:enter` / `pnpm prerelease:beta:exit` | Enter or leave Changesets beta prerelease mode for test publishes. |
-| `pnpm version-packages` | Apply pending Changesets and update package versions/changelogs. |
+| `pnpm version-packages` | Apply pending Changesets and update package versions/changelogs (with commit links via `@changesets/changelog-git`). |
 | `pnpm release` | Publish the pending package releases to npm. |
 | `pnpm ci` | Full pre-PR pipeline: `lint → types:check → build → test → e2e`. |
 
