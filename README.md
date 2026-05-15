@@ -39,6 +39,15 @@ To develop all apps and packages, run the following command:
 pnpm dev
 ```
 
+### Release packages
+
+Package publishing is standardized with [Changesets](https://github.com/changesets/changesets).
+
+1. Run `pnpm changeset` after changing a publishable package in `packages/`.
+2. Merge the generated changeset with your package changes.
+3. When the change lands on `main`, the release workflow opens or updates a release PR.
+4. Merging that release PR publishes the versioned `@zeno/*` packages with `NPM_TOKEN`.
+
 ### Remote Caching
 
 > [!TIP]
