@@ -1,0 +1,9 @@
+{
+  "packages/authentication": "0.0.0",
+  "packages/forms": "0.0.0",
+  "packages/supabase": "0.0.0",
+  "packages/tailwind": "0.0.0",
+  "packages/typescript": "0.0.1-beta.0",
+  "packages/ui": "0.0.0",
+  "packages/vitest": "0.0.0"
+}
