@@ -1,5 +1,5 @@
 {
-  "name": "@zeno/forms",
+  "name": "@egal_ro/forms",
   "version": "0.0.0",
   "private": true,
   "exports": {
@@ -14,7 +14,7 @@
   "peerDependencies": {
     "@tanstack/react-devtools": ">=0.10",
     "@tanstack/react-form-devtools": ">=0.2",
-    "@zeno/ui": "workspace:*",
+    "@egal_ro/ui": "workspace:^",
     "next": ">=16",
     "react": ">=19",
     "react-dom": ">=19",
@@ -28,7 +28,7 @@
     "@types/node": "25.6.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "@zeno/typescript": "workspace:*",
+    "@egal_ro/typescript": "workspace:*",
     "typescript": "6.0.3"
   }
 }
