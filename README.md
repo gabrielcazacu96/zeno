@@ -59,6 +59,8 @@ Only release-driving commit types such as `feat`, `fix`, `perf`, and `BREAKING C
 
 If `pnpm commitlint` fails, rewrite the offending commit message and run it again. For the latest commit, use `git commit --amend -m "feat(ui): add combobox"`. For older commits on your branch, use `git rebase -i main`, mark the commit as `reword`, then update it to a valid Conventional Commit such as `fix(forms): preserve field defaults`. If the branch was already pushed, follow up with `git push --force-with-lease`.
 
+If you run `pnpm release:pr` locally, the script already knows the repo URL, but you still need a GitHub token in your shell, for example `export GITHUB_TOKEN=...`. `release-please` uses that token to open or update the release PR on `zeno-lib/zeno`.
+
 ### Remote Caching
 
 > [!TIP]
