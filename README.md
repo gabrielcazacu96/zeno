@@ -57,6 +57,8 @@ pnpm login
 
 Only release-driving commit types such as `feat`, `fix`, `perf`, and `BREAKING CHANGE:` affect package versions. Docs, test, and chore commits are still recorded in git, but they do not create a package release by themselves.
 
+If `pnpm commitlint` fails, rewrite the offending commit message and run it again. For the latest commit, use `git commit --amend -m "feat(ui): add combobox"`. For older commits on your branch, use `git rebase -i main`, mark the commit as `reword`, then update it to a valid Conventional Commit such as `fix(forms): preserve field defaults`. If the branch was already pushed, follow up with `git push --force-with-lease`.
+
 ### Remote Caching
 
 > [!TIP]
