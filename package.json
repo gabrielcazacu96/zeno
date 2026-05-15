@@ -13,6 +13,8 @@
     "e2e:watch": "NODE_ENV=test && turbo run dev e2e:watch",
     "lint": "ultracite check",
     "lint:fix": "ultracite fix",
+    "prerelease:beta:enter": "changeset pre enter beta",
+    "prerelease:beta:exit": "changeset pre exit",
     "release": "changeset publish",
     "release:status": "changeset status --verbose",
     "test": "NODE_ENV=test && turbo run test",

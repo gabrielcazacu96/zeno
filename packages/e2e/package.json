@@ -1,5 +1,6 @@
 {
   "name": "@resolve/e2e",
+  "version": "0.0.0",
   "scripts": {
     "e2e": "playwright test",
     "e2e:watch": "playwright test --ui",

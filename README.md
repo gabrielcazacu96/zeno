@@ -43,10 +43,31 @@ pnpm dev
 
 Package publishing is standardized with [Changesets](https://github.com/changesets/changesets).
 
+Before publishing locally, authenticate with npm first:
+
+```bash
+pnpm login
+```
+
 1. Run `pnpm changeset` after changing a publishable package in `packages/`.
 2. Merge the generated changeset with your package changes.
 3. When the change lands on `main`, the release workflow opens or updates a release PR.
-4. Merging that release PR publishes the versioned `@zeno/*` packages with `NPM_TOKEN`.
+4. The release workflow only proceeds after `pnpm run ci` passes on `main`.
+5. Merging that release PR publishes the versioned `@zeno/*` packages with `NPM_TOKEN`.
+
+### Beta publish packages
+
+For a test publish under the `@zeno/*` scope, use a Changesets prerelease so npm gets a beta-tagged version instead of replacing `latest`.
+
+1. Start beta mode with `pnpm prerelease:beta:enter`.
+2. Add a changeset with `pnpm changeset` if you changed a publishable package.
+3. Apply versions with `pnpm version-packages` to generate versions like `0.0.1-beta.0`.
+4. Publish the prerelease with `pnpm release`.
+5. When you're done with beta releases, leave prerelease mode with `pnpm prerelease:beta:exit`.
+
+`pnpm prerelease:beta:enter` already sets the prerelease tag to `beta`, so `pnpm release` intentionally does **not** pass `--tag beta` again.
+
+Consumers can then install the beta build with `pnpm add @zeno/ui@beta` or pin the exact prerelease version.
 
 ### Remote Caching
 
