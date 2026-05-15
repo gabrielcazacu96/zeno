@@ -4,6 +4,8 @@ This package provides shared TypeScript configurations for the monorepo, with pr
 
 ## Configurations
 
+Test
+
 ### `base.json`
 
 The foundation configuration with modern ESM features and sensible defaults.
