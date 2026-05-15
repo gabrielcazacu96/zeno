@@ -12,7 +12,7 @@
       "dependsOn": ["^types:check"]
     },
     "e2e": {
-      "dependsOn": ["^build", "@zeno/e2e#verify-deps"],
+      "dependsOn": ["^build", "@resolve/e2e#verify-deps"],
       "outputs": [
         "./packages/e2e/playwright-report/**",
         "./packages/e2e/test-results/**"

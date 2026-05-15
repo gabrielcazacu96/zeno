@@ -1,22 +1,8 @@
 {
   "name": "@zeno/supabase",
-  "version": "0.0.0",
-  "scripts": {
-    "types:check": "tsc --noEmit"
-  },
+  "scripts": {},
   "exports": {
     "./*": "./src/*.ts"
-  },
-  "files": [
-    "src"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zeno-lib/zeno.git",
-    "directory": "packages/supabase"
   },
   "peerDependencies": {
     "@supabase/ssr": ">=0",
