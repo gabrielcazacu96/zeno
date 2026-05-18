@@ -36,7 +36,7 @@ jobs:
     - name: Install dependencies
       run: pnpm install
     - name: Install Playwright Browsers
-      run: cd packages/e2e && pnpm exec playwright install --with-deps chromium
+      run: cd packages/e2e && pnpm exec playwright install chromium
     - name: Run turbo ci command
       run: pnpm run ci
     - name: Upload Playwright report
