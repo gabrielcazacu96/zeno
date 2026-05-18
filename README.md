@@ -56,6 +56,14 @@ pnpm login
 4. The release workflow only proceeds after `pnpm run ci` passes on `main`.
 5. Merging that release PR publishes the versioned `@zeno-lib/*` packages with npm [trusted publishing](https://docs.npmjs.com/trusted-publishers) via GitHub Actions OIDC;
 
+#### Publishing a new package
+
+Before a brand-new package can be released automatically from GitHub Actions:
+
+1. Make sure the package `package.json` is **not** marked as `"private": true`.
+2. Publish an initial version first — `0.0.0` is a good default — so the package exists on npm and can be configured through the normal `pnpm release` flow afterward.
+3. In npm, open that package and add GitHub Actions [trusted publishing](https://docs.npmjs.com/trusted-publishers) for this repository so future releases from `release.yml` are allowed.
+
 Trusted publishing must be configured in npm for **each** package that should be published from this repository. Whenever you add a new publishable package, go to that package on npm and add a trusted publisher for:
 
 - GitHub repository: `zeno-lib/zeno`
