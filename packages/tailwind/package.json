@@ -1,5 +1,6 @@
 {
   "name": "@zeno/tailwind",
+  "private": true,
   "version": "0.0.0",
   "exports": {
     "./globals.css": "./globals.css"

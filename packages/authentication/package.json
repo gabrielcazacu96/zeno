@@ -1,5 +1,6 @@
 {
   "name": "@zeno/authentication",
+  "private": true,
   "version": "0.0.0",
   "scripts": {
     "types:check": "tsc --noEmit"
