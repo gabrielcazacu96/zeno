@@ -20,7 +20,6 @@
     "access": "public"
   },
   "repository": {
-    "type": "git",
     "url": "https://github.com/zeno-lib/zeno.git",
     "directory": "packages/ui"
   },
@@ -62,7 +61,7 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@zeno-lib/tailwind": "workspace:*",
-    "@zeno-lib/typescript": "workspace:*",
+    "@zeno-lib/typescript": "workspace:^",
     "typescript": "6.0.3"
   }
 }

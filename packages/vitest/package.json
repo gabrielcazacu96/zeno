@@ -12,7 +12,6 @@
     "access": "public"
   },
   "repository": {
-    "type": "git",
     "url": "https://github.com/zeno-lib/zeno.git",
     "directory": "packages/vitest"
   },

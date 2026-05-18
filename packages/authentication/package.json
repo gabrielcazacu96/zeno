@@ -16,7 +16,6 @@
     "access": "public"
   },
   "repository": {
-    "type": "git",
     "url": "https://github.com/zeno-lib/zeno.git",
     "directory": "packages/authentication"
   },
@@ -31,7 +30,7 @@
     "@zeno-lib/ui": "workspace:^"
   },
   "devDependencies": {
-    "@zeno-lib/typescript": "workspace:*",
+    "@zeno-lib/typescript": "workspace:^",
     "@types/node": "24.12.2",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3"
