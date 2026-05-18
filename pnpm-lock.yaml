@@ -11,6 +11,9 @@ importers:
       '@biomejs/biome':
         specifier: 2.4.14
         version: 2.4.14
+      '@changesets/changelog-git':
+        specifier: ^0.2.1
+        version: 0.2.1
       '@changesets/cli':
         specifier: ^2.31.0
         version: 2.31.0(@types/node@25.6.0)
@@ -83,7 +86,7 @@ importers:
         version: 19.2.3(@types/react@19.2.14)
       '@zeno/typescript':
         specifier: workspace:*
-        version: link:../../packages/typescript
+        version: link:../../packages/typescript2
       postcss:
         specifier: ^8.5.13
         version: 8.5.13
@@ -97,10 +100,10 @@ importers:
   packages/authentication:
     dependencies:
       '@zeno/supabase':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../supabase
       '@zeno/ui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ui
       next:
         specifier: '>=16'
@@ -126,7 +129,7 @@ importers:
         version: 19.2.3(@types/react@19.2.14)
       '@zeno/typescript':
         specifier: workspace:*
-        version: link:../typescript
+        version: link:../typescript2
 
   packages/e2e:
     dependencies:
@@ -142,7 +145,7 @@ importers:
         version: 25.6.0
       '@zeno/typescript':
         specifier: workspace:*
-        version: link:../typescript
+        version: link:../typescript2
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -174,7 +177,7 @@ importers:
         specifier: 1.29.1
         version: 1.29.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@zeno/ui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ui
       next:
         specifier: '>=16'
@@ -200,7 +203,7 @@ importers:
         version: 19.2.3(@types/react@19.2.14)
       '@zeno/typescript':
         specifier: workspace:*
-        version: link:../typescript
+        version: link:../typescript2
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -222,7 +225,7 @@ importers:
     devDependencies:
       '@zeno/typescript':
         specifier: workspace:*
-        version: link:../typescript
+        version: link:../typescript2
 
   packages/tailwind:
     dependencies:
@@ -231,6 +234,8 @@ importers:
         version: 4.0.12
 
   packages/typescript: {}
+
+  packages/typescript2: {}
 
   packages/ui:
     dependencies:
@@ -318,7 +323,7 @@ importers:
         version: link:../tailwind
       '@zeno/typescript':
         specifier: workspace:*
-        version: link:../typescript
+        version: link:../typescript2
       typescript:
         specifier: 6.0.3
         version: 6.0.3
