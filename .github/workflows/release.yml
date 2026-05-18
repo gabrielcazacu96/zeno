@@ -12,38 +12,13 @@ permissions:
   id-token: write
 
 jobs:
-  verify:
+  ci:
     name: Verify release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          run_install: false
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install Playwright Browsers
-        run: pnpm dlx playwright install chromium
-
-      - name: Run CI
-        run: pnpm run ci
+    uses: ./.github/workflows/turbo.yml
 
   release:
     name: Release
-    needs: verify
+    needs: ci
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -59,7 +34,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: latest
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
@@ -71,7 +46,5 @@ jobs:
         with:
           version: pnpm version-packages
           publish: pnpm release
-          commit: "chore: release packages"
-          title: "chore: release packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
