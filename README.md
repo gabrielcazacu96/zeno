@@ -54,7 +54,17 @@ pnpm login
 2. Write the changeset summary as the release note you want to appear in the changelog, then merge it with your package changes.
 3. When the change lands on `main`, the release workflow opens or updates a release PR.
 4. The release workflow only proceeds after `pnpm run ci` passes on `main`.
-5. Merging that release PR publishes the versioned `@zeno/*` packages with `NPM_TOKEN`.
+5. Merging that release PR publishes the versioned `@zeno/*` packages with npm [trusted publishing](https://docs.npmjs.com/trusted-publishers) via GitHub Actions OIDC;
+
+Trusted publishing must be configured in npm for **each** package that should be published from this repository. Whenever you add a new publishable package, go to that package on npm and add a trusted publisher for:
+
+- GitHub repository: `zeno-lib/zeno`
+- Workflow filename: `release.yml`
+
+Useful references:
+
+- [npm trusted publishers](https://docs.npmjs.com/trusted-publishers)
+- [Configuring a GitHub Actions trusted publisher](https://docs.npmjs.com/trusted-publishers#for-github-actions)
 
 ### Beta publish packages
 
