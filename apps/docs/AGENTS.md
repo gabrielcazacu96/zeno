@@ -64,7 +64,7 @@ import { Button } from "@zeno/ui/button"
 
 Workspace: `@zeno/ui`, `@zeno/typescript`. Stack: `next@16.2.4`, `react@19.2.5`, `fumadocs-core@16.8.5`, `fumadocs-ui@16.8.5`, `fumadocs-mdx@14.3.2`, `tailwindcss@4`, `zod@4`.
 
-Consumed by: `@resolve/e2e` lists this app as a workspace dep so `turbo run e2e` can build it before booting Playwright (see `packages/e2e/AGENTS.md`).
+Consumed by: `@zeno/e2e` lists this app as a workspace dep so `turbo run e2e` can build it before booting Playwright (see `packages/e2e/AGENTS.md`).
 
 ## Pitfalls
 

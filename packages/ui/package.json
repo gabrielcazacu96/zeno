@@ -1,7 +1,7 @@
 {
   "name": "@zeno/ui",
-  "version": "0.0.0",
   "private": true,
+  "version": "0.0.0",
   "exports": {
     "./*": "./src/components/*.tsx",
     "./hooks/*": [
@@ -13,6 +13,20 @@
     "./styles/*.css": "./src/styles/*.css",
     "./lib/*": "./src/lib/*.ts"
   },
+  "files": [
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zeno-lib/zeno.git",
+    "directory": "packages/ui"
+  },
+  "sideEffects": [
+    "./src/styles/*.css"
+  ],
   "scripts": {
     "types:check": "tsc --noEmit"
   },
